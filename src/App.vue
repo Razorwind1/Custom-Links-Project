@@ -2,16 +2,22 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" />
+    <LinkButton />
+    <LinkButton />
+    <LinkButton />
   </div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
+//I added LinkButton
+import LinkButton from "./components/LinkButton.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    HelloWorld,
+    LinkButton
   }
 };
 </script>
