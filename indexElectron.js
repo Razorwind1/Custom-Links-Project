@@ -3,12 +3,14 @@ const { app, BrowserWindow } = require('electron')
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 800,
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: true
     }
   })
+  win.setOpacity(0.98);
 
   // and load the index.html of the app.
   win.loadFile('dist/index.html')

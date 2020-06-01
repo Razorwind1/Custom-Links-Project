@@ -1,0 +1,35 @@
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    height: 100%;
+    
+    
+  }
+
+  .clickable {
+      -webkit-app-region: no-drag;
+  }
+
+  .taskbar {
+      height: 100%;
+      background-color: #5c5b5b;
+      width: 200px;
+      color: white;
+      border: black;
+      padding-top: 2em;
+      position: fixed;
+      
+  }
+
+  .search {
+      text-align: center;
+      font-size: 10pt;
+      background-color:lightgray;
+      color: black;
+      padding: 1px;
+  }
+
+
+ 
