@@ -8,7 +8,6 @@
         >vue-cli documentation</a
       >.
     </p>
-    
   </div>
 </template>
 
