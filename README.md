@@ -1,4 +1,4 @@
-# customlinksproject
+# link-manager
 
 ## Project setup
 ```
