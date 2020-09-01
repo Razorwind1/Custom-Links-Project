@@ -92,9 +92,6 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
   height: 2px;
   -webkit-app-region: no-drag;
 }
-.hidden {
-  display: none;
-}
 
 #title-bar.focused .buttons {
   opacity: 0.5;
