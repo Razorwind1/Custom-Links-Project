@@ -1,5 +1,6 @@
 <template>
   <div id="title-bar">
+    <div class="top-resize"></div>
     <div class="content"></div>
     <div class="buttons">
       <div v-on:click="minimize" class="minimize">&#9866;</div>
@@ -14,16 +15,35 @@ export default {
   name: "TitleBar",
   methods: {
     close: function () {
-      window.ipcRenderer.send('close-app')
+      window.ipcRenderer.send("close-app");
     },
     maximize: function () {
-      window.ipcRenderer.send('maximize-app')
+      window.ipcRenderer.send("maximize-app");
     },
     minimize: function () {
-      window.ipcRenderer.send('minimize-app')
+      window.ipcRenderer.send("minimize-app");
     },
   },
 };
+
+window.ipcRenderer.on("app-state-changed", (event, message) => {
+  if (message === "maximize") {
+    const topResizeDiv = document.querySelector("#title-bar>.top-resize");
+    topResizeDiv.classList.add("hidden");
+  }
+  if (message === "unmaximize") {
+    const topResizeDiv = document.querySelector("#title-bar>.top-resize");
+    topResizeDiv.classList.remove("hidden");
+  }
+  if (message === "focus") {
+    const titleBar = document.querySelector("#title-bar");
+    titleBar.classList.remove("focused");
+  }
+  if (message === "blur") {
+    const titleBar = document.querySelector("#title-bar");
+    titleBar.classList.add("focused");
+  }
+});
 </script>
 
 <style scoped>
@@ -64,5 +84,19 @@ export default {
 }
 #title-bar .buttons > div.close:active {
   background-color: rgb(206, 14, 14);
+}
+
+#title-bar .top-resize {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  -webkit-app-region: no-drag;
+}
+.hidden {
+  display: none;
+}
+
+#title-bar.focused .buttons {
+  opacity: 0.5;
 }
 </style>

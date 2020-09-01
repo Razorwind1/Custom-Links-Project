@@ -50,4 +50,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+.hidden {
+  display: none;
+}
 </style>
