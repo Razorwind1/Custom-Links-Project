@@ -1,18 +1,20 @@
 <template>
   <div id="app-content">
     <NavBar />
-    <router-view />
+    <div id="app-main">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
+import NavBar from "@/components/NavBar.vue";
 
 export default {
-    name: "AppContent",
-    components: {
-        NavBar
-    }
+  name: "AppContent",
+  components: {
+    NavBar,
+  },
 };
 </script>
 
@@ -20,6 +22,17 @@ export default {
 #app-content {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#app-main {
+  display: flex;
+  flex-grow: 1;
+  border-top-left-radius: 15px;
+  padding: 20px;
+  display: flex;
+  background: var(--main-background-color);
+  overflow: auto;
 }
 </style>

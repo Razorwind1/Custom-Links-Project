@@ -1,7 +1,9 @@
 <template>
   <div id="title-bar">
     <div class="top-resize"></div>
-    <div class="content"></div>
+    <div class="content">
+      <h1 class="app-title">Link Tailor</h1>
+    </div>
     <div class="buttons">
       <div v-on:click="minimize" class="minimize">&#9866;</div>
       <div v-on:click="maximize" class="maximize">&#9744;</div>
@@ -37,11 +39,11 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
   }
   if (message === "focus") {
     const titleBar = document.querySelector("#title-bar");
-    titleBar.classList.remove("focused");
+    titleBar.classList.add("focused");
   }
   if (message === "blur") {
     const titleBar = document.querySelector("#title-bar");
-    titleBar.classList.add("focused");
+    titleBar.classList.remove("focused");
   }
 });
 </script>
@@ -49,14 +51,19 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
 <style scoped>
 #title-bar {
   user-select: none;
-  height: 30px;
+  height: var(--title-bar-height);
   width: 100%;
   background-color: var(--dark-background-color);
   -webkit-app-region: drag;
+  border-bottom: var(--main-background-color) 1px solid;
   display: flex;
 }
 #title-bar .content {
   width: 100%;
+  padding-left: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 #title-bar .buttons {
   cursor: pointer;
@@ -93,7 +100,14 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
   -webkit-app-region: no-drag;
 }
 
-#title-bar.focused .buttons {
-  opacity: 0.5;
+#title-bar .app-title {
+  font-size: 15px;
+}
+
+#title-bar .buttons, #title-bar .content {
+  opacity: .5;
+}
+#title-bar.focused .buttons, #title-bar.focused .content {
+  opacity: 1;
 }
 </style>
