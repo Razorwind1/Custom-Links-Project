@@ -16,13 +16,11 @@ export default {};
 <style>
 #nav {
   user-select: none;
-  padding: 5px;
   display: flex;
   flex-direction: column;
-  width: var(--nav-width);
-  margin: 5px 0px;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  width: calc (var(--nav-width) + 10px );
+  padding: 5px;
+  border-radius: 15px 15px 0 0;
   justify-content: space-between;
   background-color: var(--dark-background-color);
 }
@@ -47,7 +45,8 @@ export default {};
 #nav > a > img {
   width: 50%;
   transition: width ease-in-out 100ms;
-  filter: grayscale(50%);
+  -webkit-user-drag: none;
+  filter: grayscale(80%);
 }
 #nav > a:hover > img {
   width: 60%;

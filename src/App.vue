@@ -38,6 +38,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body {
   height: 100%;
@@ -59,16 +60,14 @@ body {
 
 /*   SCROLLBAR   */
 ::-webkit-scrollbar {
-  width: 15px;
+  width: 7px;
   border-radius: 10px;
 }
 ::-webkit-scrollbar:hover{
-  border: solid 4px var(--main-background-color);
-  box-shadow: 0 0 4px 1px inset var(--light-background-color);
+  background-color: var(--light-background-color);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  border: solid 4px var(--main-background-color);
   background-color: var(--dark-background-color);
   border-radius: 10px;
 }

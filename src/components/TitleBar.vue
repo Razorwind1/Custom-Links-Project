@@ -1,7 +1,8 @@
 <template>
-  <div id="title-bar">
+  <div id="title-bar" class="focused">
     <div class="top-resize"></div>
     <div class="content">
+      <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
       <h1 class="app-title">Link Tailor</h1>
     </div>
     <div class="buttons">
@@ -60,10 +61,14 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
 }
 #title-bar .content {
   width: 100%;
-  padding-left: 10px;
+  padding-left: 6px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+#title-bar .content img {
+  height: 13px;
+  margin-right: 3px;
 }
 #title-bar .buttons {
   cursor: pointer;

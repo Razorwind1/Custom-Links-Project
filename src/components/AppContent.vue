@@ -30,9 +30,8 @@ export default {
   display: flex;
   flex-grow: 1;
   border-top-left-radius: 15px;
-  padding: 20px;
+  padding: 7px;
   display: flex;
   background: var(--main-background-color);
-  overflow: auto;
 }
 </style>
