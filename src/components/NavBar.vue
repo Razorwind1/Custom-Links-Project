@@ -1,12 +1,11 @@
 <template>
   <div id="nav">
-    <router-link to="/">H</router-link>
-    <router-link to="/about">A</router-link>
-    <router-link to="/hello">H</router-link>
-    <router-link to="/these">A</router-link>
-    <router-link to="/are">H</router-link>
-    <router-link to="/for">A</router-link>
-    <router-link to="/testing">H</router-link>
+    <router-link to="/">
+      <img src="/assets/svg/freepik/svg/008-home (2).svg" />
+    </router-link>
+    <router-link to="/settings">
+      <img src="/assets/svg/freepik/svg/002-settings (2).svg" />
+    </router-link>
   </div>
 </template>
 
@@ -17,12 +16,16 @@ export default {};
 <style>
 #nav {
   user-select: none;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   width: var(--nav-width);
   margin: 5px;
-  border: 1px solid var(--nav-border-color);
-  border-radius: 15px;
+  margin-left: 0px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  justify-content: space-between;
+  background-color: var(--dark-background-color);
 }
 #nav > a {
   display: flex;
@@ -33,11 +36,26 @@ export default {};
   height: var(--nav-width);
   border-radius: 15px;
   -webkit-user-drag: none;
+  transition: background-color ease-in-out 100ms;
 }
 #nav > a:hover {
   background-color: var(--nav-hover-color);
 }
 #nav > a.router-link-exact-active {
   background-color: var(--nav-active-color);
+}
+
+#nav > a > img {
+  width: 50%;
+  transition: width ease-in-out 100ms;
+  filter: grayscale(50%);
+}
+#nav > a:hover > img {
+  width: 60%;
+  filter: grayscale(0%);
+}
+#nav > a.router-link-exact-active > img {
+  width: 60%;
+  filter: grayscale(0%);
 }
 </style>

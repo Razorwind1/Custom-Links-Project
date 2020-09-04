@@ -29,7 +29,7 @@ export default {
 
   --nav-border-color: #646464;
   --nav-hover-color: #3b3b3b;
-  --nav-active-color: #242424;
+  --nav-active-color: #474747;
   --nav-width: 50px;
 }
 * {
