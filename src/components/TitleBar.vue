@@ -1,6 +1,6 @@
 <template>
-  <div id="title-bar" class="focused">
-    <div class="top-resize"></div>
+  <div id="title-bar" :class="[windowFocused ? 'focused' : '']">
+    <div v-if="!windowMaximized" class="top-resize"></div>
     <div class="content">
       <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
       <h1 class="app-title">Link Tailor</h1>
@@ -15,7 +15,6 @@
 
 <script>
 export default {
-  name: "TitleBar",
   methods: {
     close: function () {
       window.ipcRenderer.send("close-app");
@@ -26,27 +25,36 @@ export default {
     minimize: function () {
       window.ipcRenderer.send("minimize-app");
     },
+    maximized: function () {
+      this.windowMaximized = true;
+    },
+    minimized: function () {
+      this.windowMaximized = false;
+    },
+  },
+  data: function () {
+    return {
+      windowMaximized: false,
+      windowFocused: true,
+    };
+  },
+  mounted: function () {
+    window.ipcRenderer.on("app-state-changed", (event, message) => {
+      if (message === "maximize") {
+        this.windowMaximized = true;
+      }
+      if (message === "unmaximize") {
+        this.windowMaximized = false;
+      }
+      if (message === "focus") {
+        this.windowFocused = true;
+      }
+      if (message === "blur") {
+        this.windowFocused = false;
+      }
+    });
   },
 };
-
-window.ipcRenderer.on("app-state-changed", (event, message) => {
-  if (message === "maximize") {
-    const topResizeDiv = document.querySelector("#title-bar>.top-resize");
-    topResizeDiv.classList.add("hidden");
-  }
-  if (message === "unmaximize") {
-    const topResizeDiv = document.querySelector("#title-bar>.top-resize");
-    topResizeDiv.classList.remove("hidden");
-  }
-  if (message === "focus") {
-    const titleBar = document.querySelector("#title-bar");
-    titleBar.classList.add("focused");
-  }
-  if (message === "blur") {
-    const titleBar = document.querySelector("#title-bar");
-    titleBar.classList.remove("focused");
-  }
-});
 </script>
 
 <style scoped>
@@ -109,10 +117,12 @@ window.ipcRenderer.on("app-state-changed", (event, message) => {
   font-size: 15px;
 }
 
-#title-bar .buttons, #title-bar .content {
-  opacity: .5;
+#title-bar .buttons,
+#title-bar .content {
+  opacity: 0.5;
 }
-#title-bar.focused .buttons, #title-bar.focused .content {
+#title-bar.focused .buttons,
+#title-bar.focused .content {
   opacity: 1;
 }
 </style>

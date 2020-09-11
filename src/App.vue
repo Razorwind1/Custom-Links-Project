@@ -10,7 +10,6 @@ import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
 
 export default {
-  name: "App",
   components: {
     TitleBar,
     AppContent,

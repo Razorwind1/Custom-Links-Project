@@ -9,69 +9,6 @@
         <option value="4">Option 4</option>
       </select>
     </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
-    <div>
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
-      </select>
-    </div>
     <div class="attribution">
       Icons made by
       <span v-on:click="attributionLink">Freepik</span>
@@ -81,15 +18,12 @@
 
 <script>
 export default {
-  name: "Settings",
   methods: {
     attributionLink: function () {
       window.shell.openExternal("https://www.flaticon.com/authors/freepik");
     },
   },
 };
-//window.shell.openExternal('C:/Program Files (x86)/Steam/steam.exe')
-//window.shell.beep()
 </script>
 
 <style>

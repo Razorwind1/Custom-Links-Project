@@ -1,19 +1,47 @@
 <template>
   <div id="canvas">
+    <div
+      v-for="(element, index) in getGridElements"
+      :key="index"
+      @click="open(element)"
+    >{{element.label}}</div>
   </div>
 </template>
 
 <script>
-//import HelloWorld from '@/components/HelloWorld.vue'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'Canvas',
-  components: {
-  }
-}
+  computed: {
+    ...mapGetters(["getGridElements"]),
+  },
+  methods: {
+    open: function (element) {
+      window.shell.openExternal(element.content.address);
+    },
+  },
+};
 </script>
 
 <style scoped>
-#canvas{
+#canvas {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  width: 100%;
+}
+#canvas>div{
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+}
+#canvas>div:hover{
+  background-color: var(--light-background-color);
 }
 </style>
