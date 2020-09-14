@@ -15,7 +15,8 @@ export default new Vuex.Store({
         label: "Steam",
         content: {
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: ""
+          img: "",
+          tags: []
         }
       },
       {
@@ -27,61 +28,14 @@ export default new Vuex.Store({
         label: "Link Tailor GitHub",
         content: {
           address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: ""
-        }
-      },
-      {
-        posX: 0,
-        posY: 0,
-        size: 1,
-        type: "link",
-        color: "",
-        label: "Steam",
-        content: {
-          address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: ""
-        }
-      },
-      {
-        posX: 1,
-        posY: 0,
-        size: 1,
-        type: "link",
-        color: "",
-        label: "Link Tailor GitHub",
-        content: {
-          address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: ""
-        }
-      },
-      {
-        posX: 1,
-        posY: 0,
-        size: 1,
-        type: "link",
-        color: "",
-        label: "Link Tailor GitHub",
-        content: {
-          address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: ""
-        }
-      },
-      {
-        posX: 0,
-        posY: 0,
-        size: 1,
-        type: "link",
-        color: "",
-        label: "Steam",
-        content: {
-          address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: ""
+          img: "",
+          tags: []
         }
       },
     ]
   },
   mutations: {                                // FOR SYNC MUTATIONS
-    addGridElement(state, element){
+    addGridElement(state, element) {
       state.gridElements.push(element)
     }
   },
