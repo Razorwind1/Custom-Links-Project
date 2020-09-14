@@ -1,35 +1,35 @@
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { /*app, protocol, BrowserWindow,*/ ipcMain } from 'electron'
 
 export default function handler(win) {
-    ipcMain.on('close-app', (event, arg) => {
+    ipcMain.on('close-app', () => {
         win.close()
     })
-    ipcMain.on('maximize-app', (event, arg) => {
+    ipcMain.on('maximize-app', () => {
         if (win.isMaximized())
             win.unmaximize()
         else
             win.maximize()
     })
-    ipcMain.on('minimize-app', (event, arg) => {
+    ipcMain.on('minimize-app', () => {
         win.minimize()
     })
 
-    win.on('blur', (event, arg) => {
+    win.on('blur', () => {
         win.webContents.send('app-state-changed', 'blur')
     })
-    win.on('focus', (event, arg) => {
+    win.on('focus', () => {
         win.webContents.send('app-state-changed', 'focus')
     })
-    win.on('maximize', (event, arg) => {
+    win.on('maximize', () => {
         win.webContents.send('app-state-changed', 'maximize')
     })
-    win.on('unmaximize', (event, arg) => {
+    win.on('unmaximize', () => {
         win.webContents.send('app-state-changed', 'unmaximize')
     })
-    win.on('minimize', (event, arg) => {
+    win.on('minimize', () => {
         win.webContents.send('app-state-changed', 'minimize')
     })
-    win.on('restore', (event, arg) => {
+    win.on('restore', () => {
         win.webContents.send('app-state-changed', 'restore')
     })
 }
