@@ -1,6 +1,6 @@
 <template>
   <div id="app-content">
-    <NavBar />
+    <NavBar  v-on:show-popup="showPopup" />
     <div id="app-main">
       <router-view />
     </div>
@@ -14,6 +14,11 @@ export default {
   components: {
     NavBar,
   },
+  methods: {
+    showPopup: function (arg) {
+      this.$emit("show-popup", arg)
+    }
+  }
 };
 </script>
 

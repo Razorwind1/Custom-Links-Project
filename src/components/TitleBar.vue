@@ -6,9 +6,9 @@
       <h1 class="app-title">Link Tailor</h1>
     </div>
     <div class="buttons">
-      <div v-on:click="minimize" class="minimize">&#9866;</div>
-      <div v-on:click="maximize" class="maximize">&#9744;</div>
-      <div v-on:click="close" class="close">&#9932;</div>
+      <div @click="minimize" class="minimize">&#9866;</div>
+      <div @click="maximize" class="maximize">&#9744;</div>
+      <div @click="close" class="close">&#9932;</div>
     </div>
   </div>
 </template>
@@ -94,16 +94,16 @@ export default {
   background-color: var(--active-background-color);
 }
 #title-bar .buttons > div:active {
-  background-color: rgb(153, 153, 153);
+  background-color: var(--light-background-color);
 }
 #title-bar .buttons > div.close {
   font-size: 14px;
 }
 #title-bar .buttons > div.close:hover {
-  background-color: rgb(105, 11, 11);
+  background-color: rgb(170, 15, 15);
 }
 #title-bar .buttons > div.close:active {
-  background-color: rgb(206, 14, 14);
+  background-color: rgb(255, 2, 2);
 }
 
 #title-bar .top-resize {

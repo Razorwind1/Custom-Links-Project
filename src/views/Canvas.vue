@@ -26,11 +26,11 @@ export default {
 <style scoped>
 #canvas {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   width: 100%;
 }
-#canvas>div{
+#canvas > div {
   width: 100%;
   cursor: pointer;
   display: flex;
@@ -41,7 +41,7 @@ export default {
   padding: 5px;
   text-align: center;
 }
-#canvas>div:hover{
+#canvas > div:hover {
   background-color: var(--light-background-color);
 }
 </style>

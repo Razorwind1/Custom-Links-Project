@@ -15,9 +15,10 @@ export default new Vuex.Store({
         label: "Steam",
         content: {
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "",
-          tags: []
-        }
+          img: "/assets/icons/Skyrim2.png",
+          tags: ["gaming"]
+        },
+        style: []
       },
       {
         posX: 1,
@@ -29,7 +30,7 @@ export default new Vuex.Store({
         content: {
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "",
-          tags: []
+          tags: ["dev", "link-tailor"]
         }
       },
     ]

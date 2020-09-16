@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <TitleBar />
-    <AppContent />
+    <AppContent v-on:show-popup="showPopup" />
+    <div
+      v-if="popupVisible"
+      style="width: 100%; height: 100%; position: absolute; background-color: #000a; pointer-events: none;"
+    >{{popupArg}}</div>
   </div>
 </template>
 
@@ -10,6 +14,18 @@ import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
 
 export default {
+  data: function () {
+    return {
+      popupVisible: false,
+      popupArg: "",
+    };
+  },
+  methods: {
+    showPopup: function (arg) {
+      this.popupVisible = true;
+      this.popupArg = arg;
+    },
+  },
   components: {
     TitleBar,
     AppContent,
@@ -62,7 +78,7 @@ body {
   width: 7px;
   border-radius: 10px;
 }
-::-webkit-scrollbar:hover{
+::-webkit-scrollbar:hover {
   background-color: var(--light-background-color);
   border-radius: 10px;
 }
