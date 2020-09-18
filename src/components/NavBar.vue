@@ -1,15 +1,15 @@
 <template>
   <div id="nav">
     <div>
-      <router-link to="/">
+      <router-link to="/" class="button">
         <img src="/assets/svg/freepik/svg/008-home (2).svg" />
       </router-link>
-      <a class="add-link-button" @click="addLink">
+      <a class="add-link-button button" @click="addLink">
         <img src="/assets/svg/freepik/png/051-add.png" />
       </a>
     </div>
     <div>
-      <router-link to="/settings">
+      <router-link to="/settings" class="button">
         <img src="/assets/svg/freepik/svg/002-settings (2).svg" />
       </router-link>
     </div>
@@ -19,10 +19,13 @@
 <script>
 export default {
   methods: {
-    addLink : function () {
-      this.$emit("show-popup", "add-link")
-    }
-  }
+    addLink: function () {
+      this.$emit("show-popup", {
+        type: "add-link",
+        saveButtonLabel: "Save Link",
+      });
+    },
+  },
 };
 </script>
 
@@ -31,33 +34,29 @@ export default {
   user-select: none;
   display: flex;
   flex-direction: column;
-  width: calc (var(--nav-width) + 10px);
   padding: 5px;
   border-radius: 15px 15px 0 0;
   justify-content: space-between;
   background-color: var(--dark-background-color);
 }
 #nav > div > a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: var(--main-text-color);
   width: var(--nav-width);
   height: var(--nav-width);
-  border-radius: 15px;
+  border-radius: 50px;
   -webkit-user-drag: none;
-  transition: background-color ease-in-out 100ms;
-  cursor: pointer;
   margin: 5px 0;
+  transition: border-radius 100ms linear;
 }
 #nav > div > a:hover {
-  background-color: var(--nav-hover-color);
+  background-color: var(--light-background-color);
 }
 #nav > div > a.add-link-button:hover {
   background-color: transparent;
 }
 #nav > div > a.router-link-exact-active {
-  background-color: var(--nav-active-color);
+  background-color: var(--light-background-color);
+  border-radius: 15px;
 }
 
 #nav > div > a > img {

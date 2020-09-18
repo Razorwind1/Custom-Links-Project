@@ -1,6 +1,6 @@
 <template>
-  <div id="app-content">
-    <NavBar  v-on:show-popup="showPopup" />
+  <div id="app-content" :class="[popupVisible ? 'disable-input' : '']">
+    <NavBar v-on:show-popup="showPopup" />
     <div id="app-main">
       <router-view />
     </div>
@@ -16,9 +16,12 @@ export default {
   },
   methods: {
     showPopup: function (arg) {
-      this.$emit("show-popup", arg)
-    }
-  }
+      this.$emit("show-popup", arg);
+    },
+  },
+  props: {
+    popupVisible: Boolean,
+  },
 };
 </script>
 
@@ -37,5 +40,9 @@ export default {
   padding: 7px;
   display: flex;
   background: var(--main-background-color);
+}
+
+.disable-input {
+  pointer-events: none;
 }
 </style>

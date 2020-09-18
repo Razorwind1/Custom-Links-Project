@@ -6,9 +6,9 @@
       <h1 class="app-title">Link Tailor</h1>
     </div>
     <div class="buttons">
-      <div @click="minimize" class="minimize">&#9866;</div>
-      <div @click="maximize" class="maximize">&#9744;</div>
-      <div @click="close" class="close">&#9932;</div>
+      <div @click="minimize" class="minimize button">&#9866;</div>
+      <div @click="maximize" class="maximize button">&#9744;</div>
+      <div @click="close" class="close button">&#9932;</div>
     </div>
   </div>
 </template>
@@ -79,16 +79,12 @@ export default {
   margin-right: 3px;
 }
 #title-bar .buttons {
-  cursor: pointer;
   display: flex;
   -webkit-app-region: no-drag;
 }
 #title-bar .buttons > div {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: var(--title-bar-height);
+  height: var(--title-bar-height);
 }
 #title-bar .buttons > div:hover {
   background-color: var(--active-background-color);
