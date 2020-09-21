@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Canvas from '../views/Canvas.vue'
 import Settings from '../views/Settings.vue'
+import Grid from 'vue-js-grid'
+
+Vue.use(Grid)
 
 Vue.use(VueRouter)
 
