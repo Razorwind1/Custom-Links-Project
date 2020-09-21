@@ -1,19 +1,31 @@
 <template>
   <div id="canvas">
-    <div
-      v-for="(element, index) in getGridElements"
-      :key="index"
-      @click="open(element)"
-    >{{element.label}}</div>
+    <div class="grid">
+      <div
+        class="item"
+        v-for="(element, index) in $store.getters.getGridElements"
+        :key="index"
+        @click="open(element)"
+      >
+        <div class="item-content">
+          <div class="my-custom-content">{{element.label}}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import Muuri from "muuri";
 
 export default {
-  computed: {
-    ...mapGetters(["getGridElements"]),
+  mounted() {
+    const grid = new Muuri(".grid", {
+      dragEnabled: true,
+      dragSort: true,
+    });
+
+    console.log(grid);
   },
   methods: {
     open: function (element) {
@@ -26,22 +38,48 @@ export default {
 <style scoped>
 #canvas {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
   width: 100%;
 }
-#canvas > div {
-  width: 100%;
-  cursor: pointer;
+.grid {
+  position: relative;
+}
+.item {
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
+  position: absolute;
+  width: 100px;
+  height: 100px;
   margin: 5px;
-  padding: 5px;
+  z-index: 1;
+  color: #fff;
   text-align: center;
+  align-content: center;
+  line-height: 100px;
 }
-#canvas > div:hover {
-  background-color: var(--light-background-color);
+.item.muuri-item-dragging {
+  z-index: 2;
+}
+.item.muuri-item-releasing {
+  z-index: 3;
+}
+.item.muuri-item-hidden {
+  z-index: 0;
+}
+.item-content {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  cursor: pointer;
+}
+.item.muuri-item-dragging .item-content,
+.item.muuri-item-releasing .item-content {
+  background: #a8a8a8;
 }
 </style>
+
+
+
+
+ 
