@@ -1,24 +1,48 @@
 <template>
   <div class="popup-overlay">
     <div class="popup-container">
-      <div class="popup-content">{{popupArg.type}}</div>
+      <div class="popup-content">
+        <AddLink
+          v-if="popupArg.type === 'add-link'"
+          :saveLink="saveButtonClicked"
+          @save-fail="saveFail"
+          @save-success="saveSuccess"
+          @save-click="saveButtonClicked = true"
+        />
+      </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
-        <div @click="closePopup" class="button save">{{popupArg.saveButtonLabel}}</div>
+        <div @click="saveButtonClicked = true" class="button save">{{popupArg.saveButtonLabel}}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AddLink from "@/components/AddLink.vue";
+
 export default {
+  data: function () {
+    return {
+      saveButtonClicked: false,
+    };
+  },
   methods: {
     closePopup: function () {
       this.$emit("close-popup");
     },
+    saveFail: function () {
+      this.saveButtonClicked = false;
+    },
+    saveSuccess: function () {
+      this.closePopup();
+    },
   },
   props: {
     popupArg: Object,
+  },
+  components: {
+    AddLink,
   },
 };
 </script>
@@ -30,7 +54,6 @@ div.popup-overlay {
   position: absolute;
   background-color: #000a;
   pointer-events: none;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -40,24 +63,22 @@ div.popup-container {
   height: 80%;
   max-height: 500px;
   min-height: 300px;
-  display: flex;
   flex-direction: column;
   border-radius: 5px;
   pointer-events: all;
 }
 div.popup-content {
   flex-grow: 1;
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
+  height: inherit;
 }
 div.popup-buttons {
   height: 70px;
   width: 100%;
   background: var(--dark-background-color);
   border-radius: inherit;
-  display: flex;
   justify-content: space-between;
   padding: 10px;
 }

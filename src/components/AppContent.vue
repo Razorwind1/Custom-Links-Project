@@ -27,18 +27,15 @@ export default {
 
 <style>
 #app-content {
-  display: flex;
   flex-direction: row;
   flex-grow: 1;
   overflow: hidden;
 }
 
 #app-main {
-  display: flex;
   flex-grow: 1;
   border-top-left-radius: 15px;
   padding: 7px;
-  display: flex;
   background: var(--main-background-color);
 }
 

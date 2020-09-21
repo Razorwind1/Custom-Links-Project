@@ -65,6 +65,11 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+* div{
+  display: flex;
 }
 body {
   height: 100%;
@@ -77,7 +82,6 @@ body {
 
   color: var(--main-text-color);
   background-color: var(--dark-background-color);
-  display: flex;
   flex-direction: column;
 }
 .hidden {
@@ -116,4 +120,32 @@ body {
   transition: background-color ease-in-out 100ms;
   border-radius: 5px;
 }
+
+input {
+  padding: 10px;
+  background-color: var(--dark-background-color);
+  color: var(--main-text-color-text-color);
+  border-radius: 3px;
+  font-size: 16px;
+  border: 1px solid var(--active-background-color);
+  fill: var(--main-text-color);
+  transition: border ease 200ms;
+}
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+input:focus {
+  border: 1px solid var(--main-accent-color);
+  outline: none;
+} 
+.required{
+  border: 1px solid rgb(175, 35, 35)
+}
+span.required-text{
+  color: rgb(175, 35, 35);
+  font-size: 12px;
+  margin-top: -5px;
+  margin-left: 5px;
+}
+
 </style>

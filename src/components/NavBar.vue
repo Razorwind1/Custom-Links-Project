@@ -22,7 +22,7 @@ export default {
     addLink: function () {
       this.$emit("show-popup", {
         type: "add-link",
-        saveButtonLabel: "Save Link",
+        saveButtonLabel: "Add Link",
       });
     },
   },
@@ -31,20 +31,20 @@ export default {
 
 <style>
 #nav {
-  user-select: none;
-  display: flex;
   flex-direction: column;
   padding: 5px;
   border-radius: 15px 15px 0 0;
   justify-content: space-between;
   background-color: var(--dark-background-color);
 }
+#nav > div {
+  flex-direction: column;
+}
 #nav > div > a {
   color: var(--main-text-color);
   width: var(--nav-width);
   height: var(--nav-width);
   border-radius: 50px;
-  -webkit-user-drag: none;
   margin: 5px 0;
   transition: border-radius 100ms linear;
 }

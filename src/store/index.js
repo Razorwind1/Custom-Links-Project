@@ -36,8 +36,16 @@ export default new Vuex.Store({
     ]
   },
   mutations: {                                // FOR SYNC MUTATIONS
-    addGridElement(state, element) {
-      state.gridElements.push(element)
+    addGridElement(state, payload) {
+      const element = {}
+      element.content = {}
+
+      if (payload.address && payload.label) {
+        element.content.address = payload.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+        element.label = payload.label
+
+        state.gridElements.push(element)
+      }
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS

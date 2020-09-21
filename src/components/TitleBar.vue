@@ -59,18 +59,15 @@ export default {
 
 <style scoped>
 #title-bar {
-  user-select: none;
   height: var(--title-bar-height);
   width: 100%;
   background-color: var(--dark-background-color);
   -webkit-app-region: drag;
   border-bottom: var(--main-background-color) 1px solid;
-  display: flex;
 }
 #title-bar .content {
   width: 100%;
   padding-left: 6px;
-  display: flex;
   justify-content: flex-start;
   align-items: center;
 }
@@ -79,7 +76,6 @@ export default {
   margin-right: 3px;
 }
 #title-bar .buttons {
-  display: flex;
   -webkit-app-region: no-drag;
 }
 #title-bar .buttons > div {
