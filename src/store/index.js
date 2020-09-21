@@ -15,9 +15,10 @@ export default new Vuex.Store({
         label: "Steam",
         content: {
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "",
-          tags: []
-        }
+          img: "/assets/icons/Skyrim2.png",
+          tags: ["gaming"]
+        },
+        style: []
       },
       {
         posX: 1,
@@ -29,14 +30,22 @@ export default new Vuex.Store({
         content: {
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "",
-          tags: []
+          tags: ["dev", "link-tailor"]
         }
       },
     ]
   },
   mutations: {                                // FOR SYNC MUTATIONS
-    addGridElement(state, element) {
-      state.gridElements.push(element)
+    addGridElement(state, payload) {
+      const element = {}
+      element.content = {}
+
+      if (payload.address && payload.label) {
+        element.content.address = payload.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+        element.label = payload.label
+
+        state.gridElements.push(element)
+      }
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS

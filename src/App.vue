@@ -1,18 +1,42 @@
 <template>
   <div id="app">
     <TitleBar />
-    <AppContent />
+    <AppContent v-on:show-popup="showPopup" :popup-visible="popupVisible" />
+    <Popup
+      v-if="popupVisible"
+      :popup-visible="popupVisible"
+      v-on:close-popup="closePopup"
+      :popup-arg="popupArg"
+    />
   </div>
 </template>
 
 <script>
 import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
+import Popup from "@/components/Popup.vue";
 
 export default {
+  data: function () {
+    return {
+      popupVisible: false,
+      popupArg: {},
+    };
+  },
+  methods: {
+    showPopup: function (arg) {
+      this.popupVisible = true;
+      this.popupArg = arg;
+    },
+    closePopup: function () {
+      this.popupVisible = false;
+      this.popupArg = {};
+    },
+  },
   components: {
     TitleBar,
     AppContent,
+    Popup,
   },
 };
 </script>
@@ -22,22 +46,30 @@ export default {
   height: 100%;
 
   --main-text-color: #eeeeee;
+  --secondary-text-color: #111111;
+
   --light-background-color: #4d4d4d;
   --main-background-color: #2c2c2c;
   --dark-background-color: #202020;
-  --active-background-color: #181818;
+  --active-background-color: #0e0e0e;
 
-  --nav-border-color: #646464;
-  --nav-hover-color: #3b3b3b;
-  --nav-active-color: #474747;
+  --light-accent-color: #70ddbc;
+  --main-accent-color: #20906f;
+  --dark-accent-color: #127054;
+  --active-accent-color: #034b35;
+
   --nav-width: 50px;
-
   --title-bar-height: 30px;
 }
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+* div{
+  display: flex;
 }
 body {
   height: 100%;
@@ -50,7 +82,6 @@ body {
 
   color: var(--main-text-color);
   background-color: var(--dark-background-color);
-  display: flex;
   flex-direction: column;
 }
 .hidden {
@@ -62,7 +93,7 @@ body {
   width: 7px;
   border-radius: 10px;
 }
-::-webkit-scrollbar:hover{
+::-webkit-scrollbar:hover {
   background-color: var(--light-background-color);
   border-radius: 10px;
 }
@@ -80,4 +111,41 @@ body {
 ::-webkit-resizer {
   display: none;
 }
+
+.button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color ease-in-out 100ms;
+  border-radius: 5px;
+}
+
+input {
+  padding: 10px;
+  background-color: var(--dark-background-color);
+  color: var(--main-text-color-text-color);
+  border-radius: 3px;
+  font-size: 16px;
+  border: 1px solid var(--active-background-color);
+  fill: var(--main-text-color);
+  transition: border ease 200ms;
+}
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+input:focus {
+  border: 1px solid var(--main-accent-color);
+  outline: none;
+} 
+.required{
+  border: 1px solid rgb(175, 35, 35)
+}
+span.required-text{
+  color: rgb(175, 35, 35);
+  font-size: 12px;
+  margin-top: -5px;
+  margin-left: 5px;
+}
+
 </style>

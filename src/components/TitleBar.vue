@@ -6,9 +6,9 @@
       <h1 class="app-title">Link Tailor</h1>
     </div>
     <div class="buttons">
-      <div v-on:click="minimize" class="minimize">&#9866;</div>
-      <div v-on:click="maximize" class="maximize">&#9744;</div>
-      <div v-on:click="close" class="close">&#9932;</div>
+      <div @click="minimize" class="minimize button">&#9866;</div>
+      <div @click="maximize" class="maximize button">&#9744;</div>
+      <div @click="close" class="close button">&#9932;</div>
     </div>
   </div>
 </template>
@@ -59,18 +59,15 @@ export default {
 
 <style scoped>
 #title-bar {
-  user-select: none;
   height: var(--title-bar-height);
   width: 100%;
   background-color: var(--dark-background-color);
   -webkit-app-region: drag;
   border-bottom: var(--main-background-color) 1px solid;
-  display: flex;
 }
 #title-bar .content {
   width: 100%;
   padding-left: 6px;
-  display: flex;
   justify-content: flex-start;
   align-items: center;
 }
@@ -79,31 +76,26 @@ export default {
   margin-right: 3px;
 }
 #title-bar .buttons {
-  cursor: pointer;
-  display: flex;
   -webkit-app-region: no-drag;
 }
 #title-bar .buttons > div {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: var(--title-bar-height);
+  height: var(--title-bar-height);
 }
 #title-bar .buttons > div:hover {
   background-color: var(--active-background-color);
 }
 #title-bar .buttons > div:active {
-  background-color: rgb(153, 153, 153);
+  background-color: var(--light-background-color);
 }
 #title-bar .buttons > div.close {
   font-size: 14px;
 }
 #title-bar .buttons > div.close:hover {
-  background-color: rgb(105, 11, 11);
+  background-color: rgb(170, 15, 15);
 }
 #title-bar .buttons > div.close:active {
-  background-color: rgb(206, 14, 14);
+  background-color: rgb(255, 2, 2);
 }
 
 #title-bar .top-resize {
