@@ -12,14 +12,6 @@
         <h3>Address</h3>
         <input type="text" v-model="address" required />
       </div>
-      <div class="section">
-        <h3>Address</h3>
-        <input type="text" v-model="address" required />
-      </div>
-      <div class="section">
-        <h3>Address</h3>
-        <input type="text" v-model="address" required />
-      </div>
     </div>
   </div>
 </template>
