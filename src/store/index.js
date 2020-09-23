@@ -37,15 +37,15 @@ export default new Vuex.Store({
     styles: [
       {
         name: "gameStyle",
-        color: 'red',
+        color: 'rgb(226, 97, 151)',
         fontFamily: 'Verdana, Geneva, sans-serif',
         fontSize: '100%'
       },
       {
         name: "codingStyle",
-        color: 'green',
+        color: 'rgb(102, 150, 222)',
         fontFamily: '"Brush Script MT", Helvetica, sans-serif',
-        fontSize: '130%'
+        fontSize: '100%'
       }
     ]
   },
