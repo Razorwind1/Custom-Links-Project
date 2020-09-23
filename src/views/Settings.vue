@@ -1,6 +1,6 @@
 <template>
   <div class="settings">
-    <div>
+    <div class="theClass123">
       Some setting here:
       <select name="select" id>
         <option value="1">Option 1</option>
@@ -9,6 +9,7 @@
         <option value="4">Option 4</option>
       </select>
     </div>
+    <button v-on:click="getFavicon()">Favicon Test Button</button>
     <div class="attribution">
       Icons made by
       <span v-on:click="attributionLink">Freepik</span>
@@ -16,17 +17,49 @@
   </div>
 </template>
 
+
 <script>
+
 export default {
   methods: {
-    attributionLink: function () {
+attributionLink: function () {
       window.shell.openExternal("https://www.flaticon.com/authors/freepik");
     },
+    getFavicon: function () {
+    var favicon = undefined;
+    console.log("getFavicon function activated");
+    var theRequest = new XMLHttpRequest();
+try {
+    console.log("request tried");
+    theRequest.open("GET", "https://razorwind1.github.io/RealityCheck/Index.html", false);
+    theRequest.onload = function () {
+        console.log("document loaded");
+        var nodeList = document.getElementsByTagName("link");
+        console.log(nodeList);
+        for (var i = 0; i < nodeList.length; i++)
+        {
+            console.log(nodeList[i].getAttribute("href"));
+            if((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon"))
+            {
+                console.log("favico element found");
+                favicon = nodeList[i].getAttribute("href");
+            }
+        }
+    }
+    theRequest.send();
+}
+catch (e) {
+    console.log("Unable to load the questeded file.");
+}
+
+    return favicon;
+}
   },
 };
 </script>
 
 <style>
+
 .settings {
   width: 100%;
   margin-bottom: 15px;
