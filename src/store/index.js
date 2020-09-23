@@ -1,3 +1,4 @@
+//import { reduce } from 'core-js/fn/array'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -10,31 +11,46 @@ export default new Vuex.Store({
         posX: 0,
         posY: 0,
         size: 1,
-        type: "link",
-        color: "",
-        label: "Steam",
+        type: "exe",
+        style: "gameStyle",
         content: {
+          label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "/assets/icons/Skyrim2.png",
-          tags: ["gaming"]
+          img: "/assets/icons/Steam_icon_logo.png",
+          tags: ["game","favorite"]
+        }
         },
-        style: []
       },
       {
         posX: 1,
         posY: 0,
         size: 1,
-        type: "link",
-        color: "",
-        label: "Link Tailor GitHub",
+        type: "website",
+        style: "codingStyle",
         content: {
+          label: "Link Tailor GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "",
-          tags: ["dev", "link-tailor"]
+          img: "/assets/icons/github_icon.jpg",
+          tags: ["coding"],
         }
       },
+    ],
+    styles: [
+      {
+        name: "gameStyle",
+        color: 'red',
+        fontFamily: 'Verdana, Geneva, sans-serif',
+        fontSize: '100%'
+      },
+      {
+        name: "codingStyle",
+        color: 'green',
+        fontFamily: '"Brush Script MT", Helvetica, sans-serif',
+        fontSize: '130%'
+      }
     ]
   },
+
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
       const element = {}
@@ -56,6 +72,9 @@ export default new Vuex.Store({
     },
     getGridLinks: (state) => {
       state.gridElements.filter(element => element.type === "link")
+    },
+    getStyle: (state) => (styleName) => {
+      return state.styles.filter(style => style.name === styleName)
     }
   }
 })

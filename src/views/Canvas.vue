@@ -1,11 +1,13 @@
 <template>
   <div id="canvas">
+
     <div class="grid">
       <div
         class="item"
         v-for="(element, index) in $store.getters.getGridElements"
         :key="index"
         @click="open(element)"
+        v-bind:style = getStyling(element.style)
       >
         <div class="item-content">
           <div class="my-custom-content">{{element.label}}</div>
@@ -31,6 +33,13 @@ export default {
     open: function (element) {
       window.shell.openExternal(element.content.address);
     },
+    //returns a special vue "Style Object" from the store
+    getStyling (styleName) {
+      console.log(styleName);
+      const styleObject = this.$store.getters.getStyle(styleName);
+      console.log(styleObject);
+      return styleObject;
+    }
   },
 };
 </script>
@@ -40,6 +49,11 @@ export default {
   display: grid;
   width: 100%;
 }
+
+#canvas>.gridElement{
+  width: 100%;
+  cursor: pointer;
+
 .grid {
   position: relative;
 }
@@ -53,6 +67,19 @@ export default {
   z-index: 1;
   color: #fff;
   text-align: center;
+  position: relative;
+}
+#canvas>.gridElement img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+
+}
+#canvas>.gridElement div.label{
+  display: block;
+  position: absolute;
+  bottom: 1px;
   align-content: center;
   line-height: 100px;
 }
@@ -77,6 +104,8 @@ export default {
 .item.muuri-item-releasing .item-content {
   background: #a8a8a8;
 }
+
+
 </style>
 
 

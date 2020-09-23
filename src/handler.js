@@ -1,5 +1,6 @@
 import { /*app, protocol, BrowserWindow,*/ ipcMain } from 'electron'
 
+
 export default function handler(win) {
     ipcMain.on('close-app', () => {
         win.close()
