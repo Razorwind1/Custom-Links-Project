@@ -9,7 +9,6 @@
         <option value="4">Option 4</option>
       </select>
     </div>
-    <button v-on:click="getFavicon()">Favicon Test Button</button>
     <div class="attribution">
       Icons made by
       <span v-on:click="attributionLink">Freepik</span>

@@ -6,11 +6,12 @@
         class="item"
         v-for="(element, index) in $store.getters.getGridElements"
         :key="index"
-        @click="open(element)"
-        v-bind:style = getStyling(element.style)
       >
+      <!-- @click="open(element)" -->
         <div class="item-content">
-          <div class="my-custom-content">{{element.label}}</div>
+          <div class="my-custom-content" v-bind:style = getStyling(element.style)>
+          <img v-bind:src="element.content.img">
+          <div class="label">{{element.content.label}}</div></div>
         </div>
       </div>
     </div>
@@ -35,9 +36,9 @@ export default {
     },
     //returns a special vue "Style Object" from the store
     getStyling (styleName) {
-      console.log(styleName);
+      //console.log(styleName);
       const styleObject = this.$store.getters.getStyle(styleName);
-      console.log(styleObject);
+      //console.log(styleObject);
       return styleObject;
     }
   },
@@ -53,7 +54,7 @@ export default {
 #canvas>.gridElement{
   width: 100%;
   cursor: pointer;
-
+}
 .grid {
   position: relative;
 }
@@ -69,19 +70,18 @@ export default {
   text-align: center;
   position: relative;
 }
-#canvas>.gridElement img{
-  display: block;
-  margin-left: auto;
+.my-custom-content img{
+  width: 70%;
+  height: 70%;
   margin-right: auto;
-  width: 50%;
-
+  margin-left: auto;
 }
-#canvas>.gridElement div.label{
+.my-custom-content .label{
   display: block;
   position: absolute;
+  width: 100%;
   bottom: 1px;
   align-content: center;
-  line-height: 100px;
 }
 .item.muuri-item-dragging {
   z-index: 2;

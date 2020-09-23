@@ -20,7 +20,6 @@ export default new Vuex.Store({
           tags: ["game","favorite"]
         }
         },
-      },
       {
         posX: 1,
         posY: 0,
