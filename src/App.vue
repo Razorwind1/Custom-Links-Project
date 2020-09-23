@@ -42,7 +42,6 @@ export default {
 </script>
 
 <style>
-
 :root {
   height: 100%;
 
