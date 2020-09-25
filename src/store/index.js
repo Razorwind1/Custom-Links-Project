@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     gridElements: [
       {
+        id: 0,
         posX: 0,
         posY: 0,
         size: 1,
@@ -17,10 +18,11 @@ export default new Vuex.Store({
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
           img: "/assets/icons/Steam_icon_logo.png",
-          tags: ["game","favorite"]
+          tags: ["game", "favorite"]
         }
-        },
+      },
       {
+        id: 1,
         posX: 1,
         posY: 0,
         size: 1,
@@ -52,15 +54,19 @@ export default new Vuex.Store({
 
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
-      const element = {}
+      const element = {
+        id: state.gridElements.length + 1
+      }
       element.content = {}
 
-      if (payload.address && payload.label) {
-        element.content.address = payload.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-        element.label = payload.label
+      modifyLink(element, payload)
 
-        state.gridElements.push(element)
-      }
+      state.gridElements.push(element)
+    },
+    editGridElement(state, payload) {
+      const element = state.gridElements.find(element => element.id === payload.id)
+
+      modifyLink(element, payload.data)
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -70,10 +76,20 @@ export default new Vuex.Store({
       return state.gridElements
     },
     getGridLinks: (state) => {
-      state.gridElements.filter(element => element.type === "link")
+      return state.gridElements.filter(element => element.type === "link")
+    },
+    getGridLink: (state) => (id) => {
+      return state.gridElements.filter(element => element.id === id)[0]
     },
     getStyle: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
     }
   }
 })
+
+function modifyLink(element, data) {
+  if (data.address && data.label) {
+    element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+    element.content.label = data.label
+  }
+}

@@ -21,7 +21,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 600,
     height: 400,
-    minWidth: 600,
+    minWidth: 624,
     minHeight: 400,
     frame: false,
     backgroundColor: "#2c2c2c",
@@ -36,7 +36,7 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    //if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development

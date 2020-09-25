@@ -9,6 +9,14 @@
           @save-success="saveSuccess"
           @save-click="saveButtonClicked = true"
         />
+        <EditLink
+          v-if="popupArg.type === 'edit-link'"
+          :linkArgs="popupArg"
+          :saveLink="saveButtonClicked"
+          @save-fail="saveFail"
+          @save-success="saveSuccess"
+          @save-click="saveButtonClicked = true"
+        />
       </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
@@ -20,6 +28,7 @@
 
 <script>
 import AddLink from "@/components/AddLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   data: function () {
@@ -43,6 +52,7 @@ export default {
   },
   components: {
     AddLink,
+    EditLink
   },
 };
 </script>

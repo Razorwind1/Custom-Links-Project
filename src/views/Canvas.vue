@@ -1,12 +1,16 @@
 <template>
   <div id="canvas">
     <div class="grid">
-      <div class="item" v-for="(element, index) in $store.getters.getGridElements" :key="index">
-        <!-- @click="open(element)" -->
+      <div class="item" v-for="element in gridElements" :key="element.id">
         <div class="item-content">
-          <div class="link" v-bind:style="getStyling(element.style)">
+          <div
+            class="link"
+            v-bind:style="getStyling(element.style)"
+            @click="open(element)"
+            @contextmenu="editLink(element.id)"
+          >
             <img v-bind:src="element.content.img" />
-            <div class="label">{{element.content.label}}</div>
+            <div class="label">{{ element.content.label }}</div>
           </div>
         </div>
       </div>
@@ -18,17 +22,26 @@
 import Muuri from "muuri";
 
 export default {
+  data: function () {
+    return {
+      gridElements: this.$store.getters.getGridElements,
+      grid: null,
+    };
+  },
   mounted() {
-    const grid = new Muuri(".grid", {
-      dragEnabled: true,
-      dragSort: true,
-    });
-
-    console.log(grid);
+    this.initializeGrid(".grid");
   },
   methods: {
     open: function (element) {
-      window.shell.openExternal(element.content.address);
+      console.log(element)
+      // window.shell.openExternal(element.content.address);
+    },
+    editLink: function (id) {
+      this.$emit("show-popup", {
+        type: "edit-link",
+        saveButtonLabel: "Save Link",
+        linkID: id,
+      });
     },
     //returns a special vue "Style Object" from the store
     getStyling(styleName) {
@@ -37,6 +50,19 @@ export default {
       //console.log(styleObject);
       return styleObject;
     },
+    initializeGrid(el) {
+      const grid = new Muuri(el, {
+        dragEnabled: true,
+        dragSort: true,
+      });
+      this.grid = grid;
+    },
+  },
+  updated: function () {
+    this.$nextTick(function () {
+      this.grid.destroy();
+      this.initializeGrid(".grid");
+    });
   },
 };
 </script>
