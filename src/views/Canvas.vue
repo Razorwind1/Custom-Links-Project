@@ -33,8 +33,8 @@ export default {
   },
   methods: {
     open: function (element) {
-      console.log(element)
-      // window.shell.openExternal(element.content.address);
+      console.log(element);
+      window.shell.openExternal(element.content.address);
     },
     editLink: function (id) {
       this.$emit("show-popup", {
@@ -45,9 +45,7 @@ export default {
     },
     //returns a special vue "Style Object" from the store
     getStyling(styleName) {
-      //console.log(styleName);
       const styleObject = this.$store.getters.getStyle(styleName);
-      //console.log(styleObject);
       return styleObject;
     },
     initializeGrid(el) {
@@ -59,10 +57,8 @@ export default {
     },
   },
   updated: function () {
-    this.$nextTick(function () {
-      this.grid.destroy();
-      this.initializeGrid(".grid");
-    });
+    this.grid.destroy();
+    this.initializeGrid(".grid");
   },
 };
 </script>

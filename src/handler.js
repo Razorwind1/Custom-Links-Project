@@ -1,4 +1,4 @@
-import { /*app, protocol, BrowserWindow,*/ ipcMain } from 'electron'
+import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog} from 'electron'
 
 
 export default function handler(win) {
@@ -13,6 +13,17 @@ export default function handler(win) {
     })
     ipcMain.on('minimize-app', () => {
         win.minimize()
+    })
+    ipcMain.on('open-dialog', () => {
+        const imgSrc = dialog.showOpenDialogSync(win, {
+            title: "Select Image",
+            filters: [{
+                name: 'Images', extensions: ['jpg', 'png', 'gif']
+            }]
+        })
+        if (imgSrc){
+            console.log(imgSrc)
+        }
     })
 
     win.on('blur', () => {

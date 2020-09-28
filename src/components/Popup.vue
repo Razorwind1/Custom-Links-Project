@@ -2,15 +2,8 @@
   <div class="popup-overlay">
     <div class="popup-container">
       <div class="popup-content">
-        <AddLink
-          v-if="popupArg.type === 'add-link'"
-          :saveLink="saveButtonClicked"
-          @save-fail="saveFail"
-          @save-success="saveSuccess"
-          @save-click="saveButtonClicked = true"
-        />
-        <EditLink
-          v-if="popupArg.type === 'edit-link'"
+        <EditAddLink
+          v-if="popupArg.type === 'edit-link' || popupArg.type === 'add-link'"
           :linkArgs="popupArg"
           :saveLink="saveButtonClicked"
           @save-fail="saveFail"
@@ -27,8 +20,7 @@
 </template>
 
 <script>
-import AddLink from "@/components/AddLink.vue";
-import EditLink from "@/components/EditLink.vue";
+import EditAddLink from "@/components/EditAddLink.vue";
 
 export default {
   data: function () {
@@ -51,8 +43,7 @@ export default {
     popupArg: Object,
   },
   components: {
-    AddLink,
-    EditLink
+    EditAddLink
   },
 };
 </script>

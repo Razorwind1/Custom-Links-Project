@@ -29,7 +29,7 @@ export default new Vuex.Store({
         type: "website",
         style: "codingStyle",
         content: {
-          label: "Link Tailor GitHub",
+          label: "Link Tailor",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "/assets/icons/github_icon.jpg",
           tags: ["coding"],
@@ -55,11 +55,11 @@ export default new Vuex.Store({
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
       const element = {
-        id: state.gridElements.length + 1
+        id: state.gridElements.length + 1     // NEED BETTER ID MECHANISM
       }
       element.content = {}
 
-      modifyLink(element, payload)
+      modifyLink(element, payload.data)
 
       state.gridElements.push(element)
     },
@@ -88,8 +88,15 @@ export default new Vuex.Store({
 })
 
 function modifyLink(element, data) {
+  console.log(window.platform)
   if (data.address && data.label) {
     element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+    if (window.platform === "win32" && !element.content.address.includes('\\'))
+      element.content.address = 'http://' + element.content.address      // For win platform, if the value has no '\' it will be marked as a website and http:// will be included in front of it.
     element.content.label = data.label
+  }
+
+  if (data.imgSrc) { 
+    element.content.img = data.imgSrc
   }
 }
