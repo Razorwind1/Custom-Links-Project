@@ -9,6 +9,8 @@
         <option value="4">Option 4</option>
       </select>
     </div>
+    <!--<button @click="getFavicon('https://duckduckgo.com/')">getFavicon Text</button>-->
+
     <div class="attribution">
       Icons made by
       <span v-on:click="attributionLink">Freepik</span>
@@ -21,44 +23,17 @@
 
 export default {
   methods: {
-attributionLink: function () {
+    attributionLink: function () {
       window.shell.openExternal("https://www.flaticon.com/authors/freepik");
     },
-    getFavicon: function () {
-    var favicon = undefined;
-    console.log("getFavicon function activated");
-    var theRequest = new XMLHttpRequest();
-try {
-    console.log("request tried");
-    theRequest.open("GET", "https://razorwind1.github.io/RealityCheck/Index.html", false);
-    theRequest.onload = function () {
-        console.log("document loaded");
-        var nodeList = document.getElementsByTagName("link");
-        console.log(nodeList);
-        for (var i = 0; i < nodeList.length; i++)
-        {
-            console.log(nodeList[i].getAttribute("href"));
-            if((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon"))
-            {
-                console.log("favico element found");
-                favicon = nodeList[i].getAttribute("href");
-            }
-        }
-    }
-    theRequest.send();
-}
-catch (e) {
-    console.log("Unable to load the questeded file.");
-}
-
-    return favicon;
-}
+    getFavicon: function (url) {
+      window.ipcRenderer.send("getFavicon", url);
+    },
   },
 };
 </script>
 
 <style>
-
 .settings {
   width: 100%;
   margin-bottom: 15px;
@@ -87,10 +62,10 @@ catch (e) {
   padding: 0 6px;
   font-size: 12px;
   background-color: transparent;
-  opacity: .5;
+  opacity: 0.5;
 }
 .settings .attribution:hover {
-  opacity: .9;
+  opacity: 0.9;
 }
 .settings .attribution span {
   color: rgb(108, 187, 233);
