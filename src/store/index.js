@@ -88,11 +88,13 @@ export default new Vuex.Store({
 })
 
 function modifyLink(element, data) {
-  console.log(window.platform)
+
   if (data.address && data.label) {
     element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-    if (window.platform === "win32" && !element.content.address.includes('\\'))
-      element.content.address = 'http://' + element.content.address      // For win platform, if the value has no '\' it will be marked as a website and http:// will be included in front of it.
+
+    // if (window.platform === "win32" && !element.content.address.includes('\\'))
+    //   element.content.address = 'http://' + element.content.address      // For win platform, if the value has no '\' it will be marked as a website and http:// will be included in front of it.
+
     element.content.label = data.label
   }
 
