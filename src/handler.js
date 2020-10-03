@@ -1,4 +1,6 @@
-import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog} from 'electron'
+import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, app } from 'electron'
+import fs from 'fs'
+import path from 'path'
 
 
 export default function handler(win) {
@@ -18,11 +20,14 @@ export default function handler(win) {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
             filters: [{
-                name: 'Images', extensions: ['jpg', 'png', 'gif']
+                extensions: ['jpg', 'png', 'gif']
             }]
         })
-        if (imgSrc){
-            console.log(imgSrc)
+        if (imgSrc) {
+            console.log(path.dirname(app.getPath('exe')))
+            fs.mkdir(path.join(path.dirname(app.getPath('exe')), 'user_data'), { recursive: true }, (err) => {
+                if (err) throw err;
+            });
         }
     })
 

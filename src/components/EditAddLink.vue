@@ -28,6 +28,7 @@
 
 <script>
 import validateInputs from "@/js/validation.js";
+import path from 'path'
 
 export default {
   data: function () {
@@ -45,7 +46,7 @@ export default {
   },
   computed: {
     imgSrcFile: function () {
-      return this.imgSrc.match(/([^/]+)$/)[1];
+      return path.basename(this.imgSrc);
     },
   },
   mounted: function () {
