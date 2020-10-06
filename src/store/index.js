@@ -8,9 +8,13 @@ export default new Vuex.Store({
   state: {
     gridElements: [
       {
-        posX: 0,
-        posY: 0,
-        size: 1,
+        id: 0,
+        pos: {
+          X: 0,
+          Y: 0,
+          sizeX: 0,
+          sizeY: 0
+        },
         type: "exe",
         style: "gameStyle",
         content: {
@@ -21,9 +25,13 @@ export default new Vuex.Store({
         }
         },
       {
-        posX: 1,
-        posY: 0,
-        size: 1,
+        id: 1,
+        pos: {
+          X: 0,
+          Y: 1,
+          sizeX: 2,
+          sizeY: 3
+        },
         type: "website",
         style: "codingStyle",
         content: {
