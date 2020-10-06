@@ -34,7 +34,7 @@ export default {
   methods: {
     open: function (element) {
       console.log(element);
-      window.shell.openExternal(element.content.address);
+      //window.shell.openExternal(element.content.address);
     },
     editLink: function (id) {
       this.$emit("show-popup", {

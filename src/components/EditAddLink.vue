@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     selectImage: function () {
-      window.ipcRenderer.send("open-dialog");
+      this.imgSrc = window.ipcRenderer.sendSync("open-image-dialog");
     },
   },
   computed: {
