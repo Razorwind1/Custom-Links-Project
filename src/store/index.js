@@ -10,10 +10,10 @@ export default new Vuex.Store({
       {
         id: 0,
         pos: {
-          X: 0,
-          Y: 0,
-          sizeX: 0,
-          sizeY: 0
+          x: 0,
+          y: 0,
+          sizeX: 1,
+          sizeY: 1
         },
         type: "exe",
         style: "gameStyle",
@@ -27,10 +27,10 @@ export default new Vuex.Store({
       {
         id: 1,
         pos: {
-          X: 0,
-          Y: 1,
-          sizeX: 2,
-          sizeY: 3
+          x: 0,
+          y: 1,
+          sizeX: 1,
+          sizeY: 1
         },
         type: "website",
         style: "codingStyle",

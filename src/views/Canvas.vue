@@ -1,61 +1,68 @@
 <template>
   <grid-layout
-            :margin="[10,10]"
-            :layout.sync="layout"
-            :col-num="10"
-            :row-height="10"
-            :is-draggable="true"
-            :is-resizable="true"
-            :is-mirrored="false"
-            :vertical-compact="false"
-            :use-css-transforms="true"
+    :layout.sync="layout"
+    :col-num="6"
+    :row-height="100"
+    :is-draggable="true"
+    :is-resizable="true"
+    :vertical-compact="false"
+    :margin="[10, 10]"
+    :use-css-transforms="true"
+    :style="{ width: '100%', height: '100%' }"
   >
-  <div id="canvas">
-    <grid-item v-for="(element, index) in gridElements" 
-      :x="element.pos.X"
-      :y="element.pos.Y"
-      :w="element.pos.sizeX"
-      :h="element.pos.sizeY"
-      :i="index"
-      :key="element.id"
-      @resize="resizeEvent"
-      @move="moveEvent"
-      @resized="resizedEvent"
-      @moved="movedEvent"
-      >
-        <!-- @click="open(element)" -->
+    <grid-item
+      v-for="element in layout"
+      :x="element.x"
+      :y="element.y"
+      :w="element.w"
+      :h="element.h"
+      :i="element.i"
+      :key="element.i"
+      @click="open(element)"
+    >
       <div class="link" v-bind:style="getStyling(element.style)">
-        <img v-bind:src="element.content.img" />
-        <div class="label">{{element.content.label}}</div>
+        <img v-bind:src="element.img" />
+        <div class="label">{{ element.label }}</div>
       </div>
     </grid-item>
-  </div>
-</grid-layout>
+  </grid-layout>
 </template>
 
 <script>
-import VueGridLayout from 'vue-grid-layout';
+import VueGridLayout from "vue-grid-layout";
 
-//creating layout
-var testLayout = [
-  {"x":5,"y":1,"w":3,"h":10,"i":"index"},
-  {"x":0,"y":0,"w":0,"h":0,"i":"index"}];
+let layout = [];
 
 export default {
-  mounted() {
-    this.index = this.layout.length;
-  },
   data() {
     return {
-      layout: testLayout,
-      gridElements: this.$store.getters.getGridElements
-    }
+      gridElements: this.$store.getters.getGridElements,
+      layout: layout,
+    };
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
   },
   methods: {
+    gridToLayout: function () {
+      const layout = [];
+      this.gridElements.forEach((element) => {
+        layout.push({
+          x: element.pos.x,
+          y: element.pos.y,
+          w: element.pos.sizeX,
+          h: element.pos.sizeY,
+          i: element.id,
+          img: element.content.img,
+          style: element.style,
+          label: element.content.label
+
+        });
+      });
+
+      return layout;
+    },
     open: function (element) {
       window.shell.openExternal(element.content.address);
     },
@@ -66,20 +73,9 @@ export default {
       //console.log(styleObject);
       return styleObject;
     },
-    moveEvent: function(i, newX, newY){
-        console.log("MOVE i=" + i + ", x=" + newX + ", y=" + newY);
-    },
-    resizeEvent: function(i, newH, newW, newHPx, newWPx){
-        console.log("RESIZE i=" + i + ", h=" + newH + ", w=" + newW + 
-        ", h(px)=" + newHPx + ", w(px)=" + newWPx);
-    },
-    movedEvent: function(i, newX, newY){
-        console.log("MOVED i=" + i + ", x=" + newX + ", y=" + newY);
-    },
-    resizedEvent: function(i, newH, newW, newHPx, newWPx){
-        console.log("RESIZED i=" + i + ", h=" + newH + ", w=" + newW +
-        ", h(px)=" + newHPx + ", w(px)=" + newWPx);
-    },
+  },
+  mounted: function () {
+    layout = this.gridToLayout();
   },
 };
 </script>
@@ -91,7 +87,6 @@ export default {
 }
 .link {
   margin: 5px;
-  position: absolute;
   width: 100%;
   height: 100%;
   align-items: center;
