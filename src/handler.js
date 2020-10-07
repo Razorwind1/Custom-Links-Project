@@ -31,8 +31,9 @@ export default function handler(win) {
             }]
         })
         if (imgSrc && imgSrc[0]) {
-            saveLinkImage(imgSrc[0], "001")
-            event.returnValue = imgSrc[0]
+            //saveLinkImage(imgSrc[0], "001")
+            const imageBuffer = Buffer.from(fs.readFileSync(imgSrc[0]))
+            event.returnValue = imageBuffer;
         }
         else {
             event.returnValue = ""
@@ -61,13 +62,15 @@ export default function handler(win) {
 
 function saveLinkImage(imgSrc, linkId) {
     const linkFolderDir = path.join(USER_DATA_DIRECTORY, linkId)
-    const imageDir = path.join(__dirname, path.basename(imgSrc))
-    console.log(imageDir)
+    const imageDir = path.join(linkFolderDir, path.basename(imgSrc))
+    const imageBuffer = Buffer.from(fs.readFileSync(imgSrc));
+    console.log(imageBuffer)
 
     fs.mkdir(linkFolderDir, { recursive: true }, (err) => {
         if (err) throw err;
     });
-    fs.copyFile(imgSrc, imageDir, (err) => {
-        if (err) throw err;
-    });
+    // fs.copyFile(imgSrc, imageDir, (err) => {
+    //     if (err) throw err;
+    // });
+    fs.writeFileSync(imageDir, imageBuffer);
 }

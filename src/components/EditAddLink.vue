@@ -28,7 +28,7 @@
 
 <script>
 import validateInputs from "@/js/validation.js";
-import path from 'path'
+import path from "path";
 
 export default {
   data: function () {
@@ -41,7 +41,12 @@ export default {
   },
   methods: {
     selectImage: function () {
-      this.imgSrc = window.ipcRenderer.sendSync("open-image-dialog");
+      const imageBuffer = window.ipcRenderer.sendSync("open-image-dialog");
+
+      const blob = new Blob([imageBuffer], { type: "image/png" });
+      const url = URL.createObjectURL(blob);
+
+      this.imgSrc = url;
     },
   },
   computed: {
