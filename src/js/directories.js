@@ -8,7 +8,10 @@ APP = path.dirname(app.getPath('exe')),
     // --------------------------- \\
         LINK_ICONS = path.join(USER_DATA, 'link_icons'),
         // --------------------------- \\
-            DEFAULT_ICON = path.join(APP, 'resources', 'default_icon.jpg')
+
+    RESOURCES = path.join(APP, 'resources'),
+    // --------------------------- \\
+        DEFAULT_ICON = path.join(RESOURCES, 'default_icon.png')
 
 export default {
     APP,

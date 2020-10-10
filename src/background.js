@@ -5,6 +5,9 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import handler from './handler'
+import fs from 'fs'
+import defaultImgBuffer from "./js/img/defaultImgBuffer"
+import DIR from "./js/directories"
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -78,6 +81,8 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  console.log(" \n \n \n \n \n \n \n \n \n")
+  setUpDefaultLinkImg()
   createWindow()
   handler(win)
 })
@@ -94,5 +99,14 @@ if (isDevelopment) {
     process.on('SIGTERM', () => {
       app.quit()
     })
+  }
+}
+
+function setUpDefaultLinkImg() {
+  try {
+    fs.writeFileSync(DIR.DEFAULT_ICON, defaultImgBuffer, "base64")
+  }
+  catch (e) {
+    console.log(e)
   }
 }
