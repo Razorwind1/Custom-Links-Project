@@ -17,7 +17,7 @@ export default new Vuex.Store({
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "/assets/icons/Steam_icon_logo.png",
+          img: "Steam_icon_logo.png",
           tags: ["game", "favorite"]
         }
       },
@@ -31,7 +31,7 @@ export default new Vuex.Store({
         content: {
           label: "Link Tailor",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "/assets/icons/github_icon.jpg",
+          img: "github_icon.jpg",
           tags: ["coding"],
         }
       },
@@ -98,7 +98,8 @@ function modifyLink(element, data) {
     element.content.label = data.label
   }
 
-  if (data.imgSrc) { 
-    element.content.img = data.imgSrc
+  if (data.imgLabel && data.imgBuffer) { 
+    element.content.img = data.imgLabel
+    window.ipcRenderer.send("save-link-image-to-file", {buffer: data.imgBuffer, label: data.imgLabel, id: element.id})
   }
 }

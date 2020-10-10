@@ -7,9 +7,9 @@
             class="link"
             v-bind:style="getStyling(element.style)"
             @click="open(element)"
-            @contextmenu="editLink(element.id)"
+            @contextmenu="editLink(element.id, element.content.img)"
           >
-            <img v-bind:src="element.content.img" />
+            <img v-bind:src="getElementImg(element.id, element.content.img)" />
             <div class="label">{{ element.content.label }}</div>
           </div>
         </div>
@@ -20,6 +20,7 @@
 
 <script>
 import Muuri from "muuri";
+import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 export default {
   data: function () {
@@ -36,19 +37,28 @@ export default {
       console.log(element);
       //window.shell.openExternal(element.content.address);
     },
-    editLink: function (id) {
+    editLink: function (id, url) {
       this.$emit("show-popup", {
         type: "edit-link",
         saveButtonLabel: "Save Link",
         linkID: id,
+        imgUrl: url,
       });
     },
+    getElementImg: function (id, url) {
+      const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
+        id,
+        url,
+      }).buffer;
+      const imgUrl = imgUrlFromBuffer(imgBuffer);
+      return imgUrl;
+    },
     //returns a special vue "Style Object" from the store
-    getStyling(styleName) {
+    getStyling: function (styleName) {
       const styleObject = this.$store.getters.getStyle(styleName);
       return styleObject;
     },
-    initializeGrid(el) {
+    initializeGrid: function (el) {
       const grid = new Muuri(el, {
         dragEnabled: true,
         dragSort: true,

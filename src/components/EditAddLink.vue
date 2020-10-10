@@ -15,9 +15,9 @@
       <div class="section">
         <h3>Image</h3>
         <div class="img-selection">
-          <img :src="imgSrc" />
+          <img :src="imgSrc" @click="selectImage" />
           <div class="img-selection-info">
-            <input type="text" v-model="imgSrcFile" readonly disabled />
+            <input type="text" v-model="imgLabel" readonly disabled />
             <div class="button" @click="selectImage">Select Image</div>
           </div>
         </div>
@@ -28,30 +28,41 @@
 
 <script>
 import validateInputs from "@/js/validation.js";
-import path from "path";
+import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 export default {
   data: function () {
     return {
       header: this.linkArgs.type === "add-link" ? "Add Link" : "Edit Link",
+
       label: "",
       address: "",
-      imgSrc: "/assets/icons/logo.png",
+
+      imgSrc: null,
+
+      imgBuffer: null,
+      imgLabel: null,
     };
   },
   methods: {
     selectImage: function () {
-      const imageBuffer = window.ipcRenderer.sendSync("open-image-dialog");
+      const image = window.ipcRenderer.sendSync("open-image-dialog");
 
-      const blob = new Blob([imageBuffer], { type: "image/png" });
-      const url = URL.createObjectURL(blob);
+      this.imgSrc = imgUrlFromBuffer(image.buffer);
 
-      this.imgSrc = url;
+      this.imgLabel = image.src;
+      this.imgBuffer = image.buffer;
     },
-  },
-  computed: {
-    imgSrcFile: function () {
-      return path.basename(this.imgSrc);
+    getElementImg: function (id, url) {
+      const image = window.ipcRenderer.sendSync("get-image-buffer", {
+        id,
+        url,
+      });
+
+      this.imgSrc = imgUrlFromBuffer(image.buffer);
+
+      this.imgLabel = image.src;
+      this.imgBuffer = image.buffer;
     },
   },
   mounted: function () {
@@ -70,6 +81,8 @@ export default {
         key === "Enter" ? this.$emit("save-click") : "";
       })
     );
+
+    this.getElementImg(this.linkArgs.linkID, this.linkArgs.imgUrl)
   },
   watch: {
     saveLink: function (value) {

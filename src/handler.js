@@ -1,14 +1,10 @@
-import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, app } from 'electron'
-import fs from 'fs'
-import path from 'path'
+import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog } from 'electron'
 
-const APP_DIRECTORY = path.dirname(app.getPath('exe'))
-const USER_DATA_DIRECTORY = path.join(APP_DIRECTORY, 'user_data')
+import imageBufferFromUrl from './js/img/imgBufferFromUrl'
+import saveLinkImageToFile from './js/img/saveLinkImageToFile'
 
-fs.mkdir(USER_DATA_DIRECTORY, { recursive: true }, (err) => {
-    if (err) throw err;
-});
-console.log(USER_DATA_DIRECTORY)
+import DIR from "./js/directories"
+import path from "path"
 
 export default function handler(win) {
     ipcMain.on('close-app', () => {
@@ -23,6 +19,8 @@ export default function handler(win) {
     ipcMain.on('minimize-app', () => {
         win.minimize()
     })
+
+    // IMAGE HANDLING FOR THE LINKS
     ipcMain.on('open-image-dialog', (event) => {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
@@ -31,13 +29,35 @@ export default function handler(win) {
             }]
         })
         if (imgSrc && imgSrc[0]) {
-            //saveLinkImage(imgSrc[0], "001")
-            const imageBuffer = Buffer.from(fs.readFileSync(imgSrc[0]))
-            event.returnValue = imageBuffer;
+            const imgBuffer = imageBufferFromUrl(imgSrc[0]);
+            event.returnValue = { buffer: imgBuffer, src: path.basename(imgSrc[0]) }
         }
         else {
-            event.returnValue = ""
+            event.returnValue = null
         }
+    })
+    ipcMain.on('get-image-buffer', (event, args) => {
+        let imgBuffer = null
+        let imgUrl = null
+
+        if (args.id === undefined || args.url === undefined) {                                  //  ADD LINK FOR THE FIRST TIME
+            imgBuffer = imageBufferFromUrl(DIR.DEFAULT_ICON);
+            imgUrl = DIR.DEFAULT_ICON
+        }
+        else {                                                                                  //  EDIT LINK THAT HAS ICON
+            imgUrl = path.join(DIR.LINK_ICONS, args.id.toString(), args.url)
+            imgBuffer = imageBufferFromUrl(imgUrl);
+        }
+        if (!imgBuffer) {                                                                       //  ICON NOT FOUND --> ERROR
+            console.log("FAILED TO LOAD THE IMAGE SPECIFIED, FALLING BACK TO DEFAULT ICON!")
+            imgBuffer = imageBufferFromUrl(DIR.DEFAULT_ICON);
+            imgUrl = DIR.DEFAULT_ICON
+        }
+
+        event.returnValue = { buffer: imgBuffer, src: path.basename(imgUrl) }
+    })
+    ipcMain.on('save-link-image-to-file', (event, args) => {
+        saveLinkImageToFile(args.buffer, args.label, args.id)
     })
 
     win.on('blur', () => {
@@ -58,19 +78,4 @@ export default function handler(win) {
     win.on('restore', () => {
         win.webContents.send('app-state-changed', 'restore')
     })
-}
-
-function saveLinkImage(imgSrc, linkId) {
-    const linkFolderDir = path.join(USER_DATA_DIRECTORY, linkId)
-    const imageDir = path.join(linkFolderDir, path.basename(imgSrc))
-    const imageBuffer = Buffer.from(fs.readFileSync(imgSrc));
-    console.log(imageBuffer)
-
-    fs.mkdir(linkFolderDir, { recursive: true }, (err) => {
-        if (err) throw err;
-    });
-    // fs.copyFile(imgSrc, imageDir, (err) => {
-    //     if (err) throw err;
-    // });
-    fs.writeFileSync(imageDir, imageBuffer);
 }
