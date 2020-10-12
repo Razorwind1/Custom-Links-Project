@@ -39,13 +39,25 @@ export default new Vuex.Store({
         name: "gameStyle",
         color: 'rgb(226, 97, 151)',
         fontFamily: 'Verdana, Geneva, sans-serif',
-        fontSize: '100%'
+        fontSize: '100%',
+        tagColor: "rgb(226, 97, 151)"
       },
       {
         name: "codingStyle",
         color: 'rgb(102, 150, 222)',
         fontFamily: '"Brush Script MT", Helvetica, sans-serif',
-        fontSize: '100%'
+        fontSize: '100%',
+        tagColor: "" //no associated tag, so no need for a color
+      }
+    ],
+    tags: [
+      {
+        name: "favorite",
+        style: "gameStyle"
+      },
+      {
+        name: "gaming",
+        style: "gameStyle"
       }
     ]
   },
@@ -74,6 +86,26 @@ export default new Vuex.Store({
     },
     getStyle: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
-    }
+    },
+    getTagColor: (state) => (tagName) => {
+      var tagStyleName = state.tags.filter(tag => tag.name === tagName)
+      if (tagStyleName.length >= 0) {
+        tagStyleName = tagStyleName[0].style
+      }
+      else {
+        tagStyleName = "";
+      }
+      var tagStyleColor = state.styles.filter(style => style.name === tagStyleName)
+      if (tagStyleColor.length >= 0) {
+        tagStyleColor = tagStyleColor[0].tagColor
+      }
+      else {
+        tagStyleColor = "";
+      }
+      return tagStyleColor;
+    },
+    getTags: (state) => {
+      return state.tags
+    },
   }
 })
