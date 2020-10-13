@@ -5,20 +5,16 @@
     </div>
     <div class="content">
       <div class="section">
-        <table>
-          <tr>
-            <th style="min-width: 165px;">Tag Name</th>
-            <th style="min-width: 125px;">Style</th>
-            <th>Color</th>
-          </tr>
-          <div v-for="(tag, index) in $store.getters.getTags" :key="index">
-        <tr class="tag-list-item">
-          <td style="min-width: 145px; padding-left: 10px;">{{tag.name}}</td>
-          <td style="min-width: 125px; padding-left: 10px;">{{tag.style}}</td>
-          <td style="min-width: 50px; text-align: center;"><span class="color-dot" :style="{ 'background-color': getTagColorMethod(tag.name)}"></span></td>
-        </tr>
-          </div>
-        </table>
+        <div class="table-header">
+          <div>Tag Name</div>
+          <div>Color</div>
+        </div>
+        <div v-for="(tag, index) in $store.getters.getTags" :key="index">
+        <div class="table-row">
+          <div>{{tag.name}}</div>
+          <div><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
+        </div>
+        </div>
 
     </div>
   </div>
@@ -34,12 +30,6 @@ export default {
       label: "",
       address: "",
     };
-  },
-  methods: {
-    getTagColorMethod(tagName) {
-      const tagColor= this.$store.getters.getTagColor(tagName);
-      return tagColor;
-    }
   },
   watch: {
     saveLink: function (value) {
@@ -80,25 +70,30 @@ span.color-dot {
   border-radius: 50%;
   display: inline-block;
 }
-table {
-  border-spacing: 5px;
-}
-th {
-  display: inline-block;
-  text-align: left;
-}
-tr.tag-list-item {
+.table-header {
+  display: flex;
   border: 2px solid var(--dark-background-color);
-  margin-bottom: 5px;
-  margin-top: 5px;
-  text-align: left;
-  vertical-align: middle;
+  justify-content: space-between;
+}.table-header > div {
+  padding: 10px;
+  font-size: 110%;
+  font-weight: bold;
 }
 
-tr.tag-list-item td:hover {
+.table-row {
+  border: 2px solid var(--dark-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}.table-row > div {
+  padding: 10px;
+}.table-row > div:hover {
   background-color: var(--light-background-color);
   border-radius: 5px;
   cursor: pointer;
+}.table-row >div:last-child {
+  width: 55px;
 }
 
 
