@@ -25,7 +25,7 @@ export default function handler(win) {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
             filters: [{
-                extensions: ['jpg', 'png', 'gif']
+                name: 'jpg, png, gif, svg', extensions: ['jpg', 'png', 'gif', 'svg']
             }]
         })
         if (imgSrc && imgSrc[0]) {
@@ -44,14 +44,15 @@ export default function handler(win) {
             imgBuffer = imageBufferFromUrl(DIR.DEFAULT_ICON);
             imgUrl = DIR.DEFAULT_ICON
         }
-        else {                                                                                  //  EDIT LINK THAT HAS ICON
+        else {                                                                                  //  EDIT LINK THAT ALREADY HAS ICON
             imgUrl = path.join(DIR.LINK_ICONS, args.id.toString(), args.url)
             imgBuffer = imageBufferFromUrl(imgUrl);
-        }
-        if (!imgBuffer) {                                                                       //  ICON NOT FOUND --> ERROR
-            console.log("FAILED TO LOAD THE IMAGE SPECIFIED, FALLING BACK TO DEFAULT ICON!")
-            imgBuffer = imageBufferFromUrl(DIR.DEFAULT_ICON);
-            imgUrl = DIR.DEFAULT_ICON
+
+            if (!imgBuffer) {                                                                   //  EDIT LINK THAT ALREADY HAS ICON NOT FOUND --> ERROR
+                console.log("FAILED TO LOAD THE IMAGE SPECIFIED, FALLING BACK TO DEFAULT ICON!")
+                imgBuffer = imageBufferFromUrl(DIR.DEFAULT_ICON);
+                imgUrl = DIR.DEFAULT_ICON
+            }
         }
 
         event.returnValue = { buffer: imgBuffer, src: path.basename(imgUrl) }
