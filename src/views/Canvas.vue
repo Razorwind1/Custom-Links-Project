@@ -19,9 +19,10 @@
       :i="element.i"
       :key="element.i"
       @click="open(element)"
+      @contextmenu="editLink(element.id, element.img)"
     >
       <div class="link" v-bind:style="getStyling(element.style)">
-        <img v-bind:src="element.img" />
+        <img v-bind:src="getElementImg(element.id, element.img)" />
         <div class="label">{{ element.label }}</div>
       </div>
     </grid-item>
@@ -30,6 +31,7 @@
 
 <script>
 import VueGridLayout from "vue-grid-layout";
+import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 let layout = [];
 
@@ -64,15 +66,34 @@ export default {
       return layout;
     },
     open: function (element) {
-      window.shell.openExternal(element.content.address);
+      console.log(element);
+      //window.shell.openExternal(element.content.address);
+    },
+    editLink: function (id, url) {
+      this.$emit("show-popup", {
+        type: "edit-link",
+        saveButtonLabel: "Save Link",
+        linkID: id,
+        imgUrl: url,
+      });
+    },
+    getElementImg: function (id, url) {
+      const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
+        id,
+        url,
+      }).buffer;
+      const imgUrl = imgUrlFromBuffer(imgBuffer);
+      return imgUrl;
     },
     //returns a special vue "Style Object" from the store
-    getStyling(styleName) {
-      //console.log(styleName);
+    getStyling: function (styleName) {
       const styleObject = this.$store.getters.getStyle(styleName);
-      //console.log(styleObject);
       return styleObject;
-    },
+    }
+  },
+  updated: function () {
+    this.grid.destroy();
+    this.initializeGrid(".grid");
   },
   mounted: function () {
     layout = this.gridToLayout();

@@ -5,6 +5,10 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import handler from './handler'
+import fs from 'fs'
+import defaultImgBuffer from "./js/img/defaultImgBuffer"
+import DIR from "./js/directories"
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -21,7 +25,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 600,
     height: 400,
-    minWidth: 600,
+    minWidth: 624,
     minHeight: 400,
     frame: false,
     backgroundColor: "#2c2c2c",
@@ -36,7 +40,7 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    //if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
@@ -77,6 +81,8 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  console.log(" \n \n \n \n \n \n \n \n \n")
+  setUpDefaultLinkImg()
   createWindow()
   handler(win)
 })
@@ -93,5 +99,14 @@ if (isDevelopment) {
     process.on('SIGTERM', () => {
       app.quit()
     })
+  }
+}
+
+function setUpDefaultLinkImg() {
+  try {
+    fs.writeFileSync(DIR.DEFAULT_ICON, defaultImgBuffer, "base64")
+  }
+  catch (e) {
+    console.log(e)
   }
 }

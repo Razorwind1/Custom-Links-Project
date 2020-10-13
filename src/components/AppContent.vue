@@ -2,7 +2,7 @@
   <div id="app-content" :class="[popupVisible ? 'disable-input' : '']">
     <NavBar v-on:show-popup="showPopup" />
     <div id="app-main">
-      <router-view />
+      <router-view  v-on:show-popup="showPopup"/>
     </div>
   </div>
 </template>
