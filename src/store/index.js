@@ -9,9 +9,12 @@ export default new Vuex.Store({
     gridElements: [
       {
         id: 0,
-        posX: 0,
-        posY: 0,
-        size: 1,
+        pos: {
+          x: 0,
+          y: 0,
+          sizeX: 1,
+          sizeY: 1
+        },
         type: "exe",
         style: "gameStyle",
         content: {
@@ -23,9 +26,12 @@ export default new Vuex.Store({
       },
       {
         id: 1,
-        posX: 1,
-        posY: 0,
-        size: 1,
+        pos: {
+          x: 0,
+          y: 1,
+          sizeX: 1,
+          sizeY: 1
+        },
         type: "website",
         style: "codingStyle",
         content: {
@@ -58,6 +64,12 @@ export default new Vuex.Store({
         id: state.gridElements.length + 1     // NEED BETTER ID MECHANISM
       }
       element.content = {}
+      element.pos = {
+        x: 0,
+        y: 0,
+        sizeX: 1,
+        sizeY: 1
+      }
 
       modifyLink(element, payload.data)
 
