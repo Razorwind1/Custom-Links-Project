@@ -18,9 +18,9 @@
       :h="element.h"
       :i="element.i"
       :key="element.i"
-      @click="open(element)"
-      @contextmenu="editLink(element.id, element.img)"
     >
+      <!-- @click="open(element)"
+      @contextmenu="editLink(element.id, element.img)" -->
       <div class="link" v-bind:style="getStyling(element.style)">
         <img v-bind:src="getElementImg(element.id, element.img)" />
         <div class="label">{{ element.label }}</div>
@@ -59,7 +59,6 @@ export default {
           img: element.content.img,
           style: element.style,
           label: element.content.label
-
         });
       });
 
@@ -67,7 +66,7 @@ export default {
     },
     open: function (element) {
       console.log(element);
-      //window.shell.openExternal(element.content.address);
+      window.shell.openExternal(element.content.address);
     },
     editLink: function (id, url) {
       this.$emit("show-popup", {
@@ -92,8 +91,7 @@ export default {
     }
   },
   updated: function () {
-    this.grid.destroy();
-    this.initializeGrid(".grid");
+    layout = this.gridToLayout();
   },
   mounted: function () {
     layout = this.gridToLayout();

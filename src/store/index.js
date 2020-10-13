@@ -64,6 +64,12 @@ export default new Vuex.Store({
         id: state.gridElements.length + 1     // NEED BETTER ID MECHANISM
       }
       element.content = {}
+      element.pos = {
+        x: 0,
+        y: 0,
+        sizeX: 1,
+        sizeY: 1
+      }
 
       modifyLink(element, payload.data)
 
