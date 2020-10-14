@@ -79,6 +79,10 @@ export default new Vuex.Store({
       const element = state.gridElements.find(element => element.id === payload.id)
 
       modifyLink(element, payload.data)
+    },
+    setState(state, payload) {
+      state.gridElements = payload.gridElements || []
+      state.styles = payload.styles || []
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -110,8 +114,8 @@ function modifyLink(element, data) {
     element.content.label = data.label
   }
 
-  if (data.imgLabel && data.imgBuffer) { 
+  if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
-    window.ipcRenderer.send("save-link-image-to-file", {buffer: data.imgBuffer, label: data.imgLabel, id: element.id})
+    window.ipcRenderer.send("save-link-image-to-file", { buffer: data.imgBuffer, label: data.imgLabel, id: element.id })
   }
 }

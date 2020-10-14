@@ -8,6 +8,8 @@ APP = path.dirname(app.getPath('exe')),
     // --------------------------- \\
         LINK_ICONS = path.join(USER_DATA, 'link_icons'),
         // --------------------------- \\
+        STATE = path.join(USER_DATA, 'state.json'),
+        // --------------------------- \\
 
     RESOURCES = path.join(APP, 'resources'),
     // --------------------------- \\
@@ -17,5 +19,6 @@ export default {
     APP,
     USER_DATA,
     LINK_ICONS,
-    DEFAULT_ICON
+    DEFAULT_ICON,
+    STATE
 }

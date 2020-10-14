@@ -2,9 +2,12 @@ import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog } from 'electron'
 
 import imageBufferFromUrl from './js/img/imgBufferFromUrl'
 import saveLinkImageToFile from './js/img/saveLinkImageToFile'
+import writeStateToFile from './js/writeStateToFile'
 
 import DIR from "./js/directories"
 import path from "path"
+import fs from "fs"
+
 const webIconScraper = require("web-icon-scraper");
 
 export default function handler(win) {
@@ -17,9 +20,9 @@ export default function handler(win) {
             followRedirectsCount: 0,
         }).then((output) => {
             console.log(output);
-            });
+        });
         event.reply("this reply will contain the pic url?");
-      })
+    })
     ipcMain.on('close-app', () => {
         win.close()
     })
@@ -72,6 +75,20 @@ export default function handler(win) {
     })
     ipcMain.on('save-link-image-to-file', (event, args) => {
         saveLinkImageToFile(args.buffer, args.label, args.id)
+    })
+
+    ipcMain.on('state-changed', (event, state) => {
+        writeStateToFile(state)
+    })
+    ipcMain.on('state-read', (event) => {
+        let state = null
+        try {
+            state = JSON.parse(fs.readFileSync(DIR.STATE))
+        }
+        catch (err) {
+            //console.log(err)
+        }
+        event.returnValue = state
     })
 
     win.on('blur', () => {
