@@ -33,13 +33,10 @@
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
-let layout = [];
-
 export default {
   data() {
     return {
-      gridElements: this.$store.getters.getGridElements,
-      layout: layout,
+      layout: [],
     };
   },
   components: {
@@ -47,10 +44,13 @@ export default {
     GridItem: VueGridLayout.GridItem,
   },
   methods: {
-    gridToLayout: function () {
-      const layout = [];
-      this.gridElements.forEach((element) => {
-        layout.push({
+    updateGrid: function () {
+      const gridElements = this.$store.getters.getGridElements
+      this.layout = []
+
+      gridElements.forEach((element) => {
+        this.layout.push({
+          id: element.id,
           x: element.pos.x,
           y: element.pos.y,
           w: element.pos.sizeX,
@@ -61,8 +61,6 @@ export default {
           label: element.content.label
         });
       });
-
-      return layout;
     },
     open: function (element) {
       console.log(element);
@@ -90,12 +88,18 @@ export default {
       return styleObject;
     }
   },
-  updated: function () {
-    layout = this.gridToLayout();
+  created: function () {
+    this.updateGrid()
+    
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'addGridElement' || mutation.type === 'editGridElement' || mutation.type === 'setState'){
+        this.updateGrid()
+      }
+    });
   },
-  mounted: function () {
-    layout = this.gridToLayout();
-  },
+  beforeDestroy: function () {
+    this.unsubscribe()
+  }
 };
 </script>
 
