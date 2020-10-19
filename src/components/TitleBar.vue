@@ -3,7 +3,7 @@
     <div v-if="!windowMaximized" class="top-resize"></div>
     <div class="content">
       <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
-      <h1 class="app-title">Link Tailor</h1>
+      <h1 class="app-title">Tailor Link</h1>
     </div>
     <div class="buttons">
       <div @click="minimize" class="minimize button">&#9866;</div>
