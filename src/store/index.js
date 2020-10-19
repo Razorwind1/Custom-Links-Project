@@ -1,4 +1,3 @@
-//import { reduce } from 'core-js/fn/array'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -13,7 +12,7 @@ export default new Vuex.Store({
         size: 1,
         type: "exe",
         style: "gameStyle",
-        tags: ["game","favorite"],
+        tagsList: ["gaming","favorite"],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
@@ -26,9 +25,9 @@ export default new Vuex.Store({
         size: 1,
         type: "website",
         style: "codingStyle",
-        tags: ["coding"],
+        tagsList: ["coding", "favorite"],
         content: {
-          label: "Link Tailor GitHub",
+          label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "/assets/icons/github_icon.jpg",
         }
@@ -87,6 +86,18 @@ export default new Vuex.Store({
     },
     getTags: (state) => {
       return state.tags
+    },
+    getLinksByTag: (state) => (tagName) => {
+      const elementsArray = state.gridElements;
+      var retArray = [];
+      elementsArray.forEach(element => {
+        element.tagsList.forEach(tag => {
+          if (tag === tagName) {
+            retArray.push(element);
+          }
+        });
+      });
+      return retArray;
     },
   }
 })

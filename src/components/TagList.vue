@@ -10,12 +10,20 @@
           <div>Color</div>
         </div>
         <div v-for="(tag, index) in $store.getters.getTags" :key="index">
-        <div class="table-row">
+        <div class="tag-entry">
+        <div class="tag-entry-top-row">
           <div>{{tag.name}}</div>
           <div><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
+        <div>&#10005;</div>
         </div>
+        <div class="tag-entry-bottom-row">
+          <div v-for="(link, i) in $store.getters.getLinksByTag(tag.name)" :key="i">
+            <div class="associated-link">{{link.content.label}}</div> 
+          </div>
         </div>
 
+        </div>
+        </div>
     </div>
   </div>
   </div>
@@ -78,22 +86,40 @@ span.color-dot {
   padding: 10px;
   font-size: 110%;
   font-weight: bold;
+}.table-header div:nth-child(2) {
+  margin-right: 20px;
 }
-
-.table-row {
+.tag-entry {
   border: 2px solid var(--dark-background-color);
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
+.tag-entry-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-}.table-row > div {
+}.tag-entry > div {
   padding: 10px;
-}.table-row > div:hover {
+}.tag-entry-top-row > div:hover {
   background-color: var(--light-background-color);
   border-radius: 5px;
   cursor: pointer;
-}.table-row >div:last-child {
-  width: 55px;
+}.tag-entry-top-row >div:nth-child(1) {
+  width: 250px;
+}.tag-entry-top-row >div:nth-child(2) {
+  margin-left: 10px;
+  margin-right: 15px;
+}
+
+.tag-entry-bottom-row {
+  margin-left: 10px;
+  margin-right: 10px;
+  border-top: 2px solid var(--dark-background-color);
+}.associated-link {
+  font-size: 80%;
+  margin-right: 25px
 }
 
 
