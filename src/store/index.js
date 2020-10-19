@@ -7,29 +7,37 @@ export default new Vuex.Store({
   state: {
     gridElements: [
       {
-        posX: 0,
-        posY: 0,
-        size: 1,
+        id: 0,
+        pos: {
+          x: 0,
+          y: 0,
+          sizeX: 1,
+          sizeY: 1
+        },
         type: "exe",
         style: "gameStyle",
         tagsList: ["gaming","favorite"],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "/assets/icons/Steam_icon_logo.png",
+          img: "Steam_icon_logo.png",
         }
-        },
+      },
       {
-        posX: 1,
-        posY: 0,
-        size: 1,
+        id: 1,
+        pos: {
+          x: 0,
+          y: 1,
+          sizeX: 1,
+          sizeY: 1
+        },
         type: "website",
         style: "codingStyle",
         tagsList: ["coding", "favorite"],
         content: {
           label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "/assets/icons/github_icon.jpg",
+          img: "github_icon.jpg",
         }
       },
     ],
@@ -61,15 +69,29 @@ export default new Vuex.Store({
 
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
-      const element = {}
-      element.content = {}
-
-      if (payload.address && payload.label) {
-        element.content.address = payload.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-        element.label = payload.label
-
-        state.gridElements.push(element)
+      const element = {
+        id: state.gridElements.length + 1     // NEED BETTER ID MECHANISM
       }
+      element.content = {}
+      element.pos = {
+        x: 0,
+        y: 0,
+        sizeX: 1,
+        sizeY: 1
+      }
+
+      modifyLink(element, payload.data)
+
+      state.gridElements.push(element)
+    },
+    editGridElement(state, payload) {
+      const element = state.gridElements.find(element => element.id === payload.id)
+
+      modifyLink(element, payload.data)
+    },
+    setState(state, payload) {
+      state.gridElements = payload.gridElements || []
+      state.styles = payload.styles || []
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -79,7 +101,10 @@ export default new Vuex.Store({
       return state.gridElements
     },
     getGridLinks: (state) => {
-      state.gridElements.filter(element => element.type === "link")
+      return state.gridElements.filter(element => element.type === "link")
+    },
+    getGridLink: (state) => (id) => {
+      return state.gridElements.filter(element => element.id === id)[0]
     },
     getStyle: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
@@ -101,3 +126,20 @@ export default new Vuex.Store({
     },
   }
 })
+
+function modifyLink(element, data) {
+
+  if (data.address && data.label) {
+    element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+
+    // if (window.platform === "win32" && !element.content.address.includes('\\'))
+    //   element.content.address = 'http://' + element.content.address      // For win platform, if the value has no '\' it will be marked as a website and http:// will be included in front of it.
+
+    element.content.label = data.label
+  }
+
+  if (data.imgLabel && data.imgBuffer) {
+    element.content.img = data.imgLabel
+    window.ipcRenderer.send("save-link-image-to-file", { buffer: data.imgBuffer, label: data.imgLabel, id: element.id })
+  }
+}

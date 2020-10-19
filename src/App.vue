@@ -38,11 +38,24 @@ export default {
     AppContent,
     Popup,
   },
+  created: function () {
+    const state = window.ipcRenderer.sendSync("state-read");
+    if (state) this.$store.commit("setState", state);
+
+    this.$store.watch(
+      (state) => state,
+      (newValue) => {
+        window.ipcRenderer.send("state-changed", newValue);
+      },
+      {
+        deep: true,
+      }
+    );
+  },
 };
 </script>
 
 <style>
-
 :root {
   height: 100%;
 
@@ -69,7 +82,7 @@ export default {
   user-select: none;
   -webkit-user-drag: none;
 }
-* div{
+* div {
   display: flex;
 }
 body {
@@ -133,20 +146,19 @@ input {
   transition: border ease 200ms;
 }
 ::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+  filter: invert(1);
 }
 input:focus {
   border: 1px solid var(--main-accent-color);
   outline: none;
-} 
-.required{
-  border: 1px solid rgb(175, 35, 35)
 }
-span.required-text{
+.required {
+  border: 1px solid rgb(175, 35, 35);
+}
+span.required-text {
   color: rgb(175, 35, 35);
   font-size: 12px;
   margin-top: -5px;
   margin-left: 5px;
 }
-
 </style>
