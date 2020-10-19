@@ -9,6 +9,9 @@
       </a>
     </div>
     <div>
+      <a class="tag-list-button button" @click="tagList">
+        <img src="/assets/svg/freepik/svg/dh/label-tag.svg" />
+      </a>
       <router-link to="/settings" class="button">
         <img src="/assets/svg/freepik/svg/002-settings (2).svg" />
       </router-link>
@@ -22,7 +25,11 @@ export default {
     addLink: function () {
       this.$emit("show-popup", {
         type: "add-link",
-        saveButtonLabel: "Add Link",
+      });
+    },
+    tagList: function () {
+      this.$emit("show-popup", {
+        type: "tag-list",
       });
     },
   },

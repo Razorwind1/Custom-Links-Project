@@ -10,16 +10,24 @@
           @save-success="saveSuccess"
           @save-click="saveButtonClicked = true"
         />
+        <TagList
+          v-if="popupArg.type === 'tag-list'"
+          :saveLink="saveButtonClicked"
+          @save-fail="saveFail"
+          @save-success="saveSuccess"
+          @save-click="saveButtonClicked = true"
+        />
       </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
-        <div @click="saveButtonClicked = true" class="button save">{{popupArg.saveButtonLabel}}</div>
+        <div @click="saveButtonClicked = true" class="button save" v-text="saveButtonLabel()"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import EditAddLink from "@/components/EditAddLink.vue";
 
 export default {
@@ -29,6 +37,14 @@ export default {
     };
   },
   methods: {
+    saveButtonLabel: function (){
+      if (this.popupArg.type == 'tag-list')
+        return "Save"
+      if (this.popupArg.type == 'add-link')
+        return "Add Link"
+
+        return "Save"
+    },
     closePopup: function () {
       this.$emit("close-popup");
     },
@@ -43,6 +59,7 @@ export default {
     popupArg: Object,
   },
   components: {
+
     EditAddLink
   },
 };
