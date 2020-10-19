@@ -29,6 +29,7 @@
 <script>
 
 import EditAddLink from "@/components/EditAddLink.vue";
+import TagList from "@/components/TagList.vue";
 
 export default {
   data: function () {
@@ -59,8 +60,8 @@ export default {
     popupArg: Object,
   },
   components: {
-
-    EditAddLink
+    EditAddLink,
+    TagList
   },
 };
 </script>
