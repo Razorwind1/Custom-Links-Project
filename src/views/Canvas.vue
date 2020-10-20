@@ -21,10 +21,9 @@
       :i="element.i"
       :key="element.i"
       @move="moveEvent"
+      @resized="resizedEvent"
       @moved="movedEvent"
     >
-      <!-- @click="open(element)"
-      @contextmenu="editLink(element.id, element.img)" -->
       <div
         class="link"
         v-bind:style="getStyling(element.style)"
@@ -102,12 +101,14 @@ export default {
       const styleObject = this.$store.getters.getStyle(styleName);
       return styleObject;
     },
-    moveEvent: function (i, newX, newY) {
+    moveEvent: function (i) {
       this.movingElement = i
-      console.log("MOVE i=" + i + ", X=" + newX + ", Y=" + newY);
     },
-    movedEvent: function (i, newX, newY) {
-      console.log("MOVED i=" + i + ", X=" + newX + ", Y=" + newY);
+    movedEvent: function (id, newX, newY) {
+      this.$store.commit("setGridElementPosition", {id, newX, newY})
+    },
+    resizedEvent: function (id, newH, newW) {
+      this.$store.commit("resizeGridElement", {id, newH, newW})
     },
   },
   created: function () {
