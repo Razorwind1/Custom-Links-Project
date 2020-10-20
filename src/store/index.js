@@ -79,6 +79,7 @@ export default new Vuex.Store({
         sizeX: 1,
         sizeY: 1
       }
+      element.tagsList = []
 
       modifyLink(element, payload.data)
 

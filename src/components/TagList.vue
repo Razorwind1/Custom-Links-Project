@@ -57,13 +57,6 @@ export default {
   mounted: function () {
     const inputs = document.querySelectorAll("input");
     if (inputs[0]) inputs[0].focus();
-
-    // Enter Key to Submit The Form
-    inputs.forEach((input) =>
-      input.addEventListener("keyup", ({ key }) => {
-        key === "Enter" ? this.$emit("save-click") : "";
-      })
-    );
   },
   props: {
     saveLink: Boolean,
