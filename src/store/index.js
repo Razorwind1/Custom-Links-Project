@@ -1,4 +1,3 @@
-//import { reduce } from 'core-js/fn/array'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -17,11 +16,11 @@ export default new Vuex.Store({
         },
         type: "exe",
         style: "gameStyle",
+        tagsList: ["gaming","favorite"],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
           img: "Steam_icon_logo.png",
-          tags: ["game", "favorite"]
         }
       },
       {
@@ -34,11 +33,11 @@ export default new Vuex.Store({
         },
         type: "website",
         style: "codingStyle",
+        tagsList: ["coding", "favorite"],
         content: {
-          label: "Link Tailor",
+          label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "github_icon.jpg",
-          tags: ["coding"],
         }
       },
     ],
@@ -47,13 +46,23 @@ export default new Vuex.Store({
         name: "gameStyle",
         color: 'rgb(226, 97, 151)',
         fontFamily: 'Verdana, Geneva, sans-serif',
-        fontSize: '100%'
+        fontSize: '100%',
       },
       {
         name: "codingStyle",
         color: 'rgb(102, 150, 222)',
         fontFamily: '"Brush Script MT", Helvetica, sans-serif',
-        fontSize: '100%'
+        fontSize: '100%',
+      }
+    ],
+    tags: [
+      {
+        name: "favorite",
+        color: "rgb(226, 97, 151)"
+      },
+      {
+        name: "gaming",
+        color: "blue"
       }
     ]
   },
@@ -70,6 +79,7 @@ export default new Vuex.Store({
         sizeX: 1,
         sizeY: 1
       }
+      element.tagsList = []
 
       modifyLink(element, payload.data)
 
@@ -113,7 +123,22 @@ export default new Vuex.Store({
     },
     getStyle: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
-    }
+    },
+    getTags: (state) => {
+      return state.tags
+    },
+    getLinksByTag: (state) => (tagName) => {
+      const elementsArray = state.gridElements;
+      var retArray = [];
+      elementsArray.forEach(element => {
+        element.tagsList.forEach(tag => {
+          if (tag === tagName) {
+            retArray.push(element);
+          }
+        });
+      });
+      return retArray;
+    },
   }
 })
 

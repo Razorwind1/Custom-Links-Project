@@ -88,6 +88,14 @@ export default {
         imgUrl: url,
       });
     },
+    addLink: function(id, url){
+      this.$emit("show-popup", {
+        type: "add-link",
+        saveButtonLabel: "Save Link",
+        linkid: id,
+        imgUrl: url,
+      });
+    },
     getElementImg: function (id, url) {
       const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
@@ -124,8 +132,17 @@ export default {
       }
     });
   },
+  mounted: function() {
+    this._keyListener = function(e) {
+      if (e.key === "a" && (e.ctrlKey || e.metaKey)) { // add links hotkey
+          this.addLink();
+      }
+    };
+    document.addEventListener('keydown', this._keyListener.bind(this));
+  },
   beforeDestroy: function () {
     this.unsubscribe();
+    document.removeEventListener('keydown', this._keyListener);
   },
 };
 </script>
