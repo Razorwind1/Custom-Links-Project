@@ -75,6 +75,14 @@ export default {
         imgUrl: url,
       });
     },
+    addLink: function(id, url){
+      this.$emit("show-popup", {
+        type: "add-link",
+        saveButtonLabel: "Save Link",
+        linkid: id,
+        imgUrl: url,
+      });
+    },
     getElementImg: function (id, url) {
       const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
