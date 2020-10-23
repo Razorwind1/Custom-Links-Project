@@ -93,6 +93,20 @@ export default new Vuex.Store({
     setState(state, payload) {
       state.gridElements = payload.gridElements || []
       state.styles = payload.styles || []
+    },
+    setGridElementPosition(state, payload) {
+      const element = state.gridElements.find(element => element.id === payload.id)
+      if (element){
+        element.pos.x = payload.newX
+        element.pos.y = payload.newY
+      }
+    },
+    resizeGridElement(state, payload) {
+      const element = state.gridElements.find(element => element.id === payload.id)
+      if (element){
+        element.pos.sizeX = payload.newW
+        element.pos.sizeY = payload.newH
+      }
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
