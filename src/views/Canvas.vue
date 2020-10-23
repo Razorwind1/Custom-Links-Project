@@ -18,9 +18,10 @@
       :h="element.h"
       :i="element.i"
       :key="element.i"
-    >
-      <!-- @click="open(element)"
-      @contextmenu="editLink(element.id, element.img)" -->
+    
+      @click="open(element)"
+      @contextmenu="editLink(element.id, element.img)"
+      >
       <div class="link" v-bind:style="getStyling(element.style)">
         <img v-bind:src="getElementImg(element.id, element.img)" />
         <div class="label">{{ element.label }}</div>
@@ -97,9 +98,18 @@ export default {
       }
     });
   },
+  mounted: function() {
+    this._keyListener = function(e) {
+      if (e.key === "a" && (e.ctrlKey || e.metaKey)) { // add links hotkey
+          this.addLink();
+      }
+    };
+    document.addEventListener('keydown', this._keyListener.bind(this));
+  },
   beforeDestroy: function () {
-    this.unsubscribe()
-  }
+    this.unsubscribe();
+    document.removeEventListener('keydown', this._keyListener);
+  },
 };
 </script>
 
