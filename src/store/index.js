@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { v4 as uniqueId } from 'uuid';
 
 Vue.use(Vuex)
 
@@ -70,7 +71,7 @@ export default new Vuex.Store({
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
       const element = {
-        id: state.gridElements.length + 1     // NEED BETTER ID MECHANISM
+        id: uniqueId()
       }
       element.content = {}
       element.pos = {

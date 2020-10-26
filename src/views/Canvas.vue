@@ -153,19 +153,19 @@ export default {
   display: block;
 }
 .link {
-  margin: 5px;
   width: 100%;
   height: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   flex-direction: column;
-  padding: 10px;
+  padding: 8px 8px 4px 8px;
 }
 .link img {
-  height: 70%;
+  max-width: 100%;
+  max-height: 75%;
 }
 .link .label {
-  height: 30%;
+  max-height: 20%;
   justify-content: center;
   align-items: center;
   text-align: center;
