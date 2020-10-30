@@ -1,13 +1,8 @@
 <template>
   <div id="app">
     <TitleBar />
-    <AppContent v-on:show-popup="showPopup" :popup-visible="popupVisible" />
-    <Popup
-      v-if="popupVisible"
-      :popup-visible="popupVisible"
-      v-on:close-popup="closePopup"
-      :popup-arg="popupArg"
-    />
+    <AppContent />
+    <Popup v-if="this.$store.state.events.popup.active" />
   </div>
 </template>
 
@@ -17,22 +12,6 @@ import AppContent from "@/components/AppContent.vue";
 import Popup from "@/components/Popup.vue";
 
 export default {
-  data: function () {
-    return {
-      popupVisible: false,
-      popupArg: {},
-    };
-  },
-  methods: {
-    showPopup: function (arg) {
-      this.popupVisible = true;
-      this.popupArg = arg;
-    },
-    closePopup: function () {
-      this.popupVisible = false;
-      this.popupArg = {};
-    },
-  },
   components: {
     TitleBar,
     AppContent,

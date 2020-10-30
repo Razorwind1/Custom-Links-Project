@@ -1,4 +1,4 @@
-import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog } from 'electron'
+import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, shell } from 'electron'
 
 import imageBufferFromUrl from './js/img/imgBufferFromUrl'
 import saveLinkImageToFile from './js/img/saveLinkImageToFile'
@@ -77,6 +77,7 @@ export default function handler(win) {
         saveLinkImageToFile(args.buffer, args.label, args.id)
     })
 
+    // STATE EVENTS
     ipcMain.on('state-changed', (event, state) => {
         writeStateToFile(state)
     })
@@ -89,6 +90,10 @@ export default function handler(win) {
             //console.log(err)
         }
         event.returnValue = state
+    })
+
+    ipcMain.on("open", (event, address) => {
+        shell.openExternal(address);
     })
 
     win.on('blur', () => {

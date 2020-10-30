@@ -4,7 +4,7 @@ import { v4 as uniqueId } from 'uuid';
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     gridElements: [
       {
@@ -65,9 +65,18 @@ export default new Vuex.Store({
         name: "gaming",
         color: "blue"
       }
-    ]
+    ],
+    events: {
+      contextMenu: {
+        active: false,
+        arg: null
+      },
+      popup: {
+        active: false,
+        arg: null
+      }
+    }
   },
-
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
       const element = {
@@ -108,6 +117,14 @@ export default new Vuex.Store({
         element.pos.sizeX = payload.newW
         element.pos.sizeY = payload.newH
       }
+    },
+    showPopup(state, payload) {
+      state.events.popup.active = true
+      state.events.popup.arg = payload
+    },
+    closePopup(state){
+      state.events.popup.active = false,
+      state.events.popup.arg = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -142,6 +159,8 @@ export default new Vuex.Store({
     },
   }
 })
+
+export default store
 
 function modifyLink(element, data) {
 

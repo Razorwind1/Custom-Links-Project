@@ -1,7 +1,7 @@
 <template>
   <div class="edit-link">
     <div class="header">
-      <h2>{{ header }}</h2>
+      <h2>{{ header() }}</h2>
     </div>
     <div class="content">
       <div class="section">
@@ -33,7 +33,8 @@ import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 export default {
   data: function () {
     return {
-      header: this.linkArgs.type === "add-link" ? "Add Link" : "Edit Link",
+      popupActive: this.$store.state.events.popup.active,
+      popupArg: this.$store.state.events.popup.arg,
 
       label: "",
       address: "",
@@ -64,10 +65,31 @@ export default {
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
+    saveLink: function () {
+
+      const inputValid = validateInputs(this.$el);
+
+      if (inputValid) {
+        if (this.popupArg.type === "add-link") {
+          this.$store.commit("addGridElement", {
+            data: this.$data,
+          });
+        } else if (this.popupArg.type === "edit-link") {
+          this.$store.commit("editGridElement", {
+            id: this.popupArg.linkID,
+            data: this.$data,
+          });
+        }
+        this.$store.commit("closePopup")
+      }
+    },
+    header: function() {
+      return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link"
+    }
   },
   mounted: function () {
-    if (this.linkArgs.type === "edit-link") {
-      const linkData = this.$store.getters.getGridLink(this.linkArgs.linkID);
+    if (this.popupArg.type === "edit-link") {
+      const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
     }
@@ -82,34 +104,7 @@ export default {
       })
     );
 
-    this.getElementImg(this.linkArgs.linkID, this.linkArgs.imgUrl)
-  },
-  watch: {
-    saveLink: function (value) {
-      if (value === false) return;
-
-      const inputValid = validateInputs(this.$el);
-
-      if (inputValid) {
-        if (this.linkArgs.type === "add-link") {
-          this.$store.commit("addGridElement", {
-            data: this.$data,
-          });
-        } else if (this.linkArgs.type === "edit-link") {
-          this.$store.commit("editGridElement", {
-            id: this.linkArgs.linkID,
-            data: this.$data,
-          });
-        }
-        this.$emit("save-success");
-      } else {
-        this.$emit("save-fail");
-      }
-    },
-  },
-  props: {
-    saveLink: Boolean,
-    linkArgs: Object,
+    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl)
   },
 };
 </script>
