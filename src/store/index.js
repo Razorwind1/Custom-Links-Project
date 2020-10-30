@@ -107,10 +107,13 @@ export default new Vuex.Store({
         element.pos.sizeX = payload.newW
         element.pos.sizeY = payload.newH
       }
-    }
+    },
+    removeLinks: (state, payload) => {
+      const element = state.gridElements.find(element => element.id === payload);
+      state.gridElements.splice(element, 1); 
+     },
   },
-  actions: {                                  // FOR ASYNC ACTIONS
-  },
+  actions: {},                                                                     // FOR ASYNC ACTIONS,
   getters: {
     getGridElements: (state) => {
       return state.gridElements
@@ -139,7 +142,7 @@ export default new Vuex.Store({
       });
       return retArray;
     },
-  }
+  },
 })
 
 function modifyLink(element, data) {

@@ -126,7 +126,8 @@ export default {
       if (
         mutation.type === "addGridElement" ||
         mutation.type === "editGridElement" ||
-        mutation.type === "setState"
+        mutation.type === "setState"        ||
+        mutation.type === "removeLinks"
       ) {
         this.updateGrid();
       }

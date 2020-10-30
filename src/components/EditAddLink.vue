@@ -22,6 +22,9 @@
           </div>
         </div>
       </div>
+      <div class="delete-button">
+        <div class="button" @click="deleteLink()"> Delete Link</div>
+      </div>
     </div>
   </div>
 </template>
@@ -64,6 +67,10 @@ export default {
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
+    deleteLink: function(gridElements){
+      this.$store.commit("removeLinks", gridElements);
+      //close popup
+    }
   },
   mounted: function () {
     if (this.linkArgs.type === "edit-link") {
@@ -170,5 +177,10 @@ div.img-selection div.button {
 }
 div.img-selection div.button:hover {
   background: var(--active-background-color);
+}
+div.delete-button div.button {
+  margin: auto;
+  background: red;
+  padding: 10px;
 }
 </style>
