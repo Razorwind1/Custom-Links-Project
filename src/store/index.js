@@ -17,7 +17,7 @@ const store = new Vuex.Store({
         },
         type: "exe",
         style: "gameStyle",
-        tagsList: ["gaming","favorite"],
+        tagsList: ["gaming", "favorite"],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
@@ -101,19 +101,20 @@ const store = new Vuex.Store({
       modifyLink(element, payload.data)
     },
     setState(state, payload) {
-      state.gridElements = payload.gridElements || []
-      state.styles = payload.styles || []
+      state.gridElements = payload.gridElements || [],
+        state.styles = payload.styles || [],
+        state.tags = payload.tags || []
     },
     setGridElementPosition(state, payload) {
       const element = state.gridElements.find(element => element.id === payload.id)
-      if (element){
+      if (element) {
         element.pos.x = payload.newX
         element.pos.y = payload.newY
       }
     },
     resizeGridElement(state, payload) {
       const element = state.gridElements.find(element => element.id === payload.id)
-      if (element){
+      if (element) {
         element.pos.sizeX = payload.newW
         element.pos.sizeY = payload.newH
       }
@@ -122,9 +123,17 @@ const store = new Vuex.Store({
       state.events.popup.active = true
       state.events.popup.arg = payload
     },
-    closePopup(state){
-      state.events.popup.active = false,
+    closePopup(state) {
+      state.events.popup.active = false
       state.events.popup.arg = null
+    },
+    contextMenu(state, payload) {
+      state.events.contextMenu.active = true
+      state.events.contextMenu.arg = payload
+    },
+    closeContextMenu(state) {
+      state.events.contextMenu.active = false
+      state.events.contextMenu.arg = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -157,6 +166,13 @@ const store = new Vuex.Store({
       });
       return retArray;
     },
+    stateUserData: (state) => {
+      return {
+        gridElements: state.gridElements,
+        styles: state.styles,
+        tags: state.tags
+      }
+    }
   }
 })
 

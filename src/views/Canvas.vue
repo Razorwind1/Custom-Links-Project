@@ -28,7 +28,7 @@
         class="link"
         v-bind:style="getStyling(element.style)"
         @click="open(element.address)"
-        @contextmenu="contextMenu(element)"
+        @contextmenu="contextMenu($event, element)"
       >
         <img v-bind:src="getElementImg(element.id, element.img)" />
         <div class="label">{{ element.label }}</div>
@@ -79,16 +79,22 @@ export default {
       }
       window.ipcRenderer.send("open", element_address);
     },
-    contextMenu: function (element) {
-      this.editLink(element.id, element.img)
-      // this.$emit("context-menu", [
-      //   {
-      //     label: "Edit Link",
-      //     click: function () {
-      //       this.editLink(element.id, element.img);
-      //     },
-      //   },
-      // ]);
+    contextMenu: function (event, element) {
+      console.log(event)
+      this.$store.commit("contextMenu", [
+        {
+          label: "Edit Link",
+          click: () => {
+            this.editLink(element.id, element.img)
+          }
+        },
+        {
+          label: "Delete Link",
+          click: () => {
+            alert("Insert delete code here")
+          }
+        },
+      ]);
     },
     editLink: function (id, url) {
       this.$store.commit("showPopup", {
@@ -126,7 +132,6 @@ export default {
     },
   },
   created: function () {
-
     this.updateGrid();
 
     this.unsubscribe = this.$store.subscribe((mutation) => {

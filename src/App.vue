@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" @click="click">
     <TitleBar />
     <AppContent />
     <Popup v-if="this.$store.state.events.popup.active" />
+    <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
   </div>
 </template>
 
@@ -10,19 +11,26 @@
 import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
 import Popup from "@/components/Popup.vue";
+import ContextMenu from "@/components/ContextMenu.vue";
 
 export default {
   components: {
     TitleBar,
     AppContent,
     Popup,
+    ContextMenu
+  },
+  methods: {
+    click(){
+      this.$store.commit("closeContextMenu")
+    }
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
 
     this.$store.watch(
-      (state) => state,
+      (state, getters) => getters.stateUserData,
       (newValue) => {
         window.ipcRenderer.send("state-changed", newValue);
       },
