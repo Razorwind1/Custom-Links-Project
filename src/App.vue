@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="click">
+  <div id="app" @click="closeContextMenu">
     <TitleBar />
     <AppContent />
     <Popup v-if="this.$store.state.events.popup.active" />
@@ -18,12 +18,12 @@ export default {
     TitleBar,
     AppContent,
     Popup,
-    ContextMenu
+    ContextMenu,
   },
   methods: {
-    click(){
-      this.$store.commit("closeContextMenu")
-    }
+    closeContextMenu() {
+      this.$store.commit("closeContextMenu");
+    },
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -38,6 +38,8 @@ export default {
         deep: true,
       }
     );
+
+    window.addEventListener("resize", this.closeContextMenu)
   },
 };
 </script>

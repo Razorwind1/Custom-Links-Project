@@ -129,11 +129,13 @@ const store = new Vuex.Store({
     },
     contextMenu(state, payload) {
       state.events.contextMenu.active = true
-      state.events.contextMenu.arg = payload
+      state.events.contextMenu.arg = payload.content
+      state.events.contextMenu.event = payload.event
     },
     closeContextMenu(state) {
       state.events.contextMenu.active = false
       state.events.contextMenu.arg = null
+      state.events.contextMenu.event = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS

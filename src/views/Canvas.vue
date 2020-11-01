@@ -80,21 +80,23 @@ export default {
       window.ipcRenderer.send("open", element_address);
     },
     contextMenu: function (event, element) {
-      console.log(event)
-      this.$store.commit("contextMenu", [
-        {
-          label: "Edit Link",
-          click: () => {
-            this.editLink(element.id, element.img)
-          }
-        },
-        {
-          label: "Delete Link",
-          click: () => {
-            alert("Insert delete code here")
-          }
-        },
-      ]);
+      this.$store.commit("contextMenu", {
+        content: [
+          {
+            label: "Edit Link",
+            click: () => {
+              this.editLink(element.id, element.img);
+            },
+          },
+          {
+            label: "Delete Link",
+            click: () => {
+              alert("Insert delete code here");
+            },
+          },
+        ],
+        event
+      });
     },
     editLink: function (id, url) {
       this.$store.commit("showPopup", {
