@@ -91,7 +91,7 @@ export default {
           {
             label: "Delete Link",
             click: () => {
-              alert("Insert delete code here");
+              this.$store.commit("deleteGridElement", {id: element.id});
             },
           },
         ],
@@ -140,6 +140,7 @@ export default {
       if (
         mutation.type === "addGridElement" ||
         mutation.type === "editGridElement" ||
+        mutation.type === "deleteGridElement" ||
         mutation.type === "setState"
       ) {
         this.updateGrid();

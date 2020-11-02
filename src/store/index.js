@@ -100,6 +100,10 @@ const store = new Vuex.Store({
 
       modifyLink(element, payload.data)
     },
+    deleteGridElement(state, payload) {
+      const removeIndex = state.gridElements.findIndex(element => element.id === payload.id)
+      state.gridElements.splice(removeIndex, 1)
+    },
     setState(state, payload) {
       state.gridElements = payload.gridElements || [],
         state.styles = payload.styles || [],
