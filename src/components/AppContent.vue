@@ -1,8 +1,8 @@
 <template>
-  <div id="app-content" :class="[popupVisible ? 'disable-input' : '']">
-    <NavBar v-on:show-popup="showPopup" />
+  <div id="app-content" :class="[this.$store.state.events.popup.active ? 'disable-input' : '']">
+    <NavBar />
     <div id="app-main">
-      <router-view  v-on:show-popup="showPopup"/>
+      <router-view/>
     </div>
   </div>
 </template>
@@ -13,11 +13,6 @@ import NavBar from "@/components/NavBar.vue";
 export default {
   components: {
     NavBar,
-  },
-  methods: {
-    showPopup: function (arg) {
-      this.$emit("show-popup", arg);
-    },
   },
   props: {
     popupVisible: Boolean,

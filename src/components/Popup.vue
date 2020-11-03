@@ -4,11 +4,7 @@
       <div class="popup-content">
         <EditAddLink
           v-if="popupArg.type === 'edit-link' || popupArg.type === 'add-link'"
-          :linkArgs="popupArg"
-          :saveLink="saveButtonClicked"
-          @save-fail="saveFail"
-          @save-success="saveSuccess"
-          @save-click="saveButtonClicked = true"
+          ref="editAddLink"
         />
         <TagList
           v-if="popupArg.type === 'tag-list'"
@@ -20,7 +16,7 @@
       </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
-        <div @click="saveButtonClicked = true" class="button save" v-text="saveButtonLabel()"></div>
+        <div @click="save" class="button save" v-text="saveButtonLabel()"></div>
       </div>
     </div>
   </div>
@@ -34,7 +30,7 @@ import TagList from "@/components/TagList.vue";
 export default {
   data: function () {
     return {
-      saveButtonClicked: false,
+      popupArg: this.$store.state.events.popup.arg
     };
   },
   methods: {
@@ -46,18 +42,12 @@ export default {
 
         return "Save"
     },
+    save: function () {
+      this.$refs.editAddLink.saveLink()
+    },
     closePopup: function () {
-      this.$emit("close-popup");
-    },
-    saveFail: function () {
-      this.saveButtonClicked = false;
-    },
-    saveSuccess: function () {
-      this.closePopup();
-    },
-  },
-  props: {
-    popupArg: Object,
+      this.$store.commit("closePopup")
+    }
   },
   components: {
     EditAddLink,

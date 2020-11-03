@@ -4,7 +4,7 @@ import { v4 as uniqueId } from 'uuid';
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     gridElements: [
       {
@@ -17,7 +17,7 @@ export default new Vuex.Store({
         },
         type: "exe",
         style: "gameStyle",
-        tagsList: ["gaming","favorite"],
+        tagsList: ["gaming", "favorite"],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
@@ -65,9 +65,18 @@ export default new Vuex.Store({
         name: "gaming",
         color: "blue"
       }
-    ]
+    ],
+    events: {
+      contextMenu: {
+        active: false,
+        arg: null
+      },
+      popup: {
+        active: false,
+        arg: null
+      }
+    }
   },
-
   mutations: {                                // FOR SYNC MUTATIONS
     addGridElement(state, payload) {
       const element = {
@@ -91,23 +100,46 @@ export default new Vuex.Store({
 
       modifyLink(element, payload.data)
     },
+    deleteGridElement(state, payload) {
+      const removeIndex = state.gridElements.findIndex(element => element.id === payload.id)
+      state.gridElements.splice(removeIndex, 1)
+    },
     setState(state, payload) {
-      state.gridElements = payload.gridElements || []
-      state.styles = payload.styles || []
+      state.gridElements = payload.gridElements || [],
+        state.styles = payload.styles || [],
+        state.tags = payload.tags || []
     },
     setGridElementPosition(state, payload) {
       const element = state.gridElements.find(element => element.id === payload.id)
-      if (element){
+      if (element) {
         element.pos.x = payload.newX
         element.pos.y = payload.newY
       }
     },
     resizeGridElement(state, payload) {
       const element = state.gridElements.find(element => element.id === payload.id)
-      if (element){
+      if (element) {
         element.pos.sizeX = payload.newW
         element.pos.sizeY = payload.newH
       }
+    },
+    showPopup(state, payload) {
+      state.events.popup.active = true
+      state.events.popup.arg = payload
+    },
+    closePopup(state) {
+      state.events.popup.active = false
+      state.events.popup.arg = null
+    },
+    contextMenu(state, payload) {
+      state.events.contextMenu.active = true
+      state.events.contextMenu.arg = payload.content
+      state.events.contextMenu.event = payload.event
+    },
+    closeContextMenu(state) {
+      state.events.contextMenu.active = false
+      state.events.contextMenu.arg = null
+      state.events.contextMenu.event = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -140,8 +172,17 @@ export default new Vuex.Store({
       });
       return retArray;
     },
+    stateUserData: (state) => {
+      return {
+        gridElements: state.gridElements,
+        styles: state.styles,
+        tags: state.tags
+      }
+    }
   }
 })
+
+export default store
 
 function modifyLink(element, data) {
 

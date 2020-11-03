@@ -23,7 +23,7 @@
 export default {
   methods: {
     addLink: function () {
-      this.$emit("show-popup", {
+      this.$store.commit("showPopup", {
         type: "add-link",
       });
     },

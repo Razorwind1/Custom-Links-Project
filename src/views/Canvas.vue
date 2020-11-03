@@ -28,7 +28,7 @@
         class="link"
         v-bind:style="getStyling(element.style)"
         @click="open(element.address)"
-        @contextmenu="editLink(element.id, element.img)"
+        @contextmenu="contextMenu($event, element)"
       >
         <img v-bind:src="getElementImg(element.id, element.img)" />
         <div class="label">{{ element.label }}</div>
@@ -73,27 +73,41 @@ export default {
       });
     },
     open: function (element_address) {
-      console.log(element_address);
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
       }
-      window.shell.openExternal(element_address);
+      window.ipcRenderer.send("open", element_address);
+    },
+    contextMenu: function (event, element) {
+      this.$store.commit("contextMenu", {
+        content: [
+          {
+            label: "Edit Link",
+            click: () => {
+              this.editLink(element.id, element.img);
+            },
+          },
+          {
+            label: "Delete Link",
+            click: () => {
+              this.$store.commit("deleteGridElement", {id: element.id});
+            },
+          },
+        ],
+        event
+      });
     },
     editLink: function (id, url) {
-      this.$emit("show-popup", {
+      this.$store.commit("showPopup", {
         type: "edit-link",
-        saveButtonLabel: "Save Link",
         linkID: id,
         imgUrl: url,
       });
     },
-    addLink: function(id, url){
-      this.$emit("show-popup", {
+    addLink: function () {
+      this.$store.commit("showPopup", {
         type: "add-link",
-        saveButtonLabel: "Save Link",
-        linkid: id,
-        imgUrl: url,
       });
     },
     getElementImg: function (id, url) {
@@ -110,13 +124,13 @@ export default {
       return styleObject;
     },
     moveEvent: function (i) {
-      this.movingElement = i
+      this.movingElement = i;
     },
     movedEvent: function (id, newX, newY) {
-      this.$store.commit("setGridElementPosition", {id, newX, newY})
+      this.$store.commit("setGridElementPosition", { id, newX, newY });
     },
     resizedEvent: function (id, newH, newW) {
-      this.$store.commit("resizeGridElement", {id, newH, newW})
+      this.$store.commit("resizeGridElement", { id, newH, newW });
     },
   },
   created: function () {
@@ -126,23 +140,24 @@ export default {
       if (
         mutation.type === "addGridElement" ||
         mutation.type === "editGridElement" ||
+        mutation.type === "deleteGridElement" ||
         mutation.type === "setState"
       ) {
         this.updateGrid();
       }
     });
   },
-  mounted: function() {
-    this._keyListener = function(e) {
-      if (e.key === "a" && (e.ctrlKey || e.metaKey)) { // add links hotkey
-          this.addLink();
+  mounted: function () {
+    this._keyListener = function (e) {
+      if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
+        this.addLink();
       }
     };
-    document.addEventListener('keydown', this._keyListener.bind(this));
+    document.addEventListener("keydown", this._keyListener.bind(this));
   },
   beforeDestroy: function () {
     this.unsubscribe();
-    document.removeEventListener('keydown', this._keyListener);
+    document.removeEventListener("keydown", this._keyListener);
   },
 };
 </script>
@@ -171,13 +186,13 @@ export default {
   text-align: center;
 }
 
-.vue-grid-item{
+.vue-grid-item {
   cursor: pointer !important;
   transition: background-color 100ms ease-in-out;
   background-color: var(--dark-background-color);
   border-radius: 5px;
 }
-.vue-grid-item:hover{
+.vue-grid-item:hover {
   background-color: var(--light-background-color);
 }
 </style>
