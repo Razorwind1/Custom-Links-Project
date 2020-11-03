@@ -13,7 +13,7 @@
         <div class="tag-entry">
         <div class="tag-entry-top-row">
           <div>{{tag.name}}</div>
-          <div><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
+          <div @click="colorPickerPopUp(tag.name, tag.color)"><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
         <div>&#10005;</div>
         </div>
         <div class="tag-entry-bottom-row">
@@ -24,8 +24,14 @@
 
         </div>
         </div>
+      <button @click="colorPickerPopUp()">Hello</button>
     </div>
+    
   </div>
+<div class="color-picker-wrapper">
+
+
+</div>
   </div>
 </template>
 
@@ -38,6 +44,16 @@ export default {
       label: "",
       address: "",
     };
+  },
+  methods: {
+    colorPickerPopUp(tagLabel, oldColor) {
+      console.log("colorPickerPopUp (TagList.vue): " + oldColor)
+      this.$emit("show-color-picker", {
+        type: "tag-color",
+        id: tagLabel, //tags are identified by their label
+        oldColor: oldColor
+      })
+    }
   },
   watch: {
     saveLink: function (value) {
@@ -146,4 +162,17 @@ div.tag-list div.section > h3 {
   font-size: 14px;
   opacity: .9;
 }
+
+.color-picker-wrapper {
+  /* position: absolute; */
+  /* margin: 0 auto;
+  width: 400px; */
+  /* border: 20px solid var(--light-background-color);
+  border-radius: 5px; */
+}
+.myColorPicker {
+  /* border: 20px solid green;
+  border-radius: 5px; */
+}
+
 </style>
