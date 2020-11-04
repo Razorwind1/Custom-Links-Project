@@ -1,4 +1,4 @@
-import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, shell } from 'electron'
+import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, shell, app } from 'electron'
 
 import imageBufferFromUrl from './js/img/imgBufferFromUrl'
 import saveLinkImageToFile from './js/img/saveLinkImageToFile'
@@ -75,9 +75,17 @@ export default function handler(win) {
 
         event.returnValue = { buffer: imgBuffer, src: path.basename(imgUrl) }
     })
+    ipcMain.on('get-native-icon', (event, iconPath) => {
+        const iconPathNormalized = path.normalize(iconPath)
+        const nativeIcon = app.getFileIcon(iconPathNormalized, { size: "normal" })
+        nativeIcon.then(value => {
+            event.returnValue = value.toPNG(100)
+        })
+    })
     ipcMain.on('save-link-image-to-file', (event, args) => {
         saveLinkImageToFile(args.buffer, args.label, args.id)
     })
+
 
     // STATE EVENTS
     ipcMain.on('state-changed', (event, state) => {

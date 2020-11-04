@@ -31,10 +31,13 @@ export default {
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
+        const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", args.open_dir);
+
         this.$store.commit("showPopup", {
           type: "add-link",
           address: args.open_dir,
           label: window.path.parse(args.open_dir).name,
+          nativeIconBuffer
         });
       }
     });

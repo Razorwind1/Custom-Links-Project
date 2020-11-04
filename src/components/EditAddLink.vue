@@ -91,10 +91,19 @@ export default {
       const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
+      this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
     }
-    if (this.popupArg.address && this.popupArg.address && this.popupArg.type === "add-link") {
+    if (
+      this.popupArg.type === "add-link" &&
+      this.popupArg.address &&
+      this.popupArg.label &&
+      this.popupArg.nativeIconBuffer
+    ) {
       this.address = this.popupArg.address;
       this.label = this.popupArg.label;
+      this.imgLabel = this.popupArg.label
+      this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer)
+      this.imgBuffer = this.popupArg.nativeIconBuffer
     }
 
     const inputs = document.querySelectorAll("input");
@@ -106,8 +115,6 @@ export default {
         key === "Enter" ? this.$emit("save-click") : "";
       })
     );
-
-    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
   },
 };
 </script>
