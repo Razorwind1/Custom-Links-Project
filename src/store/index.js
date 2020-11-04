@@ -73,7 +73,8 @@ const store = new Vuex.Store({
       },
       popup: {
         active: false,
-        arg: null
+        arg: null,
+        event: null
       }
     }
   },
