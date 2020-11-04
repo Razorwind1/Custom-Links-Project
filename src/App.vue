@@ -29,6 +29,16 @@ export default {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
 
+    window.ipcRenderer.on("cmd-args", (event, args) => {
+      if (args.open_dir) {
+        this.$store.commit("showPopup", {
+          type: "add-link",
+          address: args.open_dir,
+          label: window.path.parse(args.open_dir).name,
+        });
+      }
+    });
+
     this.$store.watch(
       (state, getters) => getters.stateUserData,
       (newValue) => {
@@ -39,7 +49,9 @@ export default {
       }
     );
 
-    window.addEventListener("resize", this.closeContextMenu)
+    window.addEventListener("resize", this.closeContextMenu);
+
+    window.ipcRenderer.send("app-created");
   },
 };
 </script>

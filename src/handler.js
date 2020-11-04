@@ -8,6 +8,8 @@ import DIR from "./js/directories"
 import path from "path"
 import fs from "fs"
 
+var argv = require('minimist')(process.argv);
+
 const webIconScraper = require("web-icon-scraper");
 
 export default function handler(win) {
@@ -90,6 +92,10 @@ export default function handler(win) {
             //console.log(err)
         }
         event.returnValue = state
+    })
+
+    ipcMain.on('app-created', () => {
+        win.webContents.send('cmd-args', argv)
     })
 
     ipcMain.on("open", (event, address) => {

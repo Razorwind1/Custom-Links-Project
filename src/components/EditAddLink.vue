@@ -66,7 +66,6 @@ export default {
       this.imgBuffer = image.buffer;
     },
     saveLink: function () {
-
       const inputValid = validateInputs(this.$el);
 
       if (inputValid) {
@@ -80,18 +79,22 @@ export default {
             data: this.$data,
           });
         }
-        this.$store.commit("closePopup")
+        this.$store.commit("closePopup");
       }
     },
-    header: function() {
-      return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link"
-    }
+    header: function () {
+      return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
+    },
   },
   mounted: function () {
     if (this.popupArg.type === "edit-link") {
       const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
+    }
+    if (this.popupArg.address && this.popupArg.address && this.popupArg.type === "add-link") {
+      this.address = this.popupArg.address;
+      this.label = this.popupArg.label;
     }
 
     const inputs = document.querySelectorAll("input");
@@ -104,7 +107,7 @@ export default {
       })
     );
 
-    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl)
+    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
   },
 };
 </script>
