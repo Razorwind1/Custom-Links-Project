@@ -15,7 +15,9 @@
       <div class="section">
         <h3>Image</h3>
         <div class="img-selection">
-          <img :src="imgSrc" @click="selectImage" />
+          <div class="img-container">
+            <img :src="imgSrc" @click="selectImage" />
+          </div>
           <div class="img-selection-info">
             <input type="text" v-model="imgLabel" readonly disabled />
             <div class="button" @click="selectImage">Select Image</div>
@@ -48,6 +50,7 @@ export default {
   methods: {
     selectImage: function () {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
+      if (!image) return;
 
       this.imgSrc = imgUrlFromBuffer(image.buffer);
 
@@ -87,11 +90,12 @@ export default {
     },
   },
   mounted: function () {
+    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
+
     if (this.popupArg.type === "edit-link") {
       const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
-      this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
     }
     if (
       this.popupArg.type === "add-link" &&
@@ -101,9 +105,9 @@ export default {
     ) {
       this.address = this.popupArg.address;
       this.label = this.popupArg.label;
-      this.imgLabel = this.popupArg.label
-      this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer)
-      this.imgBuffer = this.popupArg.nativeIconBuffer
+      this.imgLabel = this.popupArg.label;
+      this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer);
+      this.imgBuffer = this.popupArg.nativeIconBuffer;
     }
 
     const inputs = document.querySelectorAll("input");
@@ -153,12 +157,19 @@ div.edit-link div.section > h3 {
 div.img-selection {
   padding: 10px;
 }
-div.img-selection > img {
+div.img-selection .img-container {
   width: 100px;
   height: 100px;
   background: var(--dark-background-color);
   border: 1px var(--dark-accent-color) solid;
   border-radius: 5px;
+}
+div.img-selection .img-container img {
+  max-width: 100%;
+  max-height: 100%;
+  width: inherit;
+  height: inherit;
+  object-fit: contain;
 }
 div.img-selection > div.img-selection-info {
   margin: 0 10px;
