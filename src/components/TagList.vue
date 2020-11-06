@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     colorPicker: function (event, data) {
-      console.log("colorPicker Method (TagList.vue): " + data.tagName + data.tagColor)
       this.$store.commit("colorPicker", {
         arg: {
         pickerType: "tag-color",

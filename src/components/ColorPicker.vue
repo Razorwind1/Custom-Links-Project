@@ -1,8 +1,9 @@
 <template>
 
 <div class="color-picker-overlay" @click="closeColorPicker">
-  <div class="container" :style="containerPosition" ref="container"><span>hello all</span>
-    <v-color-picker 
+  <div class="container" :style="containerPosition" ref="container" @click.stop>
+  <div @click="saveColor" class="button save">&check;</div>
+  <v-color-picker 
   class="myColorPicker"
   v-on:input = "colorPickerColor"
   dot-size = "40"
@@ -12,9 +13,8 @@
   width="250"
   canvas-height="100"
 ></v-color-picker>
+<div @click="closeColorPicker" class="button close">&#9932;</div>
   <div class="color-picker-buttons">
-        <div @click="closeColorPicker" class="button">Cancel</div>
-        <div @click="saveColor" class="button save">Confirm Color</div>
   </div>
   </div>
 
@@ -29,7 +29,10 @@ export default {
       containerPosition: {
         top: "200px",
         left: "250px",
-      }
+      },
+      oldColor: "",
+      itemID: "bo",
+      selectedColor: "#EEEEEE",
     };
   },
   methods: {
@@ -37,19 +40,16 @@ export default {
       this.$store.commit("closeColorPicker");
     },
     saveColor: function () {
-      console.log(this.itemId + this.selectedColor);
       this.$store.commit('editTagColor', {
         tagName: this.itemId,
         newColor: this.selectedColor});
-      this.$emit("close-color-picker");
+      this.$store.commit("closeColorPicker");
     },
     colorPickerColor: function (arg) {
       this.selectedColor = arg;
     },
     setContainerPosition(event) {
-      console.log("setContainerPosition (ColorPicker.vue): "+ event)
       if (event !== null) {
-        console.log("IF: setContainerPosition (ColorPicker.vue): "+ event)
       const mouseX = event.clientX;
       const mouseY = event.clientY;
 
@@ -74,33 +74,22 @@ export default {
     }
   },
   mounted: function () {
-    console.log("MOUNTED: ColorPicker.vue component mounted (ColorPicker.vue): " + this.$store.state.events.colorPicker.event);
     this.setContainerPosition(this.$store.state.events.colorPicker.event);
-    if (this.ColorPickerArg.type === "tag-color") {
-      this.oldColor = this.ColorPickerArg.tagColor;
-      this.itemId = this.ColorPickerArg.tagName;
-      console.log(this.oldColor + " " + this.itemId);
-
+    if (this.$store.state.events.colorPicker.arg.type === "tag-color") {
+      this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
+      this.itemId = this.$store.state.events.colorPicker.arg.tagName;
     // Enter Key to Submit Color Picker?
-      // input.addEventListener("keyup", ({ key }) => {
-      //   key === "Enter" ? this.$store.commit('editTagColor', {
-      //   tagName: this.tagLabel,
-      //   newColor: this.selectedColor}): "";
-      // this.$emit("close-color-picker"); 
-      // });
     }
 
   },
   updated: function () {
-    console.log("UPDATED: ColorPicker.vue component mounted (ColorPicker.vue): " + this.$store.state.events.colorPicker.event);
     this.setContainerPosition(this.$store.state.events.colorPicker.event);
+    if (this.$store.state.events.colorPicker.arg.pickerType === "tag-color") {
+      this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
+      this.itemId = this.$store.state.events.colorPicker.arg.tagName;
+    }
   },
   props: {
-    ColorPickerArg: Object,
-    oldColor: String,
-    itemId: undefined
-  },
-  components: {
   },
 }
 
@@ -110,24 +99,6 @@ export default {
 .myColorPicker {
   display: inline-block;
 }
-.container {
-  position: absolute;
-  min-width: 150px;
-  background: var(--dark-background-color);
-  border-radius: 5px;
-  border: 1px solid var(--active-background-color);
-  cursor: pointer;
-  flex-direction: column;
-  z-index: 903;
-}
-.container > div {
-  border-radius: 5px;
-  padding: 10px;
-  width: 100%;
-}
-.container > div:hover {
-  background: var(--light-background-color);
-}
 div.color-picker-overlay {
   z-index: 902;
   width: 100%;
@@ -136,46 +107,34 @@ div.color-picker-overlay {
   align-items: center;
   justify-content: center;
 }
-
-div.colorPickerContainer {
-  z-index: 903;
-  flex-direction: column;
-  max-height: 400px;
-  min-height: 300px;
-  background-color:var(--main-background-color);
-  border-radius: 5px;
-  /* background-color: var(--main-background-color);
-  width: 400px;
-  height: 80%;
-  pointer-events: all; */
-}
-div.title {
-  margin: 0 auto;
-}
-div.popup-content {
-  flex-grow: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  height: inherit;
-}
-div.color-picker-buttons {
-  height: 70px;
-  width: 100%;
+.container {
+  position: absolute;
+  min-width: 150px;
+  max-width: 252px;
   background: var(--dark-background-color);
-  justify-content: space-between;
-  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--active-background-color);
+  cursor: pointer;
+  flex-direction: column;
+  z-index: 903;
+  padding: 0;
 }
-div.color-picker-buttons > div {
-  padding: 15px;
+div.button {
+  width: 100%;
 }
-div.color-picker-buttons > div:hover {
+div.save {
   background-color: var(--light-background-color);
+  border-radius: 5px 5px 0px 0px;
 }
-div.color-picker-buttons > div.button.save {
-  background-color: var(--dark-accent-color);
-}
-div.color-picker-buttons > div.button.save:hover {
+div.save:hover {
   background-color: var(--main-accent-color);
 }
+div.close {
+  background-color: var(--light-background-color);
+  border-radius: 0px 0px 5px 5px;
+}
+div.close:hover {
+  background-color: rgb(175, 35, 35);
+}
+
 </style>

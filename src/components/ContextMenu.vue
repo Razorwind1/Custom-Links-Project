@@ -21,19 +21,15 @@ export default {
     };
   },
   mounted: function () {
-    console.log("MOUNTED: setContainerPosition (CONTEXTMENU.vue): "+ event)
     this.setContainerPosition(this.$store.state.events.contextMenu.event);
   },
   updated: function () {
-    console.log("UPDATED: setContainerPosition (CONTEXTMENU.vue): "+ event)
     this.setContainerPosition(this.$store.state.events.contextMenu.event);
 
   },
   methods: {
     setContainerPosition(event) {
       if (event !== null) {
-        console.log("IF: setContainerPosition (CONTEXTMENU.vue): "+ event)
-        
       const mouseX = event.clientX;
       const mouseY = event.clientY;
 
@@ -63,7 +59,8 @@ export default {
 <style scoped>
 .container {
   position: absolute;
-  min-width: 150px;
+  min-width: 100px;
+  max-width: 180px;
   background: var(--dark-background-color);
   border-radius: 5px;
   border: 1px solid var(--active-background-color);

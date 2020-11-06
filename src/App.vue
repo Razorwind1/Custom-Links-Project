@@ -6,7 +6,7 @@
     <Popup v-if="this.$store.state.events.popup.active" />
     <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
     <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
-    
+
   </div>
 </v-app>
 </template>
@@ -19,6 +19,7 @@ import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 
 export default {
+
   components: {
     TitleBar,
     AppContent,
