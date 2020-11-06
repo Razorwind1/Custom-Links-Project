@@ -1,8 +1,8 @@
 <template>
+
 <div class="color-picker-overlay" @click="closeColorPicker">
-<div class="colorPickerContainer" @click.stop="">
-  <div class="title" v-text="myText">Hi</div>
-  <v-color-picker 
+  <div class="container" :style="containerPosition" ref="container"><span>hello all</span>
+    <v-color-picker 
   class="myColorPicker"
   v-on:input = "colorPickerColor"
   dot-size = "40"
@@ -16,7 +16,8 @@
         <div @click="closeColorPicker" class="button">Cancel</div>
         <div @click="saveColor" class="button save">Confirm Color</div>
   </div>
-</div>
+  </div>
+
 </div>
 </template>
 
@@ -25,57 +26,83 @@
 export default {
   data: function () {
     return {
-      saveButtonClicked: false,
-      myText: "#Who are you?",
-      oldColor: "#444444",
-      tagLabel: "the default tag label",
-      selectedColor: "111111"
+      containerPosition: {
+        top: "200px",
+        left: "250px",
+      }
     };
   },
   methods: {
     closeColorPicker: function () {
-      this.$emit("close-color-picker");
-    },
-    saveFail: function () {
-      this.saveButtonClicked = false;
+      this.$store.commit("closeColorPicker");
     },
     saveColor: function () {
-      console.log(this.tagLabel + this.selectedColor);
-      this.$store.commit('editTag', {
-        tagName: this.tagLabel,
+      console.log(this.itemId + this.selectedColor);
+      this.$store.commit('editTagColor', {
+        tagName: this.itemId,
         newColor: this.selectedColor});
       this.$emit("close-color-picker");
     },
     colorPickerColor: function (arg) {
       this.selectedColor = arg;
+    },
+    setContainerPosition(event) {
+      console.log("setContainerPosition (ColorPicker.vue): "+ event)
+      if (event !== null) {
+        console.log("IF: setContainerPosition (ColorPicker.vue): "+ event)
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      const windowW = window.innerWidth;
+      const windowH = window.innerHeight;
+
+      const menuW = this.$refs.container.getBoundingClientRect().width;
+      const menuH = this.$refs.container.getBoundingClientRect().height;
+
+      if (mouseX + menuW >= windowW) {
+        this.containerPosition.left = mouseX - menuW + "px";
+      } else {
+        this.containerPosition.left = mouseX + "px";
+      }
+
+      if (mouseY + menuH >= windowH) {
+        this.containerPosition.top = windowH - menuH - 5 + "px";
+      } else {
+        this.containerPosition.top = mouseY + "px";
+      }
+      }
     }
   },
   mounted: function () {
-    this.myText = "What is life, really?";
+    console.log("MOUNTED: ColorPicker.vue component mounted (ColorPicker.vue): " + this.$store.state.events.colorPicker.event);
+    this.setContainerPosition(this.$store.state.events.colorPicker.event);
     if (this.ColorPickerArg.type === "tag-color") {
-      this.myText = "Tag Color";
-      this.oldColor = this.ColorPickerArg.oldColor;
-      this.tagLabel = this.ColorPickerArg.id;
-      console.log(this.oldColor + " " + this.tagLabel);
+      this.oldColor = this.ColorPickerArg.tagColor;
+      this.itemId = this.ColorPickerArg.tagName;
+      console.log(this.oldColor + " " + this.itemId);
+
+    // Enter Key to Submit Color Picker?
+      // input.addEventListener("keyup", ({ key }) => {
+      //   key === "Enter" ? this.$store.commit('editTagColor', {
+      //   tagName: this.tagLabel,
+      //   newColor: this.selectedColor}): "";
+      // this.$emit("close-color-picker"); 
+      // });
     }
 
-    const inputs = document.querySelectorAll("input");
-    if (inputs[0]) inputs[0].focus();
-
-    // Enter Key to Submit The Form
-    inputs.forEach((input) =>
-      input.addEventListener("keyup", ({ key }) => {
-        key === "Enter" ? this.$emit("save-click") : "";
-      })
-    );
+  },
+  updated: function () {
+    console.log("UPDATED: ColorPicker.vue component mounted (ColorPicker.vue): " + this.$store.state.events.colorPicker.event);
+    this.setContainerPosition(this.$store.state.events.colorPicker.event);
   },
   props: {
     ColorPickerArg: Object,
-    mytext: String
+    oldColor: String,
+    itemId: undefined
   },
   components: {
   },
-};
+}
 
 </script>
 
@@ -83,9 +110,26 @@ export default {
 .myColorPicker {
   display: inline-block;
 }
-
+.container {
+  position: absolute;
+  min-width: 150px;
+  background: var(--dark-background-color);
+  border-radius: 5px;
+  border: 1px solid var(--active-background-color);
+  cursor: pointer;
+  flex-direction: column;
+  z-index: 903;
+}
+.container > div {
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+}
+.container > div:hover {
+  background: var(--light-background-color);
+}
 div.color-picker-overlay {
-  z-index: 899;
+  z-index: 902;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -94,7 +138,7 @@ div.color-picker-overlay {
 }
 
 div.colorPickerContainer {
-  z-index: 901;
+  z-index: 903;
   flex-direction: column;
   max-height: 400px;
   min-height: 300px;

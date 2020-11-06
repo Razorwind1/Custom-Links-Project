@@ -21,13 +21,19 @@ export default {
     };
   },
   mounted: function () {
+    console.log("MOUNTED: setContainerPosition (CONTEXTMENU.vue): "+ event)
     this.setContainerPosition(this.$store.state.events.contextMenu.event);
   },
   updated: function () {
+    console.log("UPDATED: setContainerPosition (CONTEXTMENU.vue): "+ event)
     this.setContainerPosition(this.$store.state.events.contextMenu.event);
+
   },
   methods: {
     setContainerPosition(event) {
+      if (event !== null) {
+        console.log("IF: setContainerPosition (CONTEXTMENU.vue): "+ event)
+        
       const mouseX = event.clientX;
       const mouseY = event.clientY;
 
@@ -47,6 +53,7 @@ export default {
         this.containerPosition.top = windowH - menuH - 5 + "px";
       } else {
         this.containerPosition.top = mouseY + "px";
+      }
       }
     },
   },

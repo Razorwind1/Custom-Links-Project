@@ -8,10 +8,6 @@
         />
         <TagList
           v-if="popupArg.type === 'tag-list'"
-          :saveLink="saveButtonClicked"
-          @save-fail="saveFail"
-          @save-success="saveSuccess"
-          @save-click="saveButtonClicked = true"
         />
       </div>
       <div class="popup-buttons">

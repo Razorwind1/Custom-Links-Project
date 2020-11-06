@@ -13,7 +13,7 @@
         <div class="tag-entry">
         <div class="tag-entry-top-row">
           <div>{{tag.name}}</div>
-          <div @click="colorPickerPopUp(tag.name, tag.color)"><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
+          <div @click="colorPicker($event, {tagName: tag.name, tagColor: tag.color})"><span class="color-dot" :style="{'background-color': tag.color}"></span></div>
         <div>&#10005;</div>
         </div>
         <div class="tag-entry-bottom-row">
@@ -24,19 +24,13 @@
 
         </div>
         </div>
-      <button @click="colorPickerPopUp()">Hello</button>
     </div>
     
   </div>
-<div class="color-picker-wrapper">
-
-
-</div>
   </div>
 </template>
 
 <script>
-import validateInputs from "@/js/validation.js";
 
 export default {
   data: function () {
@@ -46,29 +40,17 @@ export default {
     };
   },
   methods: {
-    colorPickerPopUp(tagLabel, oldColor) {
-      console.log("colorPickerPopUp (TagList.vue): " + oldColor)
-      this.$emit("show-color-picker", {
-        type: "tag-color",
-        id: tagLabel, //tags are identified by their label
-        oldColor: oldColor
-      })
+    colorPicker: function (event, data) {
+      console.log("colorPicker Method (TagList.vue): " + data.tagName + data.tagColor)
+      this.$store.commit("colorPicker", {
+        arg: {
+        pickerType: "tag-color",
+        tagName: data.tagName,
+        tagColor: data.tagColor
+        },
+        event
+      });
     }
-  },
-  watch: {
-    saveLink: function (value) {
-      if (value === false) return;
-
-      const inputValid = validateInputs(this.$el);
-
-      if (inputValid) {
-        this.$store.commit("addGridElement", this.$data);
-        this.$emit("save-success");
-      }
-      else{
-        this.$emit("save-fail");
-      }
-    },
   },
   mounted: function () {
     const inputs = document.querySelectorAll("input");

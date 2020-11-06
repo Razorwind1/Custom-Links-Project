@@ -74,6 +74,10 @@ const store = new Vuex.Store({
       popup: {
         active: false,
         arg: null
+      },
+      colorPicker: {
+        active: false,
+        arg: null
       }
     }
   },
@@ -123,6 +127,9 @@ const store = new Vuex.Store({
         element.pos.sizeY = payload.newH
       }
     },
+    editTagColor(state, payload) {
+      state.tags.filter(tag => tag.name == payload.tagName).color == payload.tagColor;
+    },
     showPopup(state, payload) {
       state.events.popup.active = true
       state.events.popup.arg = payload
@@ -132,14 +139,28 @@ const store = new Vuex.Store({
       state.events.popup.arg = null
     },
     contextMenu(state, payload) {
+      console.log("contextMenu (index.js mutation): " + payload.event)
       state.events.contextMenu.active = true
       state.events.contextMenu.arg = payload.content
       state.events.contextMenu.event = payload.event
     },
     closeContextMenu(state) {
+      console.log("closeContextMenu (index.js mutation): ")
       state.events.contextMenu.active = false
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
+    },
+    colorPicker(state, payload) {
+      console.log("colorPicker (index.js mutation): " + payload.event)
+      state.events.colorPicker.active = true
+      state.events.colorPicker.arg = payload.arg
+      state.events.colorPicker.event = payload.event
+    },
+    closeColorPicker(state) {
+      console.log("closeColorPicker (index.js mutation): ")
+      state.events.colorPicker.active = false
+      state.events.colorPicker.arg = null
+      state.events.colorPicker.event = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
