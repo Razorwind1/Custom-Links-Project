@@ -32,7 +32,7 @@ export default {
       },
       oldColor: "",
       itemID: "bo",
-      selectedColor: "#EEEEEE",
+      selectedColor: "",
     };
   },
   methods: {

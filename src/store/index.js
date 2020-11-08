@@ -59,11 +59,11 @@ const store = new Vuex.Store({
     tags: [
       {
         name: "favorite",
-        color: "#556677"
+        color: "#A716D6E0"
       },
       {
         name: "gaming",
-        color: "#556677"
+        color: "#A716D6E0"
       }
     ],
     events: {

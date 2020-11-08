@@ -39,7 +39,14 @@ export default {
         return "Save"
     },
     save: function () {
-      this.$refs.editAddLink.saveLink()
+      if (this.popupArg.type == 'tag-list')
+      {
+        this.closePopup();
+      }
+      if (this.popupArg.type == 'add-link')
+      {
+        this.$refs.editAddLink.saveLink()
+      }
     },
     closePopup: function () {
       this.$store.commit("closePopup")
