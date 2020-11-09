@@ -91,7 +91,9 @@ export default {
           {
             label: "Delete Link",
             click: () => {
-              this.$store.commit("deleteGridElement", {id: element.id});
+              this.$store.commit("showPopup", {
+                type: "confirm-popup",
+              });
             },
           },
         ],
