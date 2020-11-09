@@ -6,9 +6,7 @@
           v-if="popupArg.type === 'edit-link' || popupArg.type === 'add-link'"
           ref="editAddLink"
         />
-        <TagList
-          v-if="popupArg.type === 'tag-list'"
-        />
+        <TagList v-if="popupArg.type === 'tag-list'" />
       </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
@@ -19,42 +17,37 @@
 </template>
 
 <script>
-
 import EditAddLink from "@/components/EditAddLink.vue";
 import TagList from "@/components/TagList.vue";
 
 export default {
   data: function () {
     return {
-      popupArg: this.$store.state.events.popup.arg
+      popupArg: this.$store.state.events.popup.arg,
     };
   },
   methods: {
-    saveButtonLabel: function (){
-      if (this.popupArg.type == 'tag-list')
-        return "Save"
-      if (this.popupArg.type == 'add-link')
-        return "Add Link"
+    saveButtonLabel: function () {
+      if (this.popupArg.type == "tag-list") return "Save";
+      if (this.popupArg.type == "add-link") return "Add Link";
 
-        return "Save"
+      return "Save";
     },
     save: function () {
-      if (this.popupArg.type == 'tag-list')
-      {
+      if (this.popupArg.type == "tag-list") {
         this.closePopup();
       }
-      if (this.popupArg.type == 'add-link')
-      {
-        this.$refs.editAddLink.saveLink()
+      if (this.popupArg.type == "add-link" || this.popupArg.type == "edit-link") {
+        this.$refs.editAddLink.saveLink();
       }
     },
     closePopup: function () {
-      this.$store.commit("closePopup")
-    }
+      this.$store.commit("closePopup");
+    },
   },
   components: {
     EditAddLink,
-    TagList
+    TagList,
   },
 };
 </script>
