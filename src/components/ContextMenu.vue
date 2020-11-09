@@ -28,26 +28,26 @@ export default {
   },
   methods: {
     setContainerPosition(event) {
-      const mouseX = event.clientX;
-      const mouseY = event.clientY;
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
 
-      const windowW = window.innerWidth;
-      const windowH = window.innerHeight;
+        const windowW = window.innerWidth;
+        const windowH = window.innerHeight;
 
-      const menuW = this.$refs.container.getBoundingClientRect().width;
-      const menuH = this.$refs.container.getBoundingClientRect().height;
+        const menuW = this.$refs.container.getBoundingClientRect().width;
+        const menuH = this.$refs.container.getBoundingClientRect().height;
 
-      if (mouseX + menuW >= windowW) {
-        this.containerPosition.left = mouseX - menuW + "px";
-      } else {
-        this.containerPosition.left = mouseX + "px";
-      }
+        if (mouseX + menuW >= windowW) {
+          this.containerPosition.left = mouseX - menuW + "px";
+        } else {
+          this.containerPosition.left = mouseX + "px";
+        }
 
-      if (mouseY + menuH >= windowH) {
-        this.containerPosition.top = windowH - menuH - 5 + "px";
-      } else {
-        this.containerPosition.top = mouseY + "px";
-      }
+        if (mouseY + menuH >= windowH) {
+          this.containerPosition.top = windowH - menuH - 5 + "px";
+        } else {
+          this.containerPosition.top = mouseY + "px";
+        }
     },
   },
 };
@@ -56,7 +56,8 @@ export default {
 <style scoped>
 .container {
   position: absolute;
-  min-width: 150px;
+  min-width: 100px;
+  max-width: 180px;
   background: var(--dark-background-color);
   border-radius: 5px;
   border: 1px solid var(--active-background-color);
