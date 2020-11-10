@@ -224,7 +224,7 @@ export default {
 .tagIndicator-bar:hover {
   display: inline-block;
   position: absolute;
-  top: 20px;
+  top: 18px;
   height: 20px;
   min-width: 20px;
   border-radius: 5px;
