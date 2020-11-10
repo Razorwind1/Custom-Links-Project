@@ -1,8 +1,11 @@
 <template>
-  <div id="app-content" :class="[this.$store.state.events.popup.active ? 'disable-input' : '']">
+  <div
+    id="app-content"
+    :class="[this.$store.state.events.popup.active ? 'disable-input' : '']"
+  >
     <NavBar />
     <div id="app-main">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>

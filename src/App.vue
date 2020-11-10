@@ -1,10 +1,14 @@
 <template>
+<v-app>
   <div id="app" @click="closeContextMenu">
     <TitleBar />
     <AppContent />
     <Popup v-if="this.$store.state.events.popup.active" />
     <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
+    <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
+
   </div>
+</v-app>
 </template>
 
 <script>
@@ -12,22 +16,41 @@ import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
 import Popup from "@/components/Popup.vue";
 import ContextMenu from "@/components/ContextMenu.vue";
+import ColorPicker from "@/components/ColorPicker.vue";
 
 export default {
+
   components: {
     TitleBar,
     AppContent,
     Popup,
     ContextMenu,
+    ColorPicker,
   },
   methods: {
     closeContextMenu() {
       this.$store.commit("closeContextMenu");
     },
+    closeColorPicker() {
+      this.$store.commit("closeColorPicker");
+    }
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
+
+    window.ipcRenderer.on("cmd-args", (event, args) => {
+      if (args.open_dir) {
+        const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", args.open_dir);
+
+        this.$store.commit("showPopup", {
+          type: "add-link",
+          address: args.open_dir,
+          label: window.path.parse(args.open_dir).name,
+          nativeIconBuffer
+        });
+      }
+    });
 
     this.$store.watch(
       (state, getters) => getters.stateUserData,
@@ -40,6 +63,9 @@ export default {
     );
 
     window.addEventListener("resize", this.closeContextMenu)
+    window.addEventListener("resize", this.closeColorPicker)
+    
+    window.ipcRenderer.send("app-created");
   },
 };
 </script>

@@ -28,7 +28,7 @@ export default {
       });
     },
     tagList: function () {
-      this.$emit("show-popup", {
+      this.$store.commit("showPopup", {
         type: "tag-list",
       });
     },

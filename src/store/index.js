@@ -59,11 +59,11 @@ const store = new Vuex.Store({
     tags: [
       {
         name: "favorite",
-        color: "rgb(226, 97, 151)"
+        color: "#A716D6E0"
       },
       {
         name: "gaming",
-        color: "blue"
+        color: "#A716D6E0"
       }
     ],
     events: {
@@ -72,6 +72,10 @@ const store = new Vuex.Store({
         arg: null
       },
       popup: {
+        active: false,
+        arg: null
+      },
+      colorPicker: {
         active: false,
         arg: null
       }
@@ -123,6 +127,9 @@ const store = new Vuex.Store({
         element.pos.sizeY = payload.newH
       }
     },
+    editTagColor(state, payload) {
+      state.tags.find(tag => tag.name == payload.tagName).color = payload.newColor;
+    },
     showPopup(state, payload) {
       state.events.popup.active = true
       state.events.popup.arg = payload
@@ -140,6 +147,16 @@ const store = new Vuex.Store({
       state.events.contextMenu.active = false
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
+    },
+    colorPicker(state, payload) {
+      state.events.colorPicker.active = true
+      state.events.colorPicker.arg = payload.arg
+      state.events.colorPicker.event = payload.event
+    },
+    closeColorPicker(state) {
+      state.events.colorPicker.active = false
+      state.events.colorPicker.arg = null
+      state.events.colorPicker.event = null
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS

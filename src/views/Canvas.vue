@@ -180,6 +180,9 @@ export default {
 .link img {
   max-width: 100%;
   max-height: 75%;
+  width: inherit;
+  height: inherit;
+  object-fit: contain;
 }
 .link .label {
   max-height: 20%;
