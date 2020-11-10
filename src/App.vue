@@ -1,14 +1,13 @@
 <template>
-<v-app>
   <div id="app" @click="closeContextMenu">
-    <TitleBar />
-    <AppContent />
-    <Popup v-if="this.$store.state.events.popup.active" />
-    <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
-    <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
-
+    <v-app>
+      <TitleBar />
+      <AppContent />
+      <Popup v-if="this.$store.state.events.popup.active" />
+      <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
+      <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
+    </v-app>
   </div>
-</v-app>
 </template>
 
 <script>
@@ -19,7 +18,6 @@ import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 
 export default {
-
   components: {
     TitleBar,
     AppContent,
@@ -33,7 +31,7 @@ export default {
     },
     closeColorPicker() {
       this.$store.commit("closeColorPicker");
-    }
+    },
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -41,13 +39,16 @@ export default {
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
-        const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", args.open_dir);
+        const nativeIconBuffer = window.ipcRenderer.sendSync(
+          "get-native-icon",
+          args.open_dir
+        );
 
         this.$store.commit("showPopup", {
           type: "add-link",
           address: args.open_dir,
           label: window.path.parse(args.open_dir).name,
-          nativeIconBuffer
+          nativeIconBuffer,
         });
       }
     });
@@ -62,9 +63,9 @@ export default {
       }
     );
 
-    window.addEventListener("resize", this.closeContextMenu)
-    window.addEventListener("resize", this.closeColorPicker)
-    
+    window.addEventListener("resize", this.closeContextMenu);
+    window.addEventListener("resize", this.closeColorPicker);
+
     window.ipcRenderer.send("app-created");
   },
 };
@@ -72,8 +73,6 @@ export default {
 
 <style>
 :root {
-  height: 100%;
-
   --main-text-color: #eeeeee;
   --secondary-text-color: #111111;
 
@@ -100,8 +99,8 @@ export default {
 * div {
   display: flex;
 }
-body {
-  height: 100%;
+html {
+  overflow: hidden;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

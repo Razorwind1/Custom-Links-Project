@@ -30,7 +30,9 @@
         @click="open(element.address)"
         @contextmenu="contextMenu($event, element)"
       >
-        <img v-bind:src="getElementImg(element.id, element.img)" />
+        <div class="img-container">
+          <img v-bind:src="getElementImg(element.id, element.img)" />
+        </div>
         <div class="label">{{ element.label }}</div>
       </div>
     </grid-item>
@@ -91,11 +93,11 @@ export default {
           {
             label: "Delete Link",
             click: () => {
-              this.$store.commit("deleteGridElement", {id: element.id});
+              this.$store.commit("deleteGridElement", { id: element.id });
             },
           },
         ],
-        event
+        event,
       });
     },
     editLink: function (id, url) {
@@ -175,13 +177,20 @@ export default {
   flex-direction: column;
   padding: 8px 8px 4px 8px;
 }
-.link img {
+.link .img-container {
   max-width: 100%;
   max-height: 75%;
   width: inherit;
   height: inherit;
   object-fit: contain;
+  align-items: center;
+  justify-content: center;
 }
+.link .img-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .link .label {
   max-height: 20%;
   justify-content: center;
