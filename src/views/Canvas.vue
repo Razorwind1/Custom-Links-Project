@@ -39,7 +39,7 @@
           >
             <div
               class="tagIndicator-bar"
-              >&nbsp;&nbsp;{{ tag }}</div
+              >{{ tag }}</div
             ></div
           >
         </div>
@@ -214,7 +214,6 @@ export default {
   width: 15px;
   border-radius: 50%;
   display: inline-block;
-  z-index: 800;
   margin-right: 5px;
   margin-left: 5px;
 }
