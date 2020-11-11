@@ -107,6 +107,7 @@ export default {
             click: () => {
               this.$store.commit("showPopup", {
                 type: "confirm-popup",
+                id: element.id
               });
             },
           },
