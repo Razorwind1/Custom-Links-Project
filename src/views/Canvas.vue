@@ -12,43 +12,42 @@
     :style="{ width: '100%', height: '100%' }"
     :use-style-cursor="false"
   >
-    <grid-item
-      v-for="element in layout"
-      :x="element.x"
-      :y="element.y"
-      :w="element.w"
-      :h="element.h"
-      :i="element.i"
-      :key="element.i"
-      @move="moveEvent"
-      @resized="resizedEvent"
-      @moved="movedEvent"
-    >
-      <div
-        class="link"
-        v-bind:style="getStyling(element.style)"
-        @click="open(element.address)"
-        @contextmenu="contextMenu($event, element)"
+    <div @contextmenu="contextMenuCanvas($event)" :style="{ width: '100%', height: '100%' }">
+      <grid-item
+        v-for="element in layout"
+        :x="element.x"
+        :y="element.y"
+        :w="element.w"
+        :h="element.h"
+        :i="element.i"
+        :key="element.i"
+        @move="moveEvent"
+        @resized="resizedEvent"
+        @moved="movedEvent"
       >
-        <div class="tagsWrapper">
-          <div
-            class="tagIndicator-dot"
-            v-for="tag in $store.getters.getTagsofLink(element.id)"
-            :key="tag.id"
-            :style="{ 'background-color': $store.getters.getTagColor(tag) }"
-          >
+        <div
+          class="link"
+          v-bind:style="getStyling(element.style)"
+          @click="open(element.address)"
+          @contextmenu.stop="contextMenuLink($event, element)"
+        >
+          <div class="tagsWrapper">
             <div
-              class="tagIndicator-bar"
-              >{{ tag }}</div
-            ></div
-          >
+              class="tagIndicator-dot"
+              v-for="tag in $store.getters.getTagsofLink(element.id)"
+              :key="tag.id"
+              :style="{ 'background-color': $store.getters.getTagColor(tag) }"
+            >
+              <div class="tagIndicator-bar">{{ tag }}</div>
+            </div>
+          </div>
+          <div class="img-container">
+            <img v-bind:src="getElementImg(element.id, element.img)" />
+          </div>
+          <div class="label">{{ element.label }}</div>
         </div>
-        <div class="img-container">
-          <img v-bind:src="getElementImg(element.id, element.img)" />
-        </div>
-        <div class="label">{{ element.label }}</div>
-      </div>
-    </grid-item>
+      </grid-item>
+    </div>
   </grid-layout>
 </template>
 
@@ -94,7 +93,7 @@ export default {
       }
       window.ipcRenderer.send("open", element_address);
     },
-    contextMenu: function (event, element) {
+    contextMenuLink: function (event, element) {
       this.$store.commit("contextMenu", {
         content: [
           {
@@ -109,6 +108,21 @@ export default {
               this.$store.commit("showPopup", {
                 type: "confirm-popup",
               });
+            },
+          },
+        ],
+        event,
+      });
+    },
+    contextMenuCanvas: function (event) {
+      this.$store.commit("contextMenu", {
+        content: [
+          {
+            label: "Open All",
+            click: () => {
+              this.layout.forEach(element => {
+                this.open(element.address)
+              })
             },
           },
         ],
