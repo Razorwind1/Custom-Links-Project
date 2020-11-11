@@ -1,14 +1,13 @@
 <template>
-<v-app>
-  <div id="app" @click="closeContextMenu">
-    <TitleBar />
-    <AppContent />
-    <Popup v-if="this.$store.state.events.popup.active" />
-    <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
-    <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
-
-  </div>
-</v-app>
+  <v-app>
+    <div id="app" @click="closeContextMenu">
+      <TitleBar />
+      <AppContent />
+      <Popup v-if="this.$store.state.events.popup.active" />
+      <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
+      <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -19,13 +18,12 @@ import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 
 export default {
-
   components: {
     TitleBar,
     AppContent,
     Popup,
     ContextMenu,
-    ColorPicker,
+    ColorPicker
   },
   methods: {
     closeContextMenu() {
@@ -35,13 +33,16 @@ export default {
       this.$store.commit("closeColorPicker");
     }
   },
-  created: function () {
+  created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
-        const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", args.open_dir);
+        const nativeIconBuffer = window.ipcRenderer.sendSync(
+          "get-native-icon",
+          args.open_dir
+        );
 
         this.$store.commit("showPopup", {
           type: "add-link",
@@ -54,19 +55,19 @@ export default {
 
     this.$store.watch(
       (state, getters) => getters.stateUserData,
-      (newValue) => {
+      newValue => {
         window.ipcRenderer.send("state-changed", newValue);
       },
       {
-        deep: true,
+        deep: true
       }
     );
 
-    window.addEventListener("resize", this.closeContextMenu)
-    window.addEventListener("resize", this.closeColorPicker)
-    
+    window.addEventListener("resize", this.closeContextMenu);
+    window.addEventListener("resize", this.closeColorPicker);
+
     window.ipcRenderer.send("app-created");
-  },
+  }
 };
 </script>
 

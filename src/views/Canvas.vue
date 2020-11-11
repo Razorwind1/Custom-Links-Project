@@ -190,7 +190,9 @@ export default {
   align-items: center;
   text-align: center;
 }
-
+.vue-grid-layout {
+  overflow-y: auto;
+};
 .vue-grid-item {
   cursor: pointer !important;
   transition: background-color 100ms ease-in-out;

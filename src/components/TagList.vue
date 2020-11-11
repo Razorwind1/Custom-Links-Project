@@ -21,18 +21,12 @@
                   })
                 "
               >
-                <span
-                  class="color-dot"
-                  :style="{ 'background-color': tag.color }"
-                ></span>
+                <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
               </div>
               <div>&#10005;</div>
             </div>
             <div class="tag-entry-bottom-row">
-              <div
-                v-for="(link, i) in $store.getters.getLinksByTag(tag.name)"
-                :key="i"
-              >
+              <div v-for="(link, i) in $store.getters.getLinksByTag(tag.name)" :key="i">
                 <div class="associated-link">{{ link.content.label }}</div>
               </div>
             </div>
@@ -45,31 +39,31 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       label: "",
-      address: "",
+      address: ""
     };
   },
   methods: {
-    colorPicker: function (event, data) {
+    colorPicker: function(event, data) {
       this.$store.commit("colorPicker", {
         arg: {
           pickerType: "tag-color",
           tagName: data.tagName,
-          tagColor: data.tagColor,
+          tagColor: data.tagColor
         },
-        event,
+        event
       });
-    },
+    }
   },
-  mounted: function () {
+  mounted: function() {
     const inputs = document.querySelectorAll("input");
     if (inputs[0]) inputs[0].focus();
   },
   props: {
-    saveLink: Boolean,
-  },
+    saveLink: Boolean
+  }
 };
 </script>
 
@@ -161,5 +155,4 @@ div.tag-list div.section > h3 {
   font-size: 14px;
   opacity: 0.9;
 }
-
 </style>
