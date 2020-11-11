@@ -30,6 +30,19 @@
         @click="open(element.address)"
         @contextmenu="contextMenu($event, element)"
       >
+        <div class="tagsWrapper">
+          <div
+            class="tagIndicator-dot"
+            v-for="tag in $store.getters.getTagsofLink(element.id)"
+            :key="tag.id"
+            :style="{ 'background-color': $store.getters.getTagColor(tag) }"
+          >
+            <div
+              class="tagIndicator-bar"
+              >{{ tag }}</div
+            ></div
+          >
+        </div>
         <div class="img-container">
           <img v-bind:src="getElementImg(element.id, element.img)" />
         </div>
@@ -93,7 +106,9 @@ export default {
           {
             label: "Delete Link",
             click: () => {
-              this.$store.commit("deleteGridElement", { id: element.id });
+              this.$store.commit("showPopup", {
+                type: "confirm-popup",
+              });
             },
           },
         ],
@@ -196,6 +211,39 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.tagsWrapper {
+  flex-direction: row;
+  position: absolute;
+  top: 4px;
+}
+.tagIndicator-dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.tagIndicator-bar {
+  color: transparent;
+}
+.tagIndicator-bar:hover {
+  display: inline-block;
+  position: absolute;
+  top: 18px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  padding-top: 0px;
+  background-color: inherit;
+
+  font-size: 13px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans";
+  color: white;
 }
 
 .vue-grid-item {
