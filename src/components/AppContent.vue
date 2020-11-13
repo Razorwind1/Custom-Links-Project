@@ -28,6 +28,7 @@ export default {
   flex-direction: row;
   flex-grow: 1;
   overflow: hidden;
+  height: 100%;
 }
 
 #app-main {

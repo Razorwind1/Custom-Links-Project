@@ -12,28 +12,42 @@
     :style="{ width: '100%', height: '100%' }"
     :use-style-cursor="false"
   >
-    <grid-item
-      v-for="element in layout"
-      :x="element.x"
-      :y="element.y"
-      :w="element.w"
-      :h="element.h"
-      :i="element.i"
-      :key="element.i"
-      @move="moveEvent"
-      @resized="resizedEvent"
-      @moved="movedEvent"
-    >
-      <div
-        class="link"
-        v-bind:style="getStyling(element.style)"
-        @click="open(element.address)"
-        @contextmenu="contextMenu($event, element)"
+    <div @contextmenu="contextMenuCanvas($event)" :style="{ width: '100%', height: '100%' }">
+      <grid-item
+        v-for="element in layout"
+        :x="element.x"
+        :y="element.y"
+        :w="element.w"
+        :h="element.h"
+        :i="element.i"
+        :key="element.i"
+        @move="moveEvent"
+        @resized="resizedEvent"
+        @moved="movedEvent"
       >
-        <img v-bind:src="getElementImg(element.id, element.img)" />
-        <div class="label">{{ element.label }}</div>
-      </div>
-    </grid-item>
+        <div
+          class="link"
+          v-bind:style="getStyling(element.style)"
+          @click="open(element.address)"
+          @contextmenu.stop="contextMenuLink($event, element)"
+        >
+          <div class="tagsWrapper">
+            <div
+              class="tagIndicator-dot"
+              v-for="tag in $store.getters.getTagsofLink(element.id)"
+              :key="tag.id"
+              :style="{ 'background-color': $store.getters.getTagColor(tag) }"
+            >
+              <div class="tagIndicator-bar">{{ tag }}</div>
+            </div>
+          </div>
+          <div class="img-container">
+            <img v-bind:src="getElementImg(element.id, element.img)" />
+          </div>
+          <div class="label">{{ element.label }}</div>
+        </div>
+      </grid-item>
+    </div>
   </grid-layout>
 </template>
 
@@ -79,7 +93,7 @@ export default {
       }
       window.ipcRenderer.send("open", element_address);
     },
-    contextMenu: function (event, element) {
+    contextMenuLink: function (event, element) {
       this.$store.commit("contextMenu", {
         content: [
           {
@@ -93,11 +107,27 @@ export default {
             click: () => {
               this.$store.commit("showPopup", {
                 type: "confirm-popup",
+                id: element.id
               });
             },
           },
         ],
-        event
+        event,
+      });
+    },
+    contextMenuCanvas: function (event) {
+      this.$store.commit("contextMenu", {
+        content: [
+          {
+            label: "Open All",
+            click: () => {
+              this.layout.forEach(element => {
+                this.open(element.address)
+              })
+            },
+          },
+        ],
+        event,
       });
     },
     editLink: function (id, url) {
@@ -177,22 +207,61 @@ export default {
   flex-direction: column;
   padding: 8px 8px 4px 8px;
 }
-.link img {
+.link .img-container {
   max-width: 100%;
   max-height: 75%;
   width: inherit;
   height: inherit;
   object-fit: contain;
+  align-items: center;
+  justify-content: center;
 }
+.link .img-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .link .label {
   max-height: 20%;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
+.tagsWrapper {
+  flex-direction: row;
+  position: absolute;
+  top: 4px;
+}
+.tagIndicator-dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.tagIndicator-bar {
+  color: transparent;
+}
+.tagIndicator-bar:hover {
+  display: inline-block;
+  position: absolute;
+  top: 18px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  padding-top: 0px;
+  background-color: inherit;
+
+  font-size: 13px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans";
+  color: white;
+}
 .vue-grid-layout {
   overflow-y: auto;
-};
+}
 .vue-grid-item {
   cursor: pointer !important;
   transition: background-color 100ms ease-in-out;

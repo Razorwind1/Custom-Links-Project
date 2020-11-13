@@ -64,6 +64,10 @@ const store = new Vuex.Store({
       {
         name: "gaming",
         color: "#A716D6E0"
+      },
+      {
+        name: "coding",
+        color: "#FFFF00E0"
       }
     ],
     events: {
@@ -174,8 +178,19 @@ const store = new Vuex.Store({
     getStyle: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
     },
+    getTagsofLink: (state) => (id) => {
+      return state.gridElements.find(gridEl => gridEl.id === id).tagsList;
+    },
     getTags: (state) => {
       return state.tags
+    },
+    getTagColor: (state) => (id) => {
+      if (state.tags.find(tag => tag.name === id) === undefined) {
+        return id;
+      } else {
+        return state.tags.find(tag => tag.name === id).color;
+      }
+      
     },
     getLinksByTag: (state) => (tagName) => {
       const elementsArray = state.gridElements;

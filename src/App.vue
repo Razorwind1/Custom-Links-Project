@@ -1,13 +1,13 @@
 <template>
-  <v-app>
-    <div id="app" @click="closeContextMenu">
+  <div id="app" @click="closeContextMenu">
+    <v-app>
       <TitleBar />
       <AppContent />
       <Popup v-if="this.$store.state.events.popup.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
-    </div>
-  </v-app>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ export default {
     },
     closeColorPicker() {
       this.$store.commit("closeColorPicker");
-    }
+    },
   },
   created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -48,7 +48,7 @@ export default {
           type: "add-link",
           address: args.open_dir,
           label: window.path.parse(args.open_dir).name,
-          nativeIconBuffer
+          nativeIconBuffer,
         });
       }
     });
@@ -73,8 +73,6 @@ export default {
 
 <style>
 :root {
-  height: 100%;
-
   --main-text-color: #eeeeee;
   --secondary-text-color: #111111;
 
@@ -101,8 +99,8 @@ export default {
 * div {
   display: flex;
 }
-body {
-  height: 100%;
+html {
+  overflow: hidden;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

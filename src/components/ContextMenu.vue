@@ -63,6 +63,7 @@ export default {
   border: 1px solid var(--active-background-color);
   cursor: pointer;
   flex-direction: column;
+  padding: 0;
 }
 .container > div {
   border-radius: 5px;
