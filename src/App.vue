@@ -23,7 +23,7 @@ export default {
     AppContent,
     Popup,
     ContextMenu,
-    ColorPicker,
+    ColorPicker
   },
   methods: {
     closeContextMenu() {
@@ -33,7 +33,7 @@ export default {
       this.$store.commit("closeColorPicker");
     },
   },
-  created: function () {
+  created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
 
@@ -55,11 +55,11 @@ export default {
 
     this.$store.watch(
       (state, getters) => getters.stateUserData,
-      (newValue) => {
+      newValue => {
         window.ipcRenderer.send("state-changed", newValue);
       },
       {
-        deep: true,
+        deep: true
       }
     );
 
@@ -67,7 +67,7 @@ export default {
     window.addEventListener("resize", this.closeColorPicker);
 
     window.ipcRenderer.send("app-created");
-  },
+  }
 };
 </script>
 
