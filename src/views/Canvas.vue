@@ -12,7 +12,10 @@
     :style="{ width: '100%', height: '100%' }"
     :use-style-cursor="false"
   >
-    <div @contextmenu="contextMenuCanvas($event)" :style="{ width: '100%', height: '100%' }">
+    <div
+      @contextmenu="contextMenuCanvas($event)"
+      :style="{ width: '100%', height: '100%' }"
+    >
       <grid-item
         v-for="element in layout"
         :x="element.x"
@@ -107,7 +110,7 @@ export default {
             click: () => {
               this.$store.commit("showPopup", {
                 type: "confirm-popup",
-                id: element.id
+                id: element.id,
               });
             },
           },
@@ -121,9 +124,17 @@ export default {
           {
             label: "Open All",
             click: () => {
-              this.layout.forEach(element => {
-                this.open(element.address)
-              })
+              this.layout.forEach((element) => {
+                this.open(element.address);
+              });
+            },
+          },
+          {
+            label: "Add Link",
+            click: () => {
+              this.$store.commit("showPopup", {
+                type: "add-link",
+              });
             },
           },
         ],
