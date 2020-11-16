@@ -108,8 +108,8 @@ export default {
           {
             label: "Delete Link",
             click: () => {
-              this.$store.commit("showPopup", {
-                type: "confirm-popup",
+              this.$store.commit("showAlert", {
+                type: "delete-link",
                 id: element.id,
               });
             },

@@ -7,14 +7,7 @@
           ref="editAddLink"
         />
 
-
-        <Confirm
-        v-if="popupArg.type === 'confirm-popup'"
-        ref="confirmPopup"
-        />
-
         <TagList v-if="popupArg.type === 'tag-list'" />
-
       </div>
       <div class="popup-buttons">
         <div @click="closePopup" class="button">Cancel</div>
@@ -27,7 +20,6 @@
 <script>
 import EditAddLink from "@/components/EditAddLink.vue";
 import TagList from "@/components/TagList.vue";
-import Confirm from "@/components/Confirm.vue";
 
 export default {
   data: function () {
@@ -39,21 +31,19 @@ export default {
     saveButtonLabel: function () {
       if (this.popupArg.type == "tag-list") return "Save";
       if (this.popupArg.type == "add-link") return "Add Link";
-      if (this.popupArg.type == 'confirm-popup')
-        return "Delete"      
-        
-        return "Save";
+
+      return "Save";
     },
     save: function () {
       if (this.popupArg.type == "tag-list") {
         this.closePopup();
       }
-      if (this.popupArg.type == "add-link" || this.popupArg.type == "edit-link") {
+      if (
+        this.popupArg.type == "add-link" ||
+        this.popupArg.type == "edit-link"
+      ) {
         this.$refs.editAddLink.saveLink();
       }
-      if ( this.popupArg.type == 'confirm-popup')
-        this.$refs.confirmPopup.deleteLink()      
-
     },
     closePopup: function () {
       this.$store.commit("closePopup");
@@ -62,8 +52,6 @@ export default {
   components: {
     EditAddLink,
     TagList,
-    Confirm
-
   },
 };
 </script>

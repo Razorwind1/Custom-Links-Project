@@ -75,6 +75,10 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
+      alert: {
+        active: false,
+        arg: null
+      },
       popup: {
         active: false,
         arg: null
@@ -134,6 +138,8 @@ const store = new Vuex.Store({
     editTagColor(state, payload) {
       state.tags.find(tag => tag.name == payload.tagName).color = payload.newColor;
     },
+
+
     showPopup(state, payload) {
       state.events.popup.active = true
       state.events.popup.arg = payload
@@ -142,6 +148,16 @@ const store = new Vuex.Store({
       state.events.popup.active = false
       state.events.popup.arg = null
     },
+    
+    showAlert(state, payload) {
+      state.events.alert.active = true
+      state.events.alert.arg = payload
+    },
+    closeAlert(state) {
+      state.events.alert.active = false
+      state.events.alert.arg = null
+    },
+
     contextMenu(state, payload) {
       state.events.contextMenu.active = true
       state.events.contextMenu.arg = payload.content
@@ -152,6 +168,7 @@ const store = new Vuex.Store({
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
     },
+
     colorPicker(state, payload) {
       state.events.colorPicker.active = true
       state.events.colorPicker.arg = payload.arg
@@ -161,7 +178,7 @@ const store = new Vuex.Store({
       state.events.colorPicker.active = false
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
-    }
+    },
   },
   actions: {                                  // FOR ASYNC ACTIONS
   },
