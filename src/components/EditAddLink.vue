@@ -76,10 +76,18 @@ export default {
           this.$store.commit("addGridElement", {
             data: this.$data,
           });
+          this.$store.commit("showAlert", {
+            type: "link-added",
+            label: this.label,
+          });
         } else if (this.popupArg.type === "edit-link") {
           this.$store.commit("editGridElement", {
             id: this.popupArg.linkID,
             data: this.$data,
+          });
+          this.$store.commit("showAlert", {
+            type: "link-edited",
+            label: this.label,
           });
         }
         this.$store.commit("closePopup");

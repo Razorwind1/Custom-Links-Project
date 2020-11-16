@@ -2,8 +2,8 @@
   <div class="alert-overlay">
     <div class="alert-container">
       <div class="alert-content">
-        <h1>Delete Link</h1>
-        <p>Are you sure you want to delete <b>{{$store.getters.getGridLink(alertArg.id).content.label}}</b>?</p>
+        <h1>{{ header }}</h1>
+        <p>{{ content }}</p>
       </div>
       <div class="alert-buttons">
         <div
@@ -28,6 +28,9 @@ export default {
     return {
       alertArg: this.$store.state.events.alert.arg,
 
+      header: "Example Header",
+      content: "This is an example explanation for this alert!",
+
       closeButton: false,
 
       saveButton: true,
@@ -35,11 +38,29 @@ export default {
       saveButtonStyle: {},
     };
   },
-  created: function() {
+  created: function () {
     if (this.alertArg.type == "delete-link") {
+      this.header = "Delete Link";
+      this.content = `Are you sure you want to delete ${
+        this.$store.getters.getGridLink(this.alertArg.id).content.label
+      }?`;
       this.saveButtonLabel = "Delete";
-      this.saveButtonClass = ["delete-link"]
-      this.closeButton = true
+      this.saveButtonClass = ["delete-link"];
+      this.closeButton = true;
+    }
+    
+    if (this.alertArg.type == "link-added") {
+      this.header = "Link Added";
+      this.content = `Your link ${this.alertArg.label} was added successfully!`;
+      this.saveButtonLabel = "Close";
+      this.closeButton = false;
+    }
+
+    if (this.alertArg.type == "link-edited") {
+      this.header = "Link Edited";
+      this.content = `Your link ${this.alertArg.label} was edited successfully!`;
+      this.saveButtonLabel = "Close";
+      this.closeButton = false;
     }
   },
   methods: {
@@ -47,7 +68,7 @@ export default {
       if (this.alertArg.type == "delete-link") {
         this.$store.commit("deleteGridElement", { id: this.alertArg.id });
         this.$store.commit("closeAlert");
-      }
+      } else this.$store.commit("closeAlert");
     },
     closeAlert: function () {
       this.$store.commit("closeAlert");
@@ -84,7 +105,7 @@ div.alert-content {
 div.alert-content h1 {
   font-size: 20px;
   padding: 10px;
-  opacity: .8;
+  opacity: 0.8;
   border-bottom: 1px solid var(--light-background-color);
 }
 div.alert-content p {
@@ -94,7 +115,7 @@ div.alert-content p {
 
 div.alert-buttons {
   flex-direction: row-reverse;
-  height: 70px;
+  height: 60px;
   width: 100%;
   background: var(--dark-background-color);
   border-radius: inherit;
@@ -121,6 +142,4 @@ div.alert-buttons > div.button.delete-link {
 div.alert-buttons > div.button.delete-link:hover {
   background-color: #ad2020;
 }
-
-
 </style>
