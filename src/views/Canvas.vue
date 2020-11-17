@@ -31,16 +31,23 @@
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
         >
-          <div class="tagsWrapper">
+          <TagsWrapper
+          :listOfTags="$store.getters.getTagsofLink(element.id)"
+          ></TagsWrapper>
+
+
+          <!-- <div class="tagsWrapper">
             <div
               class="tagIndicator-dot"
               v-for="tag in $store.getters.getTagsofLink(element.id)"
               :key="tag.id"
               :style="{ 'background-color': $store.getters.getTagColor(tag) }"
+              @mouseover="displayTagLabel(this)"
+              @mouseleave="hideTaglabel(this)"
             >
-              <div class="tagIndicator-bar">{{ tag }}</div>
+              
             </div>
-          </div>
+          </div> -->
           <div class="img-container">
             <img v-bind:src="getElementImg(element.id, element.img)" />
           </div>
@@ -54,6 +61,7 @@
 <script>
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+import TagsWrapper from "@/components/TagsWrapper.vue";
 
 export default {
   data() {
@@ -65,6 +73,7 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
+    TagsWrapper
   },
   methods: {
     updateGrid: function () {
@@ -113,7 +122,7 @@ export default {
           },
         ],
         event,
-      });
+      },);
     },
     contextMenuCanvas: function (event) {
       this.$store.commit("contextMenu", {
@@ -163,6 +172,12 @@ export default {
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("resizeGridElement", { id, newH, newW });
+    },
+    displayTagLabel: function (tagCircle) {
+        console.log(tagCircle);
+      },
+    hideTaglabel: function (tagCircle) {
+        console.log(tagCircle);
     },
   },
   created: function () {
