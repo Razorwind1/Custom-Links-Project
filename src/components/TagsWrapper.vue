@@ -12,7 +12,7 @@
     <div
       class="tagIndicator-bar"
       v-for="tag in listOfTags"
-      :key="tag.lol"
+      :key="tag.name"
       :style="{ 'background-color': $store.getters.getTagColor(tag) }"
       v-bind:class="{visible: focusedTag==tag}"
     >{{ tag }}</div>
@@ -23,7 +23,7 @@
 export default {
   data: function () {
     return {
-      focusedTag: undefined,
+      focusedTag: null,
     };
   },
   props: ['listOfTags'],
@@ -32,7 +32,7 @@ export default {
       this.focusedTag = tag;
     },
     mouseLeave: function () {
-      this.focusedTag = undefined;
+      this.focusedTag = null;
     }
   },
 };
