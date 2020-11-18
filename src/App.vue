@@ -4,6 +4,7 @@
       <TitleBar />
       <AppContent />
       <Popup v-if="this.$store.state.events.popup.active" />
+      <Alert v-if="this.$store.state.events.alert.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
     </v-app>
@@ -14,6 +15,7 @@
 import TitleBar from "@/components/TitleBar.vue";
 import AppContent from "@/components/AppContent.vue";
 import Popup from "@/components/Popup.vue";
+import Alert from "@/components/Alert.vue";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 
@@ -22,6 +24,7 @@ export default {
     TitleBar,
     AppContent,
     Popup,
+    Alert,
     ContextMenu,
     ColorPicker
   },
