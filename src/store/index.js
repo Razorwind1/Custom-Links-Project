@@ -138,7 +138,11 @@ const store = new Vuex.Store({
     editTagColor(state, payload) {
       state.tags.find(tag => tag.name == payload.tagName).color = payload.newColor;
     },
-
+    editTagName(state, payload) {
+      state.tags.find(tag => tag.name == payload.tagName).name = payload.newName;
+      //Also must make IDs for tags so associated links don't dissapear!!
+      //(or run through each tag-array of each grid-element and replace their old "label-name" with the changed one)
+    },
 
     showPopup(state, payload) {
       state.events.popup.active = true

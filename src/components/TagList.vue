@@ -12,7 +12,21 @@
         <div v-for="(tag, index) in $store.getters.getTags" :key="index">
           <div class="tag-entry">
             <div class="tag-entry-top-row">
-              <div>{{ tag.name }}</div>
+              <input
+                class="tagLabel"
+                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index }"
+                @click="editingName(tag.name, index)"
+                :value="tag.name"
+                ref="tags"
+                v-on:keyup.enter="saveName"
+              />
+              <div
+                @click="stopEditingName()"
+                class="xStopEditing"
+                v-show="tagBeingEditedIdx == index"
+              >
+                &#9932;
+              </div>
               <div
                 @click="
                   colorPicker($event, {
@@ -21,12 +35,18 @@
                   })
                 "
               >
-                <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
+                <span
+                  class="color-dot"
+                  :style="{ 'background-color': tag.color }"
+                ></span>
               </div>
-              <div>&#10005;</div>
+              <div class="xDeleteTag">&#9932;</div>
             </div>
             <div class="tag-entry-bottom-row">
-              <div v-for="(link, i) in $store.getters.getLinksByTag(tag.name)" :key="i">
+              <div
+                v-for="(link, i) in $store.getters.getLinksByTag(tag.name)"
+                :key="i"
+              >
                 <div class="associated-link">{{ link.content.label }}</div>
               </div>
             </div>
@@ -39,35 +59,74 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
       label: "",
-      address: ""
+      address: "",
+      tagBeingEditedIdx: null,
+      tagBeingEditedName: null
     };
   },
   methods: {
-    colorPicker: function(event, data) {
+    colorPicker: function (event, data) {
       this.$store.commit("colorPicker", {
         arg: {
           pickerType: "tag-color",
           tagName: data.tagName,
-          tagColor: data.tagColor
+          tagColor: data.tagColor,
         },
-        event
+        event,
       });
-    }
+    },
+    editingName(tagName, index) {
+      this.tagBeingEditedIdx = index;
+      this.tagBeingEditedName = tagName;
+    },
+    stopEditingName() {
+      this.tagBeingEditedIdx = null;
+    },
+    saveName() {
+      this.$store.commit("editTagName", {
+        tagName: this.tagBeingEditedName,
+        newName: this.$refs.tags[this.tagBeingEditedIdx].value
+        })
+    },
+    getTagLabelClass(tagName) {
+      return "tag-entry-label-name-" + tagName;
+    },
   },
-  mounted: function() {
+  mounted: function () {
     const inputs = document.querySelectorAll("input");
     if (inputs[0]) inputs[0].focus();
   },
   props: {
-    saveLink: Boolean
-  }
+    saveLink: Boolean,
+  },
 };
 </script>
 
 <style scoped>
+input.tagLabel {
+  background-color: var(--main-background-color);
+  border: none;
+  padding: 4px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+input.tagBeingEdited {
+  background-color: var(--light-background-color);
+  cursor: text;
+}
+.xStopEditing {
+  font-size: 13px;
+  position: absolute;
+  left: 180px;
+}
+.xDeleteTag {
+  font-size: 15px;
+  margin-right: 5px;
+  margin-top: 2px;
+}
 span.color-dot {
   height: 25px;
   width: 25px;
@@ -98,9 +157,10 @@ span.color-dot {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  position: relative;
 }
 .tag-entry > div {
-  padding: 10px;
+  padding: 7px;
 }
 .tag-entry-top-row > div:hover {
   background-color: var(--light-background-color);
