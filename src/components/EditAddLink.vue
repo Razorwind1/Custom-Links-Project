@@ -10,7 +10,10 @@
       </div>
       <div class="section">
         <h3>Address</h3>
-        <input type="text" v-model="address" required />
+        <div class="address-selection">
+          <input type="text" v-model="address" required />
+          <div class="button" @click="selectFile">Open</div>
+        </div>
       </div>
       <div class="section">
         <h3>Image</h3>
@@ -40,6 +43,7 @@ export default {
 
       label: "",
       address: "",
+      type: "url",
 
       imgSrc: null,
 
@@ -56,6 +60,22 @@ export default {
 
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
+    },
+    selectFile: function () {
+      const file = window.ipcRenderer.sendSync("open-file-dialog", {
+        type: this.type,
+      });
+      if (!file) return;
+
+      const nativeIconBuffer = window.ipcRenderer.sendSync(
+        "get-native-icon",
+        file
+      );
+
+      this.address = file;
+      this.label = this.imgLabel = window.path.parse(file).name;
+      this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
+      this.imgBuffer = nativeIconBuffer;
     },
     getElementImg: function (id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
@@ -152,6 +172,27 @@ div.edit-link div.section > h3 {
   margin-bottom: 0;
   font-size: 14px;
   opacity: 0.9;
+}
+
+div.address-selection {
+  flex-direction: column;
+  position: relative;
+}
+div.address-selection input {
+  margin-bottom: 8px;
+}
+div.address-selection div.button {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  box-shadow: inset 0 0 100px var(--active-background-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border: 1px solid rgba(1, 1, 1, 0);
+  transition: box-shadow 150ms ease-in-out;
+}
+div.address-selection div.button:hover {
+  box-shadow: inset 0 0 100px var(--light-background-color);
 }
 
 div.img-selection {

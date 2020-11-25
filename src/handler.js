@@ -43,7 +43,7 @@ export default function handler(win) {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
             filters: [{
-                name: 'jpg, png, gif, svg', extensions: ['jpg', 'png', 'gif', 'svg']
+                name: 'jpg, png, svg', extensions: ['jpg', 'png', 'svg']
             }]
         })
         if (imgSrc && imgSrc[0]) {
@@ -53,6 +53,17 @@ export default function handler(win) {
         else {
             event.returnValue = null
         }
+    })
+    ipcMain.on('open-file-dialog', (event, args) => {
+        const dialogType = (args.type === "file") ? ['openFile'] : ['openDirectory']
+        const fileSrc = dialog.showOpenDialogSync(win, {
+            title: "Open",
+            properties: dialogType
+        })
+        if (fileSrc && fileSrc[0])
+            event.returnValue = fileSrc[0]
+        else
+            event.returnValue = null
     })
     ipcMain.on('get-image-buffer', (event, args) => {
         let imgBuffer = null
