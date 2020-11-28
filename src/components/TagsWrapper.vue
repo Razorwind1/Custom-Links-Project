@@ -3,19 +3,19 @@
   <div class="link-tags-wrapper">
     <div
       class="tagIndicator-dot"
-      v-for="tag in listOfTags"
-      :key="tag"
-      :style="{ 'background-color': $store.getters.getTagColor(tag) }"
-      @mouseover="mouseOver(tag)"
+      v-for="tagID in listOfTags"
+      :key="tagID"
+      :style="{ 'background-color': $store.getters.getTagColor(tagID) }"
+      @mouseover="mouseOver(tagID)"
       @mouseleave="mouseLeave"
     ></div>
     <div
       class="tagIndicator-bar"
-      v-for="tag in listOfTags"
-      :key="tag.name"
-      :style="{ 'background-color': $store.getters.getTagColor(tag) }"
-      v-bind:class="{visible: focusedTag==tag}"
-    >{{ tag }}</div>
+      v-for="tagID in listOfTags"
+      :key="tagID.lol"
+      :style="{ 'background-color': $store.getters.getTagColor(tagID) }"
+      v-bind:class="{visible: focusedTag==tagID}"
+    >{{ $store.getters.getTagName(tagID) }}</div>
   </div>
 </template>
 
@@ -28,8 +28,8 @@ export default {
   },
   props: ['listOfTags'],
   methods: {
-    mouseOver: function (tag) {
-      this.focusedTag = tag;
+    mouseOver: function (tagID) {
+      this.focusedTag = tagID;
     },
     mouseLeave: function () {
       this.focusedTag = null;

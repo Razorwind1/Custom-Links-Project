@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     saveButtonLabel: function () {
-      if (this.popupArg.type == "tag-list") return "Save";
+      if (this.popupArg.type == "tag-list") return "Close";
       if (this.popupArg.type == "add-link") return "Add Link";
 
       return "Save";

@@ -15,7 +15,7 @@
               <input
                 class="tagLabel"
                 v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index }"
-                @click="editingName(tag.name, index)"
+                @click="editingName(tag.id, index)"
                 :value="tag.name"
                 ref="tags"
                 v-on:keyup.enter="saveName"
@@ -28,9 +28,16 @@
                 &#9932;
               </div>
               <div
+                @click="saveName()"
+                class="checkSaveLabel"
+                v-show="tagBeingEditedIdx == index"
+              >
+                &#x2713;
+              </div>
+              <div
                 @click="
                   colorPicker($event, {
-                    tagName: tag.name,
+                    tagID: tag.id,
                     tagColor: tag.color,
                   })
                 "
@@ -44,7 +51,7 @@
             </div>
             <div class="tag-entry-bottom-row">
               <div
-                v-for="(link, i) in $store.getters.getLinksByTag(tag.name)"
+                v-for="(link, i) in $store.getters.getLinksByTag(tag.id)"
                 :key="i"
               >
                 <div class="associated-link">{{ link.content.label }}</div>
@@ -64,41 +71,43 @@ export default {
       label: "",
       address: "",
       tagBeingEditedIdx: null,
-      tagBeingEditedName: null
+      tagBeingEditedID: null,
     };
   },
   methods: {
+    possiblyCloseEditFields: function () {
+      console.log("possiblyCloseEditFields");
+    },
     colorPicker: function (event, data) {
       this.$store.commit("colorPicker", {
         arg: {
           pickerType: "tag-color",
-          tagName: data.tagName,
           tagColor: data.tagColor,
+          tagID: data.tagID,
         },
         event,
       });
     },
-    editingName(tagName, index) {
+    editingName(tagID, index) {
       this.tagBeingEditedIdx = index;
-      this.tagBeingEditedName = tagName;
+      this.tagBeingEditedID = tagID;
     },
     stopEditingName() {
+      this.$refs.tags[this.tagBeingEditedIdx].blur();
       this.tagBeingEditedIdx = null;
     },
     saveName() {
       this.$store.commit("editTagName", {
-        tagName: this.tagBeingEditedName,
-        newName: this.$refs.tags[this.tagBeingEditedIdx].value
-        })
+        tagID: this.tagBeingEditedID,
+        newName: this.$refs.tags[this.tagBeingEditedIdx].value,
+      });
+      this.stopEditingName();
     },
     getTagLabelClass(tagName) {
       return "tag-entry-label-name-" + tagName;
     },
   },
-  mounted: function () {
-    const inputs = document.querySelectorAll("input");
-    if (inputs[0]) inputs[0].focus();
-  },
+  mounted: function () {},
   props: {
     saveLink: Boolean,
   },
@@ -120,7 +129,12 @@ input.tagBeingEdited {
 .xStopEditing {
   font-size: 13px;
   position: absolute;
-  left: 180px;
+  left: 182px;
+}
+.checkSaveLabel {
+  font-size: 14px;
+  position: absolute;
+  left: 168px;
 }
 .xDeleteTag {
   font-size: 15px;
