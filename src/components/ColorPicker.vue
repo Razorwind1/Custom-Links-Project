@@ -32,7 +32,7 @@ export default {
         left: "250px",
       },
       oldColor: "",
-      itemID: "",
+      itemID: null,
       selectedColor: "",
     };
   },
@@ -42,7 +42,7 @@ export default {
     },
     saveColor: function () {
       this.$store.commit("editTagColor", {
-        tagName: this.itemId,
+        tagID: this.itemID,
         newColor: this.selectedColor,
       });
       this.$store.commit("closeColorPicker");
@@ -79,7 +79,7 @@ export default {
     this.setContainerPosition(this.$store.state.events.colorPicker.event);
     if (this.$store.state.events.colorPicker.arg.type === "tag-color") {
       this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
-      this.itemId = this.$store.state.events.colorPicker.arg.tagName;
+      this.itemID = this.$store.state.events.colorPicker.arg.tagID;
       // Enter Key to Submit Color Picker?
     }
   },
@@ -87,7 +87,7 @@ export default {
     this.setContainerPosition(this.$store.state.events.colorPicker.event);
     if (this.$store.state.events.colorPicker.arg.pickerType === "tag-color") {
       this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
-      this.itemId = this.$store.state.events.colorPicker.arg.tagName;
+      this.itemID = this.$store.state.events.colorPicker.arg.tagID;
     }
   },
   props: {},

@@ -17,7 +17,7 @@ const store = new Vuex.Store({
         },
         type: "exe",
         style: "gameStyle",
-        tagsList: ["gaming", "favorite"],
+        tagsList: [1, 2],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
         },
         type: "website",
         style: "codingStyle",
-        tagsList: ["coding", "favorite"],
+        tagsList: [3],
         content: {
           label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
@@ -58,14 +58,17 @@ const store = new Vuex.Store({
     ],
     tags: [
       {
+        id: 1,
         name: "favorite",
         color: "#A716D6E0"
       },
       {
+        id: 2,
         name: "gaming",
         color: "#A716D6E0"
       },
       {
+        id: 3,
         name: "coding",
         color: "#FFFF00E0"
       }
@@ -136,9 +139,11 @@ const store = new Vuex.Store({
       }
     },
     editTagColor(state, payload) {
-      state.tags.find(tag => tag.name == payload.tagName).color = payload.newColor;
+      state.tags.find(tag => tag.id == payload.tagID).color = payload.newColor;
     },
-
+    editTagName(state, payload) {
+      state.tags.find(tag => tag.id == payload.tagID).name = payload.newName;
+    },
 
     showPopup(state, payload) {
       state.events.popup.active = true
@@ -201,20 +206,23 @@ const store = new Vuex.Store({
     getTags: (state) => {
       return state.tags
     },
+    getTagName: (state) => (id) => {
+      return state.tags.find(tag => tag.id == id).name;
+    },
     getTagColor: (state) => (id) => {
-      if (state.tags.find(tag => tag.name === id) === undefined) {
+      if (state.tags.find(tag => tag.id === id) === undefined) {
         return id;
       } else {
-        return state.tags.find(tag => tag.name === id).color;
+        return state.tags.find(tag => tag.id === id).color;
       }
       
     },
-    getLinksByTag: (state) => (tagName) => {
+    getLinksByTag: (state) => (tagID) => {
       const elementsArray = state.gridElements;
       var retArray = [];
       elementsArray.forEach(element => {
         element.tagsList.forEach(tag => {
-          if (tag === tagName) {
+          if (tag === tagID) {
             retArray.push(element);
           }
         });
