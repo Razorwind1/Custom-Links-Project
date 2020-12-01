@@ -89,6 +89,9 @@ const store = new Vuex.Store({
       colorPicker: {
         active: false,
         arg: null
+      },
+      editingFields: {
+        active: false
       }
     }
   },
@@ -183,6 +186,12 @@ const store = new Vuex.Store({
       state.events.colorPicker.active = false
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
+    },
+    allowEditingFields(state) {
+      state.events.editingFields.active = true
+    },
+    closeEditingFields(state) {
+      state.events.editingFields.active = false
     },
   },
   actions: {                                  // FOR ASYNC ACTIONS

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="closeContextMenu">
+  <div id="app" @click="closeContextMenu(), closeEditingFields()">
     <v-app>
       <TitleBar />
       <AppContent />
@@ -35,6 +35,9 @@ export default {
     closeColorPicker() {
       this.$store.commit("closeColorPicker");
     },
+    closeEditingFields() {
+      this.$store.commit("closeEditingFields");
+    }
   },
   created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -68,6 +71,7 @@ export default {
 
     window.addEventListener("resize", this.closeContextMenu);
     window.addEventListener("resize", this.closeColorPicker);
+    window.addEventListener("resize", this.closeEditingFields);
 
     window.ipcRenderer.send("app-created");
   }
