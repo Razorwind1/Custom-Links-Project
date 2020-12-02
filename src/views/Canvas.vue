@@ -35,9 +35,8 @@
           @contextmenu.stop="contextMenuLink($event, element)"
         >
           <TagsWrapper
-          :listOfTags="$store.getters.getTagsofLink(element.id)"
+            :listOfTags="$store.getters.getTagsofLink(element.id)"
           ></TagsWrapper>
-
 
           <!-- <div class="tagsWrapper">
             <div
@@ -65,6 +64,7 @@
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 import TagsWrapper from "@/components/TagsWrapper.vue";
+import shortLabel from "@/js/shortLabel.js";
 
 export default {
   data() {
@@ -76,7 +76,7 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    TagsWrapper
+    TagsWrapper,
   },
   methods: {
     updateGrid: function () {
@@ -84,6 +84,13 @@ export default {
       this.layout = [];
 
       gridElements.forEach((element) => {
+        let elementLabelLenght = 10;
+        if (element.pos.sizeX == 2) elementLabelLenght = 20;
+        if (element.pos.sizeX == 3) elementLabelLenght = 33;
+        if (element.pos.sizeX == 4) elementLabelLenght = 45;
+        if (element.pos.sizeX == 5) elementLabelLenght = 58;
+        if (element.pos.sizeX > 5) elementLabelLenght = 70;
+
         this.layout.push({
           id: element.id,
           x: element.pos.x,
@@ -93,7 +100,7 @@ export default {
           i: element.id,
           img: element.content.img,
           style: element.style,
-          label: element.content.label,
+          label: shortLabel(element.content.label, elementLabelLenght),
           address: element.content.address,
         });
       });
@@ -125,7 +132,7 @@ export default {
           },
         ],
         event,
-      },);
+      });
     },
     contextMenuCanvas: function (event) {
       this.$store.commit("contextMenu", {
@@ -183,12 +190,13 @@ export default {
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("resizeGridElement", { id, newH, newW });
+      this.updateGrid();
     },
     displayTagLabel: function (tagCircle) {
-        console.log(tagCircle);
-      },
+      console.log(tagCircle);
+    },
     hideTaglabel: function (tagCircle) {
-        console.log(tagCircle);
+      console.log(tagCircle);
     },
   },
   created: function () {
