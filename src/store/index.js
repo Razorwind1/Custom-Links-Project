@@ -186,7 +186,7 @@ const store = new Vuex.Store({
     },
 
     addNewTag(state) {
-      state.tags.unshift({
+      state.tags.push({
         id: uniqueId(),
         name: "New Tag",
         color: "#333"
