@@ -69,8 +69,8 @@ const store = new Vuex.Store({
       },
       {
         id: 3,
-        name: "coding",
-        color: "#FFFF00E0"
+        name: "New Tag",
+        color: "#333"
       }
     ],
     events: {
@@ -184,6 +184,14 @@ const store = new Vuex.Store({
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
     },
+
+    addNewTag(state) {
+      state.tags.push({
+        id: uniqueId(),
+        name: "New Tag",
+        color: "#333"
+      })
+    }
   },
   actions: {                                  // FOR ASYNC ACTIONS
   },
