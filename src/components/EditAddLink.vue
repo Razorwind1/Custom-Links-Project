@@ -37,7 +37,12 @@
           </div>
         </div>
         <div class="address-input">
-          <input type="text" v-model="address" :class="this.type === 'url' ? 'url' : ''" required />
+          <input
+            type="text"
+            v-model="address"
+            :class="this.type === 'url' ? 'url' : ''"
+            required
+          />
           <div class="button" v-show="type !== 'url'" @click="selectFile">
             Open
           </div>
@@ -153,13 +158,15 @@ export default {
       this.popupArg.type === "add-link" &&
       this.popupArg.address &&
       this.popupArg.label &&
-      this.popupArg.nativeIconBuffer
+      this.popupArg.nativeIconBuffer &&
+      this.popupArg.linkType
     ) {
       this.address = this.popupArg.address;
       this.label = this.popupArg.label;
       this.imgLabel = this.popupArg.label;
       this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer);
       this.imgBuffer = this.popupArg.nativeIconBuffer;
+      this.type = this.popupArg.linkType;
     }
 
     const inputs = document.querySelectorAll("input");
@@ -225,7 +232,7 @@ div.address-header div.button {
   border-radius: 0;
   border-bottom: none;
   border-left: none;
-  opacity: .6;
+  opacity: 0.6;
   transition: background-color 200ms ease-in-out;
   transition: opacity 200ms ease-in-out;
 }

@@ -51,6 +51,7 @@ export default {
           type: "add-link",
           address: args.open_dir,
           label: window.path.parse(args.open_dir).name,
+          linkType: window.ipcRenderer.sendSync("get-link-type", {link: args.open_dir}),
           nativeIconBuffer,
         });
       }

@@ -97,6 +97,23 @@ export default function handler(win) {
         saveLinkImageToFile(args.buffer, args.label, args.id)
     })
 
+    // OTHER EVENTS
+    ipcMain.on('get-link-type', (event, args) => {
+        //console.log(args.link)
+        let type = null
+        try {
+            if (fs.lstatSync(args.link).isFile())
+                type = 'file'
+            if (fs.lstatSync(args.link).isDirectory())
+                type = 'folder'
+        }
+        catch (e) {
+            // Could not locate the link in the OS so it will be shown as url
+            type = 'url'
+        }
+
+        event.returnValue = type
+    })
 
     // STATE EVENTS
     ipcMain.on('state-changed', (event, state) => {

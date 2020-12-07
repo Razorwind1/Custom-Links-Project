@@ -244,11 +244,7 @@ function modifyLink(element, data) {
     element.content.label = data.label
   }
 
-  if (data.type) {
-    console.log(data.type)
-    element.type = data.type
-  }
-  else element.type = "url"
+  element.type = data.type || "url";
 
   if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
