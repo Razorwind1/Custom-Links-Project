@@ -6,7 +6,10 @@
     <div class="content">
       <div class="section">
         <div class="table-header">
-          <div>Tag Name</div>
+          <div>
+            Tag Name
+            <div class="button" @click="addNewTag()">New+</div>
+          </div>
           <div>Color</div>
         </div>
         <div v-for="(tag, index) in $store.getters.getTags" :key="index">
@@ -19,7 +22,7 @@
                 v-on:click.stop=""
                 :value="tag.name"
                 ref="tags"
-                v-on:keyup.enter="saveName"
+                v-on:keyup.enter="saveName(tag.id)"
               />
               <div
                 @click="stopEditingName()"
@@ -29,7 +32,7 @@
                 &#9932;
               </div>
               <div
-                @click="saveName()"
+                @click="saveName(tag.id)"
                 class="checkSaveLabel"
                 v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
               >
@@ -69,10 +72,8 @@
 export default {
   data: function () {
     return {
-      label: "",
-      address: "",
       tagBeingEditedIdx: null,
-      tagBeingEditedID: null,
+      tagsLength: this.$store.getters.getTags.length,
     };
   },
   methods: {
@@ -86,7 +87,8 @@ export default {
         event,
       });
     },
-    editingName(tagID, index) {
+    editingName(index) {
+      this.$refs.tags[index].focus();
       this.tagBeingEditedIdx = index;
       this.tagBeingEditedID = tagID;
       this.$store.commit("allowEditingFields");
@@ -96,9 +98,9 @@ export default {
       this.tagBeingEditedIdx = null;
       this.$store.commit("closeEditingFields");
     },
-    saveName() {
+    saveName(tagID) {
       this.$store.commit("editTagName", {
-        tagID: this.tagBeingEditedID,
+        tagID,
         newName: this.$refs.tags[this.tagBeingEditedIdx].value,
       });
       this.stopEditingName();
@@ -106,8 +108,16 @@ export default {
     getTagLabelClass(tagName) {
       return "tag-entry-label-name-" + tagName;
     },
+    addNewTag() {
+      this.$store.commit("addNewTag");
+    },
   },
-  mounted: function () {},
+  updated: function () {
+    if (this.tagsLength < this.$refs.tags.length)
+      this.editingName(this.$refs.tags.length - 1);
+
+    this.tagsLength = this.$refs.tags.length;
+  },
   props: {
     saveLink: Boolean,
   },
@@ -229,5 +239,20 @@ div.tag-list div.section > h3 {
   margin-bottom: 0;
   font-size: 14px;
   opacity: 0.9;
+}
+
+.table-header .button {
+  font-size: 10px;
+  background-color: var(--main-accent-color);
+  padding: 1px 2px;
+  align-self: flex-start;
+  margin-left: 2px;
+  transition: background-color 150ms ease-in-out;
+}
+.table-header .button:hover {
+  background-color: var(--dark-accent-color);
+}
+.table-header .button:active {
+  background-color: var(--active-accent-color);
 }
 </style>
