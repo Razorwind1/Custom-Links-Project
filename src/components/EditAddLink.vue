@@ -147,6 +147,7 @@ export default {
       const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
+      this.type = linkData.type;
     }
     if (
       this.popupArg.type === "add-link" &&

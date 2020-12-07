@@ -15,7 +15,7 @@ const store = new Vuex.Store({
           sizeX: 1,
           sizeY: 1
         },
-        type: "exe",
+        type: "file",
         style: "gameStyle",
         tagsList: ["gaming", "favorite"],
         content: {
@@ -32,7 +32,7 @@ const store = new Vuex.Store({
           sizeX: 1,
           sizeY: 1
         },
-        type: "website",
+        type: "url",
         style: "codingStyle",
         tagsList: ["coding", "favorite"],
         content: {
@@ -148,7 +148,7 @@ const store = new Vuex.Store({
       state.events.popup.active = false
       state.events.popup.arg = null
     },
-    
+
     showAlert(state, payload) {
       state.events.alert.active = true
       state.events.alert.arg = payload
@@ -207,7 +207,7 @@ const store = new Vuex.Store({
       } else {
         return state.tags.find(tag => tag.name === id).color;
       }
-      
+
     },
     getLinksByTag: (state) => (tagName) => {
       const elementsArray = state.gridElements;
@@ -243,6 +243,12 @@ function modifyLink(element, data) {
 
     element.content.label = data.label
   }
+
+  if (data.type) {
+    console.log(data.type)
+    element.type = data.type
+  }
+  else element.type = "url"
 
   if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
