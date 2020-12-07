@@ -17,8 +17,9 @@
             <div class="tag-entry-top-row">
               <input
                 class="tagLabel"
-                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index }"
-                @click="editingName(index)"
+                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && $store.state.events.editingFields.active}"
+                @click="editingName(tag.id, index)"
+                v-on:click.stop=""
                 :value="tag.name"
                 ref="tags"
                 v-on:keyup.enter="saveName(tag.id)"
@@ -26,14 +27,14 @@
               <div
                 @click="stopEditingName()"
                 class="xStopEditing"
-                v-show="tagBeingEditedIdx == index"
+                v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
               >
                 &#9932;
               </div>
               <div
                 @click="saveName(tag.id)"
                 class="checkSaveLabel"
-                v-show="tagBeingEditedIdx == index"
+                v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
               >
                 &#x2713;
               </div>
@@ -76,9 +77,6 @@ export default {
     };
   },
   methods: {
-    possiblyCloseEditFields: function () {
-      console.log("possiblyCloseEditFields");
-    },
     colorPicker: function (event, data) {
       this.$store.commit("colorPicker", {
         arg: {
@@ -92,10 +90,13 @@ export default {
     editingName(index) {
       this.$refs.tags[index].focus();
       this.tagBeingEditedIdx = index;
+      this.tagBeingEditedID = tagID;
+      this.$store.commit("allowEditingFields");
     },
     stopEditingName() {
       this.$refs.tags[this.tagBeingEditedIdx].blur();
       this.tagBeingEditedIdx = null;
+      this.$store.commit("closeEditingFields");
     },
     saveName(tagID) {
       this.$store.commit("editTagName", {
@@ -129,6 +130,7 @@ input.tagLabel {
   border: none;
   padding: 4px;
   padding-left: 10px;
+  padding-right: 50px;
   cursor: pointer;
 }
 input.tagBeingEdited {
@@ -138,12 +140,12 @@ input.tagBeingEdited {
 .xStopEditing {
   font-size: 13px;
   position: absolute;
-  left: 182px;
+  left: 232px;
 }
 .checkSaveLabel {
   font-size: 14px;
   position: absolute;
-  left: 168px;
+  left: 220px;
 }
 .xDeleteTag {
   font-size: 15px;
