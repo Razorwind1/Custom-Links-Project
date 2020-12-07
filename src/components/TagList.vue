@@ -8,7 +8,7 @@
         <div class="table-header">
           <div>
             Tag Name
-            <div class="button" @click="addNewTag()">New+</div>
+            <div class="button" @click.stop="addNewTag()">New+</div>
           </div>
           <div>Color</div>
         </div>
