@@ -18,7 +18,7 @@
               <input
                 class="tagLabel"
                 v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && $store.state.events.editingFields.active}"
-                @click="editingName(tag.id, index)"
+                @click="editingName(index)"
                 v-on:click.stop=""
                 :value="tag.name"
                 ref="tags"
@@ -90,7 +90,6 @@ export default {
     editingName(index) {
       this.$refs.tags[index].focus();
       this.tagBeingEditedIdx = index;
-      this.tagBeingEditedID = tagID;
       this.$store.commit("allowEditingFields");
     },
     stopEditingName() {
