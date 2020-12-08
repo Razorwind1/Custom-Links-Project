@@ -42,6 +42,9 @@ export default {
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
+
+        args.open_dir = args.open_dir.match(/^ *(.*[^ ]) *$/)[1]     // This regex is used to delete ' ' character from the start and the end of the given string.
+
         const nativeIconBuffer = window.ipcRenderer.sendSync(
           "get-native-icon",
           args.open_dir
@@ -50,7 +53,7 @@ export default {
         this.$store.commit("showPopup", {
           type: "add-link",
           address: args.open_dir,
-          label: window.path.parse(args.open_dir).name,
+          label: window.path.parse(args.open_dir).name || 'My Drive',
           linkType: window.ipcRenderer.sendSync("get-link-type", {link: args.open_dir}),
           nativeIconBuffer,
         });
