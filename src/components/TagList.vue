@@ -2,16 +2,11 @@
   <div class="tag-list">
     <div class="header">
       <h2>Tag List</h2>
+      <div class="button new-tag" @click.stop="addNewTag()">New+</div>
     </div>
     <div class="content">
       <div class="section">
-        <div class="table-header">
-          <div>
-            Tag Name
-            <div class="button" @click.stop="addNewTag()">New+</div>
-          </div>
-          <div>Color</div>
-        </div>
+        
         <div v-for="(tag, index) in $store.getters.getTags" :key="index">
           <div class="tag-entry">
             <div class="tag-entry-top-row">
@@ -127,29 +122,31 @@ export default {
 input.tagLabel {
   background-color: var(--main-background-color);
   border: none;
-  padding: 4px;
+  padding: 3px;
   padding-left: 10px;
-  padding-right: 50px;
+  padding-right: 40px;
   cursor: pointer;
+  width: 120px;
 }
 input.tagBeingEdited {
   background-color: var(--light-background-color);
   cursor: text;
 }
 .xStopEditing {
-  font-size: 13px;
+  margin-top: 1px;
+  font-size: 12px;
   position: absolute;
-  left: 232px;
+  left: 97px;
 }
 .checkSaveLabel {
-  font-size: 14px;
+  font-size: 13px;
   position: absolute;
-  left: 220px;
+  left: 92px;
 }
 .xDeleteTag {
-  font-size: 15px;
-  margin-right: 5px;
-  margin-top: 2px;
+  font-size: 11px;
+  margin-right: -2px;
+  margin-top: 0px;
 }
 span.color-dot {
   height: 25px;
@@ -157,24 +154,12 @@ span.color-dot {
   border-radius: 50%;
   display: inline-block;
 }
-.table-header {
-  display: flex;
-  border: 2px solid var(--dark-background-color);
-  justify-content: space-between;
-}
-.table-header > div {
-  padding: 10px;
-  font-size: 110%;
-  font-weight: bold;
-}
-.table-header div:nth-child(2) {
-  margin-right: 20px;
-}
 .tag-entry {
   border: 2px solid var(--dark-background-color);
-  width: 100%;
+  width: 170px;
   display: flex;
   flex-flow: column;
+  float: left;
 }
 .tag-entry-top-row {
   display: flex;
@@ -184,7 +169,7 @@ span.color-dot {
   position: relative;
 }
 .tag-entry > div {
-  padding: 7px;
+  padding: 4px;
 }
 .tag-entry-top-row > div:hover {
   background-color: var(--light-background-color);
@@ -192,7 +177,7 @@ span.color-dot {
   cursor: pointer;
 }
 .tag-entry-top-row > div:nth-child(1) {
-  width: 250px;
+  width: 120px;
 }
 .tag-entry-top-row > div:nth-child(2) {
   margin-left: 10px;
@@ -224,12 +209,14 @@ div.tag-list div.header {
 }
 div.tag-list div.content {
   height: 100%;
-  flex-direction: column;
   overflow: auto;
 }
 div.tag-list div.section {
   flex-direction: column;
-  margin: 5px 10px;
+  margin: 1px 3px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 div.tag-list div.section > * {
   margin: 8px 5px;
@@ -240,18 +227,19 @@ div.tag-list div.section > h3 {
   opacity: 0.9;
 }
 
-.table-header .button {
-  font-size: 10px;
+.new-tag {
+  font-size: 15px;
   background-color: var(--main-accent-color);
-  padding: 1px 2px;
+  padding: 2px 5px;
   align-self: flex-start;
-  margin-left: 2px;
+  margin-left: 10px;
+  margin-top: 5px;
   transition: background-color 150ms ease-in-out;
 }
-.table-header .button:hover {
+.new-tag:hover {
   background-color: var(--dark-accent-color);
 }
-.table-header .button:active {
+.new-tag:active {
   background-color: var(--active-accent-color);
 }
 </style>
