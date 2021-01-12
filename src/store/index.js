@@ -92,6 +92,14 @@ const store = new Vuex.Store({
       },
       editingFields: {
         active: false
+      },
+      linkHovered: {
+        active: false,
+        arg: null
+      },
+      assignedTagsMenu: {
+        active: false,
+        arg: null
       }
     }
   },
@@ -147,6 +155,14 @@ const store = new Vuex.Store({
     editTagName(state, payload) {
       state.tags.find(tag => tag.id == payload.tagID).name = payload.newName;
     },
+    linkHovered(state, payload) {
+      state.events.linkHovered.active = true
+      state.events.linkHovered.arg = payload
+    },
+    linkUnHovered(state) {
+      state.events.linkHovered.active = false
+      state.events.linkHovered.arg = null
+    },
 
     showPopup(state, payload) {
       state.events.popup.active = true
@@ -165,7 +181,16 @@ const store = new Vuex.Store({
       state.events.alert.active = false
       state.events.alert.arg = null
     },
-
+    assignedTagsMenu(state, payload) {
+      state.events.assignedTagsMenu.active = true
+      state.events.assignedTagsMenu.arg = payload
+      state.events.assignedTagsMenu.event = payload.event
+    },
+    closeAssignedTagsMenu(state) {
+      state.events.assignedTagsMenu.active = false
+      state.events.assignedTagsMenu.id = null
+      state.events.assignedTagsMenu.event = null
+    },
     contextMenu(state, payload) {
       state.events.contextMenu.active = true
       state.events.contextMenu.arg = payload.content

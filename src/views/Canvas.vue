@@ -33,23 +33,21 @@
           v-bind:style="getStyling(element.style)"
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
+          @mouseover="linkHovered(element.id)"
+          @mouseleave="linkUnHovered"
         >
           <TagsWrapper
             :listOfTags="$store.getters.getTagsofLink(element.id)"
           ></TagsWrapper>
+          
+          <div class="assignedTagsIcon" v-show="$store.state.events.linkHovered.arg==element.id">
+            <img src="/assets/svg/freepik/svg/dh/label-tag.svg" alt="Assigned Tags Icon" @click.stop="assignedTagsMenu($event, element)">
+          </div>
 
-          <!-- <div class="tagsWrapper">
-            <div
-              class="tagIndicator-dot"
-              v-for="tag in $store.getters.getTagsofLink(element.id)"
-              :key="tag.id"
-              :style="{ 'background-color': $store.getters.getTagColor(tag) }"
-              @mouseover="displayTagLabel(this)"
-              @mouseleave="hideTaglabel(this)"
+          <div class="editIcon" v-show="$store.state.events.linkHovered.arg==element.id">
+            <img src="\assets\icons\edit_white.png" alt="Edit Icon" @click.stop="contextMenuLink($event, element)"
             >
-              
-            </div>
-          </div> -->
+          </div>
           <div class="img-container">
             <img v-bind:src="getElementImg(element.id, element.img)" />
           </div>
@@ -106,11 +104,12 @@ export default {
       });
     },
     open: function (element_address) {
+      
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
       }
-      window.ipcRenderer.send("open", element_address);
+        window.ipcRenderer.send("open", element_address);
     },
     contextMenuLink: function (event, element) {
       this.$store.commit("contextMenu", {
@@ -198,6 +197,18 @@ export default {
     hideTaglabel: function (tagCircle) {
       console.log(tagCircle);
     },
+    linkHovered: function (linkID) {
+      this.$store.commit("linkHovered", linkID)
+    },
+    linkUnHovered: function () {
+      this.$store.commit("linkUnHovered");
+    },
+    assignedTagsMenu: function(event, element) {
+      this.$store.commit("assignedTagsMenu", {
+        element,
+        event
+      });
+    }
   },
   created: function () {
     this.updateGrid();
@@ -232,6 +243,22 @@ export default {
 #canvas {
   width: 100%;
   display: block;
+}
+.editIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+.editIcon img {
+  width: 13px;
+}
+.assignedTagsIcon {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.assignedTagsIcon img {
+  width: 13px;
 }
 .link {
   width: 100%;
