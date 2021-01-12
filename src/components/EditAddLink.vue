@@ -9,8 +9,44 @@
         <input type="text" v-model="label" required />
       </div>
       <div class="section">
-        <h3>Address</h3>
-        <input type="text" v-model="address" required />
+        <div class="address-header">
+          <h3>Address</h3>
+
+          <div>
+            <div
+              class="button"
+              :class="[this.type === 'url' ? 'active' : '']"
+              @click="linkType('url')"
+            >
+              Web
+            </div>
+            <div
+              class="button"
+              :class="[this.type === 'folder' ? 'active' : '']"
+              @click="linkType('folder')"
+            >
+              Folder
+            </div>
+            <div
+              class="button"
+              :class="[this.type === 'file' ? 'active' : '']"
+              @click="linkType('file')"
+            >
+              File
+            </div>
+          </div>
+        </div>
+        <div class="address-input">
+          <input
+            type="text"
+            v-model="address"
+            :class="this.type === 'url' ? 'url' : ''"
+            required
+          />
+          <div class="button" v-show="type !== 'url'" @click="selectFile">
+            Open
+          </div>
+        </div>
       </div>
       <div class="section">
         <h3>Image</h3>
@@ -40,6 +76,7 @@ export default {
 
       label: "",
       address: "",
+      type: "url",
 
       imgSrc: null,
 
@@ -56,6 +93,22 @@ export default {
 
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
+    },
+    selectFile: function () {
+      const file = window.ipcRenderer.sendSync("open-file-dialog", {
+        type: this.type,
+      });
+      if (!file) return;
+
+      const nativeIconBuffer = window.ipcRenderer.sendSync(
+        "get-native-icon",
+        file
+      );
+
+      this.address = file;
+      this.label = this.imgLabel = window.path.parse(file).name;
+      this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
+      this.imgBuffer = nativeIconBuffer;
     },
     getElementImg: function (id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
@@ -88,6 +141,9 @@ export default {
     header: function () {
       return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
     },
+    linkType: function (type) {
+      this.type = type;
+    },
   },
   mounted: function () {
     this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
@@ -96,18 +152,21 @@ export default {
       const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
+      this.type = linkData.type;
     }
     if (
       this.popupArg.type === "add-link" &&
       this.popupArg.address &&
       this.popupArg.label &&
-      this.popupArg.nativeIconBuffer
+      this.popupArg.nativeIconBuffer &&
+      this.popupArg.linkType
     ) {
       this.address = this.popupArg.address;
       this.label = this.popupArg.label;
       this.imgLabel = this.popupArg.label;
       this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer);
       this.imgBuffer = this.popupArg.nativeIconBuffer;
+      this.type = this.popupArg.linkType;
     }
 
     const inputs = document.querySelectorAll("input");
@@ -141,17 +200,76 @@ div.edit-link div.content {
   flex-direction: column;
   overflow: auto;
 }
+
 div.edit-link div.section {
   flex-direction: column;
-  margin: 5px 10px;
+  margin: 10px;
 }
-div.edit-link div.section > * {
-  margin: 8px 5px;
-}
-div.edit-link div.section > h3 {
-  margin-bottom: 0;
+div.edit-link div.section h3 {
+  margin-bottom: 5px;
+  margin-left: 5px;
   font-size: 14px;
   opacity: 0.9;
+}
+div.edit-link div.section input {
+  margin-bottom: 5px;
+}
+
+div.address-header {
+  position: relative;
+}
+div.address-header > div {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+div.address-header div.button {
+  font-size: 14px;
+  font-style: italic;
+  background-color: var(--dark-background-color);
+  border: 1px solid var(--active-background-color);
+  padding: 0 5px;
+  border-radius: 0;
+  border-bottom: none;
+  border-left: none;
+  opacity: 0.6;
+  transition: background-color 200ms ease-in-out;
+  transition: opacity 200ms ease-in-out;
+}
+div.address-header div.button:hover {
+  opacity: 1;
+}
+div.address-header div.button:first-child {
+  border-top-left-radius: 10px;
+}
+div.address-header div.button:last-child {
+  border-top-right-radius: 10px;
+}
+div.address-header div.button.active {
+  background-color: var(--dark-accent-color);
+  opacity: 1;
+}
+
+div.address-input {
+  flex-direction: column;
+  position: relative;
+}
+div.address-input input:not(.url) {
+  padding-right: 4rem;
+}
+div.address-input div.button {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  box-shadow: inset 0 0 1000px var(--active-background-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border: 1px solid rgba(1, 1, 1, 0);
+  border-left: 1px solid var(--active-accent-color);
+  transition: box-shadow 150ms ease-in-out;
+}
+div.address-input div.button:hover {
+  box-shadow: inset 0 0 1000px var(--light-background-color);
 }
 
 div.img-selection {
@@ -170,6 +288,7 @@ div.img-selection .img-container img {
   width: inherit;
   height: inherit;
   object-fit: contain;
+  cursor: pointer;
 }
 div.img-selection > div.img-selection-info {
   margin: 0 10px;
@@ -179,7 +298,6 @@ div.img-selection > div.img-selection-info input:focus {
   border: 1px solid var(--active-background-color);
 }
 div.img-selection div.button {
-  margin-top: 10px;
   padding: 15px;
   background: var(--dark-background-color);
   border-radius: 50px;

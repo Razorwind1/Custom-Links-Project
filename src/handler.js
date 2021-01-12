@@ -43,7 +43,7 @@ export default function handler(win) {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
             filters: [{
-                name: 'jpg, png, gif, svg', extensions: ['jpg', 'png', 'gif', 'svg']
+                name: 'jpg, png, svg', extensions: ['jpg', 'png', 'svg']
             }]
         })
         if (imgSrc && imgSrc[0]) {
@@ -53,6 +53,17 @@ export default function handler(win) {
         else {
             event.returnValue = null
         }
+    })
+    ipcMain.on('open-file-dialog', (event, args) => {
+        const dialogType = (args.type === "file") ? ['openFile'] : ['openDirectory']
+        const fileSrc = dialog.showOpenDialogSync(win, {
+            title: "Open",
+            properties: dialogType
+        })
+        if (fileSrc && fileSrc[0])
+            event.returnValue = fileSrc[0]
+        else
+            event.returnValue = null
     })
     ipcMain.on('get-image-buffer', (event, args) => {
         let imgBuffer = null
@@ -86,6 +97,23 @@ export default function handler(win) {
         saveLinkImageToFile(args.buffer, args.label, args.id)
     })
 
+    // OTHER EVENTS
+    ipcMain.on('get-link-type', (event, args) => {
+        //console.log(args.link)
+        let type = null
+        try {
+            if (fs.lstatSync(args.link).isFile())
+                type = 'file'
+            if (fs.lstatSync(args.link).isDirectory())
+                type = 'folder'
+        }
+        catch (e) {
+            // Could not locate the link in the OS so it will be shown as url
+            type = 'url'
+        }
+
+        event.returnValue = type
+    })
 
     // STATE EVENTS
     ipcMain.on('state-changed', (event, state) => {
