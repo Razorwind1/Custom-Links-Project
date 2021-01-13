@@ -83,22 +83,10 @@ export default {
 </script>
 
 <style>
-:root {
-  --main-text-color: #eeeeee;
-  --secondary-text-color: #111111;
-
-  --light-background-color: #4d4d4d;
-  --main-background-color: #2c2c2c;
-  --dark-background-color: #202020;
-  --active-background-color: #0e0e0e;
-
-  --light-accent-color: #70ddbc;
-  --main-accent-color: #20906f;
-  --dark-accent-color: #127054;
-  --active-accent-color: #034b35;
-
-  --nav-width: 50px;
-  --title-bar-height: 30px;
+@import '/appThemes/light.css';
+:root{
+    --nav-width: 50px;
+    --title-bar-height: 30px;
 }
 * {
   margin: 0;

@@ -99,9 +99,9 @@ div.popup-buttons > div:hover {
   background-color: var(--light-background-color);
 }
 div.popup-buttons > div.button.save {
-  background-color: var(--dark-accent-color);
+  background-color: var(--main-accent-color);
 }
 div.popup-buttons > div.button.save:hover {
-  background-color: var(--main-accent-color);
+  background-color: var(--active-accent-color);
 }
 </style>

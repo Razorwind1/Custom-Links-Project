@@ -246,7 +246,7 @@ div.address-header div.button:last-child {
   border-top-right-radius: 10px;
 }
 div.address-header div.button.active {
-  background-color: var(--dark-accent-color);
+  background-color: var(--main-accent-color);
   opacity: 1;
 }
 
@@ -261,7 +261,7 @@ div.address-input div.button {
   position: absolute;
   right: 0;
   padding: 10px;
-  box-shadow: inset 0 0 1000px var(--active-background-color);
+  box-shadow: inset 0 0 1000px var(--main-background-color);
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border: 1px solid rgba(1, 1, 1, 0);

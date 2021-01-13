@@ -54,6 +54,8 @@ export default {
   border-radius: 50px;
   margin: 5px 0;
   transition: border-radius 100ms linear;
+  background-color: var(--dark-background-color);
+  box-shadow: 0px 0px 15px 10px var(--main-background-color) inset;
 }
 #nav > div > a:hover {
   background-color: var(--light-background-color);
@@ -62,7 +64,7 @@ export default {
   background-color: transparent;
 }
 #nav > div > a.router-link-exact-active {
-  background-color: var(--light-background-color);
+  background-color: var(--main-accent-color);
   border-radius: 15px;
 }
 
@@ -71,6 +73,7 @@ export default {
   transition: width ease-in-out 100ms;
   -webkit-user-drag: none;
   filter: grayscale(80%);
+  
 }
 #nav > div > a.add-link-button > img {
   filter: grayscale(30%);
