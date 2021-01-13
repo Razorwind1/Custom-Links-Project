@@ -137,9 +137,9 @@ div.alert-buttons > div.button.save:hover {
 }
 
 div.alert-buttons > div.button.delete-link {
-  background-color: #791313;
+  background-color: var(--dark-alert-color);
 }
 div.alert-buttons > div.button.delete-link:hover {
-  background-color: #ad2020;
+  background-color: var(--light-alert-color);;
 }
 </style>
