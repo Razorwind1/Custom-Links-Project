@@ -1,12 +1,10 @@
 <template>
   <div class="settings">
-    <div class="theClass123">
-      Some setting here:
-      <select name="select" id>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-        <option value="4">Option 4</option>
+    <div>
+      <label for="theme">Theme:</label>
+      <select name="select" id="theme" @change="theme($event)" :value="this.$store.state.theme">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
       </select>
     </div>
     <!--<button @click="getFavicon('https://duckduckgo.com/')">getFavicon Text</button>-->
@@ -29,6 +27,9 @@ export default {
     getFavicon: function (url) {
       window.ipcRenderer.send("getFavicon", url);
     },
+    theme(e){
+      this.$store.commit("setAppTheme", e.target.value)
+    }
   },
 };
 </script>
@@ -42,11 +43,14 @@ export default {
 }
 .settings > div {
   margin: 20px 0;
-  width: 100%;
+  width: 80%;
+  margin: 20px auto;
   height: 40px;
-  display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: "flex-start";
+}
+.settings > div label {
+  margin-right: 20px;
 }
 
 .settings .attribution {
@@ -78,6 +82,7 @@ export default {
   color: var(--main-text-color);
   border: none;
   height: 70%;
+  padding: 0 10px;
 }
 .settings select:hover {
   cursor: pointer;

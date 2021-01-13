@@ -18,6 +18,7 @@ import Popup from "@/components/Popup.vue";
 import Alert from "@/components/Alert.vue";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
+import importCss from "@/js/importCss.js";
 
 export default {
   components: {
@@ -40,8 +41,8 @@ export default {
     }
   },
   created: function() {
-    // const state = window.ipcRenderer.sendSync("state-read");
-    // if (state) this.$store.commit("setState", state);
+    const state = window.ipcRenderer.sendSync("state-read");
+    if (state) this.$store.commit("setState", state);
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
@@ -77,13 +78,14 @@ export default {
     window.addEventListener("resize", this.closeColorPicker);
     window.addEventListener("resize", this.closeEditingFields);
 
+    importCss(this.$store.state.theme)
+
     window.ipcRenderer.send("app-created");
-  }
+  },
 };
 </script>
 
 <style>
-@import '/appThemes/light.css';
 :root{
     --nav-width: 50px;
     --title-bar-height: 30px;
