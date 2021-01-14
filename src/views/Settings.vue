@@ -5,6 +5,7 @@
       <select name="select" id="theme" @change="theme($event)" :value="this.$store.state.theme">
         <option value="dark">Dark</option>
         <option value="light">Light</option>
+        <option value="darkRed">Dark Red</option>
       </select>
     </div>
     <!--<button @click="getFavicon('https://duckduckgo.com/')">getFavicon Text</button>-->
