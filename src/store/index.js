@@ -155,6 +155,18 @@ const store = new Vuex.Store({
     editTagName(state, payload) {
       state.tags.find(tag => tag.id == payload.tagID).name = payload.newName;
     },
+    assignTag(state, payload) {
+      const index = state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.indexOf(payload.tagID);
+      if (index < 0) {
+        state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.push(payload.tagID);
+      }
+    },
+    unassignTag(state, payload) {
+      const index = state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.indexOf(payload.tagID);
+      if (index > -1) {
+        state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.splice(index, 1);
+      }
+    },
     linkHovered(state, payload) {
       state.events.linkHovered.active = true
       state.events.linkHovered.arg = payload
@@ -243,6 +255,25 @@ const store = new Vuex.Store({
     },
     getTagsofLink: (state) => (id) => {
       return state.gridElements.find(gridEl => gridEl.id === id).tagsList;
+    },
+    getTagsNotofLink: (state) => (id) => {
+      const tagsOfLink = state.gridElements.find(gridEl => gridEl.id === id).tagsList;
+      var returnArray = [];
+      const allTags = state.tags;
+      var isAssignedtoLink = false;
+      for (var i=0; i<allTags.length; i++) {
+        isAssignedtoLink = false;
+        for (var j=0; j<tagsOfLink.length; j++) {
+          if (allTags[i].id === tagsOfLink[j]) {
+            isAssignedtoLink = true;
+            break;
+          }
+        }
+        if (isAssignedtoLink == false) {
+          returnArray.push(allTags[i].id);
+        }
+      }
+      return returnArray;
     },
     getTags: (state) => {
       return state.tags

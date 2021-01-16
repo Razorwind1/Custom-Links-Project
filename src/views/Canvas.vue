@@ -36,9 +36,6 @@
           @mouseover="linkHovered(element.id)"
           @mouseleave="linkUnHovered"
         >
-          <TagsWrapper
-            :listOfTags="$store.getters.getTagsofLink(element.id)"
-          ></TagsWrapper>
           
           <div class="assignedTagsIcon" v-show="$store.state.events.linkHovered.arg==element.id">
             <img src="/assets/svg/freepik/svg/dh/label-tag.svg" alt="Assigned Tags Icon" @click.stop="assignedTagsMenu($event, element)">
@@ -61,7 +58,6 @@
 <script>
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
-import TagsWrapper from "@/components/TagsWrapper.vue";
 import shortLabel from "@/js/shortLabel.js";
 
 export default {
@@ -74,7 +70,6 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    TagsWrapper,
   },
   methods: {
     updateGrid: function () {
@@ -252,6 +247,10 @@ export default {
 .editIcon img {
   width: 13px;
 }
+.editIcon img:hover {
+  filter: brightness(85%);
+  transition: filter 0.1s ease-in-out; 
+}
 .assignedTagsIcon {
   position: absolute;
   left: 5px;
@@ -259,7 +258,12 @@ export default {
 }
 .assignedTagsIcon img {
   width: 13px;
+} 
+.assignedTagsIcon img:hover {
+  filter: brightness(85%);
+  transition: filter 0.1s ease-in-out; 
 }
+
 .link {
   width: 100%;
   height: 100%;
@@ -289,11 +293,7 @@ export default {
   text-align: center;
   overflow: hidden;
 }
-.tagsWrapper {
-  flex-direction: row;
-  position: absolute;
-  top: 4px;
-}
+
 .tagIndicator-dot {
   height: 15px;
   width: 15px;
