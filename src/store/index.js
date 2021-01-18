@@ -199,6 +199,10 @@ const store = new Vuex.Store({
         name: "New Tag",
         color: "#333"
       })
+    },
+    deleteTag(state, payload){
+      const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
+      state.tags.splice(removeIndex, 1)
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -223,7 +227,7 @@ const store = new Vuex.Store({
       return state.tags
     },
     getTagName: (state) => (id) => {
-      return state.tags.find(tag => tag.id == id).name;
+      return state.tags.find(tag => tag.id === id).name;
     },
     getTagColor: (state) => (id) => {
       if (state.tags.find(tag => tag.id === id) === undefined) {

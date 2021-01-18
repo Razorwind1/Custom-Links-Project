@@ -14,9 +14,7 @@
           :style="saveButtonStyle"
           :class="saveButtonClass"
         ></div>
-        <div v-show="closeButton" @click="closeAlert" class="button">
-          Cancel
-        </div>
+        <div v-show="closeButton" @click="closeAlert" class="button">Cancel</div>
       </div>
     </div>
   </div>
@@ -24,7 +22,7 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       alertArg: this.$store.state.events.alert.arg,
 
@@ -35,10 +33,10 @@ export default {
 
       saveButton: true,
       saveButtonLabel: "OK",
-      saveButtonStyle: {},
+      saveButtonStyle: {}
     };
   },
-  created: function () {
+  created: function() {
     if (this.alertArg.type == "delete-link") {
       this.header = "Delete Link";
       this.content = `Are you sure you want to delete ${
@@ -48,7 +46,17 @@ export default {
       this.saveButtonClass = ["delete-link"];
       this.closeButton = true;
     }
-    
+
+    if (this.alertArg.type == "delete-tag") {
+      this.header = "Delete Tag";
+      this.content = `Are you sure you want to delete the '${
+        this.$store.getters.getTagName(this.alertArg.tagID)
+      }' tag?`;
+      this.saveButtonLabel = "Delete";
+      this.saveButtonClass = ["delete-tag"];
+      this.closeButton = true;
+    }
+
     if (this.alertArg.type == "link-added") {
       this.header = "Link Added";
       this.content = `Your link ${this.alertArg.label} was added successfully!`;
@@ -64,16 +72,20 @@ export default {
     }
   },
   methods: {
-    save: function () {
+    save: function() {
       if (this.alertArg.type == "delete-link") {
         this.$store.commit("deleteGridElement", { id: this.alertArg.id });
         this.$store.commit("closeAlert");
+      }
+      if (this.alertArg.type == "delete-tag") {
+        this.$store.commit("deleteTag", { id: this.alertArg.tagID });
+        this.$store.commit("closeAlert");
       } else this.$store.commit("closeAlert");
     },
-    closeAlert: function () {
+    closeAlert: function() {
       this.$store.commit("closeAlert");
-    },
-  },
+    }
+  }
 };
 </script>
 
