@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="closeContextMenu(), closeEditingFields()">
+  <div id="app" @click="closeContextMenu(), closeEditingFields(), closeAssignedTagsMenu()">
     <v-app>
       <TitleBar />
       <AppContent />
@@ -7,6 +7,7 @@
       <Alert v-if="this.$store.state.events.alert.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
+      <AssignedTagsMenu v-if="this.$store.state.events.assignedTagsMenu.active" />
     </v-app>
   </div>
 </template>
@@ -18,6 +19,7 @@ import Popup from "@/components/Popup.vue";
 import Alert from "@/components/Alert.vue";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
+import AssignedTagsMenu from "@/components/AssignedTagsMenu.vue";
 import importCss from "@/js/importCss.js";
 
 export default {
@@ -27,7 +29,8 @@ export default {
     Popup,
     Alert,
     ContextMenu,
-    ColorPicker
+    ColorPicker,
+    AssignedTagsMenu
   },
   methods: {
     closeContextMenu() {
@@ -38,6 +41,9 @@ export default {
     },
     closeEditingFields() {
       this.$store.commit("closeEditingFields");
+    },
+    closeAssignedTagsMenu() {
+      this.$store.commit("closeAssignedTagsMenu");
     }
   },
   created: function() {
@@ -77,6 +83,7 @@ export default {
     window.addEventListener("resize", this.closeContextMenu);
     window.addEventListener("resize", this.closeColorPicker);
     window.addEventListener("resize", this.closeEditingFields);
+    window.addEventListener("resize", this.closeAssignedTagsMenu)
 
     importCss(this.$store.state.theme)
 
