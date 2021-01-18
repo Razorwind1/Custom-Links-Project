@@ -1,0 +1,17 @@
+:root {
+    --main-text-color: #eeeeee;
+    --secondary-text-color: #111111;
+  
+    --light-background-color: #ac5f5f;
+    --main-background-color: #7a2626;
+    --dark-background-color: #441818;
+    --active-background-color: #350404;
+  
+    --light-accent-color: #dddddd;
+    --main-accent-color: #585858;
+    --dark-accent-color: #2f2f2f;
+    --active-accent-color: #1d1d1d;
+
+    --dark-alert-color: #8a5cc5;
+    --light-alert-color: #7b32db;
+  }

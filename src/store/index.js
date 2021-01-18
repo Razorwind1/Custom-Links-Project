@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { v4 as uniqueId } from 'uuid';
+import importCss from "@/js/importCss.js";
 
 Vue.use(Vuex)
 
@@ -73,6 +74,7 @@ const store = new Vuex.Store({
         color: "#333"
       }
     ],
+    theme: "dark",
     events: {
       contextMenu: {
         active: false,
@@ -101,9 +103,20 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       }
-    }
+    },
   },
   mutations: {                                // FOR SYNC MUTATIONS
+    setState(state, payload) {
+      state.gridElements = payload.gridElements || [],
+      state.styles = payload.styles || [],
+      state.tags = payload.tags || [],
+      state.theme = payload.theme || "dark"
+    },
+    setAppTheme(state, payload){
+      state.theme = payload
+      importCss(payload)
+    },
+
     addGridElement(state, payload) {
       const element = {
         id: uniqueId()
@@ -130,11 +143,7 @@ const store = new Vuex.Store({
       const removeIndex = state.gridElements.findIndex(element => element.id === payload.id)
       state.gridElements.splice(removeIndex, 1)
     },
-    setState(state, payload) {
-      state.gridElements = payload.gridElements || [],
-        state.styles = payload.styles || [],
-        state.tags = payload.tags || []
-    },
+    
     setGridElementPosition(state, payload) {
       const element = state.gridElements.find(element => element.id === payload.id)
       if (element) {
@@ -149,6 +158,7 @@ const store = new Vuex.Store({
         element.pos.sizeY = payload.newH
       }
     },
+
     editTagColor(state, payload) {
       state.tags.find(tag => tag.id == payload.tagID).color = payload.newColor;
     },
@@ -236,6 +246,10 @@ const store = new Vuex.Store({
         name: "New Tag",
         color: "#333"
       })
+    },
+    deleteTag(state, payload){
+      const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
+      state.tags.splice(removeIndex, 1)
     }
   },
   actions: {                                  // FOR ASYNC ACTIONS
@@ -279,7 +293,7 @@ const store = new Vuex.Store({
       return state.tags
     },
     getTagName: (state) => (id) => {
-      return state.tags.find(tag => tag.id == id).name;
+      return state.tags.find(tag => tag.id === id).name;
     },
     getTagColor: (state) => (id) => {
       if (state.tags.find(tag => tag.id === id) === undefined) {
@@ -305,7 +319,8 @@ const store = new Vuex.Store({
       return {
         gridElements: state.gridElements,
         styles: state.styles,
-        tags: state.tags
+        tags: state.tags,
+        theme: state.theme
       }
     }
   }
@@ -317,9 +332,6 @@ function modifyLink(element, data) {
 
   if (data.address && data.label) {
     element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-
-    // if (window.platform === "win32" && !element.content.address.includes('\\'))
-    //   element.content.address = 'http://' + element.content.address      // For win platform, if the value has no '\' it will be marked as a website and http:// will be included in front of it.
 
     element.content.label = data.label
   }

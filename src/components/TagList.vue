@@ -6,7 +6,6 @@
     </div>
     <div class="content">
       <div class="section">
-        
         <div v-for="(tag, index) in $store.getters.getTags" :key="index">
           <div class="tag-entry">
             <div class="tag-entry-top-row">
@@ -14,7 +13,7 @@
                 class="tagLabel"
                 v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && $store.state.events.editingFields.active}"
                 @click="editingName(index)"
-                v-on:click.stop=""
+                v-on:click.stop
                 :value="tag.name"
                 ref="tags"
                 v-on:keyup.enter="saveName(tag.id)"
@@ -23,16 +22,12 @@
                 @click="stopEditingName()"
                 class="xStopEditing"
                 v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
-              >
-                &#9932;
-              </div>
+              >&#9932;</div>
               <div
                 @click="saveName(tag.id)"
                 class="checkSaveLabel"
                 v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
-              >
-                &#x2713;
-              </div>
+              >&#x2713;</div>
               <div
                 @click="
                   colorPicker($event, {
@@ -41,18 +36,12 @@
                   })
                 "
               >
-                <span
-                  class="color-dot"
-                  :style="{ 'background-color': tag.color }"
-                ></span>
+                <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
               </div>
-              <div class="xDeleteTag">&#9932;</div>
+              <div @click="xDeleteTag(tag.id)">&#9932;</div>
             </div>
             <div class="tag-entry-bottom-row">
-              <div
-                v-for="(link, i) in $store.getters.getLinksByTag(tag.id)"
-                :key="i"
-              >
+              <div v-for="(link, i) in $store.getters.getLinksByTag(tag.id)" :key="i">
                 <div class="associated-link">{{ link.content.label }}</div>
               </div>
             </div>
@@ -65,21 +54,21 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       tagBeingEditedIdx: null,
-      tagsLength: this.$store.getters.getTags.length,
+      tagsLength: this.$store.getters.getTags.length
     };
   },
   methods: {
-    colorPicker: function (event, data) {
+    colorPicker: function(event, data) {
       this.$store.commit("colorPicker", {
         arg: {
           pickerType: "tag-color",
           tagColor: data.tagColor,
-          tagID: data.tagID,
+          tagID: data.tagID
         },
-        event,
+        event
       });
     },
     editingName(index) {
@@ -95,7 +84,7 @@ export default {
     saveName(tagID) {
       this.$store.commit("editTagName", {
         tagID,
-        newName: this.$refs.tags[this.tagBeingEditedIdx].value,
+        newName: this.$refs.tags[this.tagBeingEditedIdx].value
       });
       this.stopEditingName();
     },
@@ -105,16 +94,22 @@ export default {
     addNewTag() {
       this.$store.commit("addNewTag");
     },
+    xDeleteTag(tagID) {
+      this.$store.commit("showAlert", {
+        type: "delete-tag",
+        tagID
+      });
+    }
   },
-  updated: function () {
+  updated: function() {
     if (this.tagsLength < this.$refs.tags.length)
       this.editingName(this.$refs.tags.length - 1);
 
     this.tagsLength = this.$refs.tags.length;
   },
   props: {
-    saveLink: Boolean,
-  },
+    saveLink: Boolean
+  }
 };
 </script>
 

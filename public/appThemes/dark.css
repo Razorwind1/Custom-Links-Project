@@ -1,0 +1,18 @@
+
+:root {
+    --main-text-color: #eeeeee;
+    --secondary-text-color: #111111;
+  
+    --light-background-color: #4d4d4d;
+    --main-background-color: #2c2c2c;
+    --dark-background-color: #202020;
+    --active-background-color: #0e0e0e;
+  
+    --light-accent-color: #70ddbc;
+    --main-accent-color: #407e6b;
+    --dark-accent-color: #127054;
+    --active-accent-color: #034b35;
+
+    --dark-alert-color: #791313;
+    --light-alert-color: #ad2020;
+  }

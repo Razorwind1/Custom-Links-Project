@@ -48,7 +48,7 @@
           <div class="img-container">
             <img v-bind:src="getElementImg(element.id, element.img)" />
           </div>
-          <div class="label">{{ element.label }}</div>
+          <label class="label">{{ element.label }}</label>
         </div>
       </grid-item>
     </div>
@@ -59,6 +59,7 @@
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 import shortLabel from "@/js/shortLabel.js";
+import TagsWrapper from "@/components/TagsWrapper.vue";
 
 export default {
   data() {
@@ -77,13 +78,6 @@ export default {
       this.layout = [];
 
       gridElements.forEach((element) => {
-        let elementLabelLenght = 10;
-        if (element.pos.sizeX == 2) elementLabelLenght = 20;
-        if (element.pos.sizeX == 3) elementLabelLenght = 33;
-        if (element.pos.sizeX == 4) elementLabelLenght = 45;
-        if (element.pos.sizeX == 5) elementLabelLenght = 58;
-        if (element.pos.sizeX > 5) elementLabelLenght = 70;
-
         this.layout.push({
           id: element.id,
           x: element.pos.x,
@@ -93,7 +87,7 @@ export default {
           i: element.id,
           img: element.content.img,
           style: element.style,
-          label: shortLabel(element.content.label, elementLabelLenght),
+          label: element.content.label,
           address: element.content.address,
         });
       });
@@ -288,10 +282,12 @@ export default {
 
 .link .label {
   max-height: 20%;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
   text-align: center;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .tagIndicator-dot {

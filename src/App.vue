@@ -20,6 +20,7 @@ import Alert from "@/components/Alert.vue";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ColorPicker from "@/components/ColorPicker.vue";
 import AssignedTagsMenu from "@/components/AssignedTagsMenu.vue";
+import importCss from "@/js/importCss.js";
 
 export default {
   components: {
@@ -46,8 +47,8 @@ export default {
     }
   },
   created: function() {
-    // const state = window.ipcRenderer.sendSync("state-read");
-    // if (state) this.$store.commit("setState", state);
+    const state = window.ipcRenderer.sendSync("state-read");
+    if (state) this.$store.commit("setState", state);
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
@@ -84,28 +85,17 @@ export default {
     window.addEventListener("resize", this.closeEditingFields);
     window.addEventListener("resize", this.closeAssignedTagsMenu)
 
+    importCss(this.$store.state.theme)
+
     window.ipcRenderer.send("app-created");
-  }
+  },
 };
 </script>
 
 <style>
-:root {
-  --main-text-color: #eeeeee;
-  --secondary-text-color: #111111;
-
-  --light-background-color: #4d4d4d;
-  --main-background-color: #2c2c2c;
-  --dark-background-color: #202020;
-  --active-background-color: #0e0e0e;
-
-  --light-accent-color: #70ddbc;
-  --main-accent-color: #20906f;
-  --dark-accent-color: #127054;
-  --active-accent-color: #034b35;
-
-  --nav-width: 50px;
-  --title-bar-height: 30px;
+:root{
+    --nav-width: 50px;
+    --title-bar-height: 30px;
 }
 * {
   margin: 0;

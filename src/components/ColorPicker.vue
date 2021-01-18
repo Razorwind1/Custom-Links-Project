@@ -12,7 +12,7 @@
         v-on:input="colorPickerColor"
         dot-size="40"
         mode="hexa"
-        v-bind:dark="true"
+        v-bind:dark="darkThemeActive()"
         v-bind:value="oldColor"
         width="250"
         canvas-height="100"
@@ -74,6 +74,9 @@ export default {
         }
       }
     },
+    darkThemeActive(){
+      return (this.$store.state.theme === "dark") ? true : false
+    }
   },
   mounted: function () {
     this.setContainerPosition(this.$store.state.events.colorPicker.event);
