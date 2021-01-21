@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { v4 as uniqueId } from 'uuid';
-import importCss from "@/js/importCss.js";
+import importCss from "@/js/helper/importCss.js";
 
 Vue.use(Vuex)
 
@@ -251,8 +251,6 @@ const store = new Vuex.Store({
       const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
       state.tags.splice(removeIndex, 1)
     }
-  },
-  actions: {                                  // FOR ASYNC ACTIONS
   },
   getters: {
     getGridElements: (state) => {

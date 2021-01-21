@@ -1,4 +1,4 @@
-import DIR from "../directories.js"
+import DIR from "../helper/directories.js"
 import path from "path"
 import fs from "fs"
 

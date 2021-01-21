@@ -13,7 +13,7 @@
     :use-style-cursor="false"
   >
     <div
-      @contextmenu="contextMenuCanvas($event)"
+      @contextmenu.stop="contextMenuCanvas($event)"
       :style="{ width: '100%', height: '100%' }"
     >
       <grid-item
@@ -58,8 +58,6 @@
 <script>
 import VueGridLayout from "vue-grid-layout";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
-import shortLabel from "@/js/shortLabel.js";
-import TagsWrapper from "@/components/TagsWrapper.vue";
 
 export default {
   data() {

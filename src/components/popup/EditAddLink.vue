@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import validateInputs from "@/js/validation.js";
+import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 export default {

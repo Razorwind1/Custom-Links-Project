@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Canvas from '../views/Canvas.vue'
-import Settings from '../views/Settings.vue'
+import Canvas from '../components/views/Canvas.vue'
+import Settings from '../components/views/Settings.vue'
 
 Vue.use(VueRouter)
 

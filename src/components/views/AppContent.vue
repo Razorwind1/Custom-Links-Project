@@ -1,7 +1,7 @@
 <template>
   <div
     id="app-content"
-    :class="[this.$store.state.events.popup.active || this.$store.state.events.alert.active ? 'disable-input' : '']"
+    :class="[this.$store.state.events.popup.active || this.$store.state.events.alert.active || this.$store.state.events.contextMenu.active ? 'disable-input' : '']"
   >
     <NavBar />
     <div id="app-main">
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import NavBar from "@/components/NavBar.vue";
+import NavBar from "@/components/core/NavBar.vue";
 
 export default {
   components: {

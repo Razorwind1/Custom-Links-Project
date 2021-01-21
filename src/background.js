@@ -7,7 +7,7 @@ import path from 'path'
 import handler from './handler'
 import fs from 'fs'
 import defaultImgBuffer from "./js/img/defaultImgBuffer"
-import DIR from "./js/directories"
+import DIR from "./js/helper/directories"
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 

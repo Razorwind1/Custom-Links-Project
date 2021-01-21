@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="closeContextMenu(), closeEditingFields(), closeAssignedTagsMenu()">
+  <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
     <v-app>
       <TitleBar />
       <AppContent />
@@ -13,14 +13,14 @@
 </template>
 
 <script>
-import TitleBar from "@/components/TitleBar.vue";
-import AppContent from "@/components/AppContent.vue";
-import Popup from "@/components/Popup.vue";
-import Alert from "@/components/Alert.vue";
-import ContextMenu from "@/components/ContextMenu.vue";
-import ColorPicker from "@/components/ColorPicker.vue";
-import AssignedTagsMenu from "@/components/AssignedTagsMenu.vue";
-import importCss from "@/js/importCss.js";
+import TitleBar from "@/components/core/TitleBar.vue";
+import AppContent from "@/components/views/AppContent.vue";
+import Popup from "@/components/popup/Popup.vue";
+import Alert from "@/components/core/Alert.vue";
+import ContextMenu from "@/components/floating/ContextMenu.vue";
+import ColorPicker from "@/components/floating/ColorPicker.vue";
+import AssignedTagsMenu from "@/components/floating/AssignedTagsMenu.vue";
+import importCss from "@/js/helper/importCss.js";
 
 export default {
   components: {
@@ -33,16 +33,10 @@ export default {
     AssignedTagsMenu
   },
   methods: {
-    closeContextMenu() {
+    closeMenus() {
       this.$store.commit("closeContextMenu");
-    },
-    closeColorPicker() {
       this.$store.commit("closeColorPicker");
-    },
-    closeEditingFields() {
       this.$store.commit("closeEditingFields");
-    },
-    closeAssignedTagsMenu() {
       this.$store.commit("closeAssignedTagsMenu");
     }
   },
@@ -80,10 +74,7 @@ export default {
       }
     );
 
-    window.addEventListener("resize", this.closeContextMenu);
-    window.addEventListener("resize", this.closeColorPicker);
-    window.addEventListener("resize", this.closeEditingFields);
-    window.addEventListener("resize", this.closeAssignedTagsMenu)
+    window.addEventListener("resize", this.closeMenus());
 
     importCss(this.$store.state.theme)
 

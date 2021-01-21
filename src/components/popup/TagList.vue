@@ -29,7 +29,7 @@
                 v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
               >&#x2713;</div>
               <div
-                @click="
+                @click.stop="
                   colorPicker($event, {
                     tagID: tag.id,
                     tagColor: tag.color,
