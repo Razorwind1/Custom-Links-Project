@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="containerPosition" ref="container">
+  <floating :event="this.$store.state.events.contextMenu.event" class="contextMenu">
     <div
       v-for="(element, index) in this.$store.state.events.contextMenu.arg"
       :key="index"
@@ -7,55 +7,21 @@
     >
       {{ element.label }}
     </div>
-  </div>
+  </floating>
 </template>
 
 <script>
+import floating from "@/components/floating/Floating.vue";
+
 export default {
-  data: function () {
-    return {
-      containerPosition: {
-        top: "200px",
-        left: "250px",
-      },
-    };
-  },
-  mounted: function () {
-    this.setContainerPosition(this.$store.state.events.contextMenu.event);
-  },
-  updated: function () {
-    this.setContainerPosition(this.$store.state.events.contextMenu.event);
-  },
-  methods: {
-    setContainerPosition(event) {
-        const mouseX = event.clientX;
-        const mouseY = event.clientY;
-
-        const windowW = window.innerWidth;
-        const windowH = window.innerHeight;
-
-        const menuW = this.$refs.container.getBoundingClientRect().width;
-        const menuH = this.$refs.container.getBoundingClientRect().height;
-
-        if (mouseX + menuW >= windowW) {
-          this.containerPosition.left = mouseX - menuW + "px";
-        } else {
-          this.containerPosition.left = mouseX + "px";
-        }
-
-        if (mouseY + menuH >= windowH) {
-          this.containerPosition.top = windowH - menuH - 5 + "px";
-        } else {
-          this.containerPosition.top = mouseY + "px";
-        }
-    },
+  components: {
+    floating,
   },
 };
 </script>
 
 <style scoped>
-.container {
-  position: absolute;
+.contextMenu {
   min-width: 100px;
   max-width: 180px;
   background: var(--dark-background-color);
@@ -63,14 +29,13 @@ export default {
   border: 1px solid var(--active-background-color);
   cursor: pointer;
   flex-direction: column;
-  padding: 0;
 }
-.container > div {
+.contextMenu > div {
   border-radius: 5px;
   padding: 10px;
   width: 100%;
 }
-.container > div:hover {
+.contextMenu > div:hover {
   background: var(--light-background-color);
 }
 </style>

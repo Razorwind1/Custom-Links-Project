@@ -35,14 +35,13 @@ export default {
   methods: {
     closeMenus() {
       this.$store.commit("closeContextMenu");
-      this.$store.commit("closeColorPicker");
       this.$store.commit("closeEditingFields");
       this.$store.commit("closeAssignedTagsMenu");
     }
   },
   created: function() {
-    const state = window.ipcRenderer.sendSync("state-read");
-    if (state) this.$store.commit("setState", state);
+    //const state = window.ipcRenderer.sendSync("state-read");
+    //if (state) this.$store.commit("setState", state);
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {

@@ -1,12 +1,7 @@
 <template>
-  <div class="color-picker-overlay" @click="closeColorPicker">
-    <div
-      class="container"
-      :style="containerPosition"
-      ref="container"
-      @click.stop
-    >
-      <div @click="saveColor" class="button save">&check;</div>
+  <floating :event="this.$store.state.events.colorPicker.event" class="colorPicker">
+    <div @click="saveColor" class="button save">&check;</div>
+    <div @click.stop>
       <v-color-picker
         class="myColorPicker"
         v-on:input="colorPickerColor"
@@ -17,24 +12,24 @@
         width="250"
         canvas-height="100"
       ></v-color-picker>
-      <div @click="closeColorPicker" class="button close">&#9932;</div>
-      <div class="color-picker-buttons"></div>
     </div>
-  </div>
+    <div class="button close" @click="closeColorPicker()">&#9932;</div>
+  </floating>
 </template>
 
 <script>
+import floating from "@/components/floating/Floating.vue";
+
 export default {
   data: function () {
     return {
-      containerPosition: {
-        top: "200px",
-        left: "250px",
-      },
-      oldColor: "",
-      itemID: null,
+      oldColor: this.$store.state.events.colorPicker.arg.tagColor,
+      itemID: this.$store.state.events.colorPicker.arg.tagID,
       selectedColor: "",
     };
+  },
+  components: {
+    floating,
   },
   methods: {
     closeColorPicker: function () {
@@ -50,50 +45,14 @@ export default {
     colorPickerColor: function (arg) {
       this.selectedColor = arg;
     },
-    setContainerPosition(event) {
-      if (event !== null) {
-        const mouseX = event.clientX;
-        const mouseY = event.clientY;
-
-        const windowW = window.innerWidth;
-        const windowH = window.innerHeight;
-
-        const menuW = this.$refs.container.getBoundingClientRect().width;
-        const menuH = this.$refs.container.getBoundingClientRect().height;
-
-        if (mouseX + menuW >= windowW) {
-          this.containerPosition.left = mouseX - menuW + "px";
-        } else {
-          this.containerPosition.left = mouseX + "px";
-        }
-
-        if (mouseY + menuH >= windowH) {
-          this.containerPosition.top = windowH - menuH - 5 + "px";
-        } else {
-          this.containerPosition.top = mouseY + "px";
-        }
-      }
+    darkThemeActive() {
+      return this.$store.state.theme === "dark" ? true : false;
     },
-    darkThemeActive(){
-      return (this.$store.state.theme === "dark") ? true : false
-    }
-  },
-  mounted: function () {
-    this.setContainerPosition(this.$store.state.events.colorPicker.event);
-    if (this.$store.state.events.colorPicker.arg.type === "tag-color") {
-      this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
-      this.itemID = this.$store.state.events.colorPicker.arg.tagID;
-      // Enter Key to Submit Color Picker?
-    }
   },
   updated: function () {
-    this.setContainerPosition(this.$store.state.events.colorPicker.event);
-    if (this.$store.state.events.colorPicker.arg.pickerType === "tag-color") {
-      this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
-      this.itemID = this.$store.state.events.colorPicker.arg.tagID;
-    }
+    this.oldColor = this.$store.state.events.colorPicker.arg.tagColor;
+    this.itemID = this.$store.state.events.colorPicker.arg.tagID;
   },
-  props: {},
 };
 </script>
 
@@ -101,28 +60,15 @@ export default {
 .myColorPicker {
   display: inline-block;
 }
-div.color-picker-overlay {
-  z-index: 902;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-}
-.container {
-  position: absolute;
+.colorPicker {
   min-width: 150px;
   max-width: 252px;
-  background: var(--dark-background-color);
   border-radius: 5px;
   border: 1px solid var(--active-background-color);
   cursor: pointer;
   flex-direction: column;
   z-index: 903;
   padding: 0;
-}
-div.button {
-  width: 100%;
 }
 div.save {
   background-color: var(--light-background-color);
