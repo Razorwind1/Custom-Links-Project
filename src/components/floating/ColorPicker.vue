@@ -36,7 +36,7 @@ export default {
       this.$store.commit("closeColorPicker");
     },
     saveColor: function () {
-      this.$store.commit("editTagColor", {
+      this.$store.commit("editTag", {
         tagID: this.itemID,
         newColor: this.selectedColor,
       });

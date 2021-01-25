@@ -7,9 +7,9 @@
           type="checkbox"
           checked="true"
           class="checkedCheckbox"
-          :style="{ 'background-color': $store.getters.getTagColor(tagID) }"
+          :style="{ 'background-color': $store.getters.tagColorFromId(tagID) }"
         />
-        {{ $store.getters.getTagName(tagID) }}</label
+        {{ $store.getters.tagNameFromId(tagID) }}</label
       >
     </div>
     <div class="header">Nonassigned Tags</div>
@@ -20,7 +20,7 @@
     >
       <label v-on:click="assignTag(nonassignedTagID)">
         <input type="checkbox" />
-        {{ $store.getters.getTagName(nonassignedTagID) }}</label
+        {{ $store.getters.tagNameFromId(nonassignedTagID) }}</label
       >
     </div>
   </floating>
@@ -32,10 +32,11 @@ import floating from "@/components/floating/Floating.vue";
 export default {
   data: function () {
     let linkID = this.$store.state.events.assignedTagsMenu.arg.element.id;
+    let assignedTags = this.$store.getters.tagsFromLinkId(linkID);
     return {
       linkID,
-      assignedTags: this.$store.getters.getTagsofLink(linkID),
-      nonassignedTags: this.$store.getters.getTagsNotofLink(linkID),
+      assignedTags,
+      nonassignedTags: this.$store.state.tags.map(tag => tag.id).filter(item => !assignedTags.includes(item)),
     };
   },
   components: {
@@ -47,16 +48,16 @@ export default {
         tagID,
         linkID: this.linkID,
       });
-      this.assignedTags = this.$store.getters.getTagsofLink(this.linkID);
-      this.nonassignedTags = this.$store.getters.getTagsNotofLink(this.linkID);
+      this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
+      this.nonassignedTags = this.$store.state.tags.map(tag => tag.id).filter(item => !this.assignedTags.includes(item));
     },
     assignTag(tagID) {
       this.$store.commit("assignTag", {
         tagID,
         linkID: this.linkID,
       });
-      this.assignedTags = this.$store.getters.getTagsofLink(this.linkID);
-      this.nonassignedTags = this.$store.getters.getTagsNotofLink(this.linkID);
+      this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
+      this.nonassignedTags = this.$store.state.tags.map(tag => tag.id).filter(item => !this.assignedTags.includes(item));
     },
   },
 };

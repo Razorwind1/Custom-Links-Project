@@ -72,10 +72,10 @@ export default {
   },
   methods: {
     updateGrid: function () {
-      const gridElements = this.$store.getters.getGridElements;
+      const links = this.$store.state.links;
       this.layout = [];
 
-      gridElements.forEach((element) => {
+      links.forEach((element) => {
         this.layout.push({
           id: element.id,
           x: element.pos.x,
@@ -99,7 +99,7 @@ export default {
         window.ipcRenderer.send("open", element_address);
     },
     contextMenuLink: function (event, element) {
-      this.$store.commit("contextMenu", {
+      this.$store.commit("showContextMenu", {
         content: [
           {
             label: "Edit Link",
@@ -121,7 +121,7 @@ export default {
       });
     },
     contextMenuCanvas: function (event) {
-      this.$store.commit("contextMenu", {
+      this.$store.commit("showContextMenu", {
         content: [
           {
             label: "Open All",
@@ -165,17 +165,17 @@ export default {
     },
     //returns a special vue "Style Object" from the store
     getStyling: function (styleName) {
-      const styleObject = this.$store.getters.getStyle(styleName);
+      const styleObject = this.$store.getters.styleFromName(styleName);
       return styleObject;
     },
     moveEvent: function (i) {
       this.movingElement = i;
     },
     movedEvent: function (id, newX, newY) {
-      this.$store.commit("setGridElementPosition", { id, newX, newY });
+      this.$store.commit("setLinkPosition", { id, newX, newY });
     },
     resizedEvent: function (id, newH, newW) {
-      this.$store.commit("resizeGridElement", { id, newH, newW });
+      this.$store.commit("setLinkSize", { id, newH, newW });
       this.updateGrid();
     },
     displayTagLabel: function (tagCircle) {
@@ -191,7 +191,7 @@ export default {
       this.$store.commit("linkUnHovered");
     },
     assignedTagsMenu: function(event, element) {
-      this.$store.commit("assignedTagsMenu", {
+      this.$store.commit("showAssignedTagsMenu", {
         element,
         event
       });
@@ -202,9 +202,9 @@ export default {
 
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (
-        mutation.type === "addGridElement" ||
-        mutation.type === "editGridElement" ||
-        mutation.type === "deleteGridElement" ||
+        mutation.type === "addLink" ||
+        mutation.type === "editLink" ||
+        mutation.type === "deleteLink" ||
         mutation.type === "setState"
       ) {
         this.updateGrid();
