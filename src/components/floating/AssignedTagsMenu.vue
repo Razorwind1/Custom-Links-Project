@@ -1,27 +1,42 @@
 <template>
-  <floating :event="this.$store.state.events.assignedTagsMenu.event" class="tagsMenu">
+
+  <floating
+    :event="this.$store.state.events.assignedTagsMenu.event"
+    class="tagsMenu"
+  >
+  <div @click.stop>
     <div class="header">Assigned Tags</div>
-    <div class="assignedTagEntry" v-for="tagID in this.assignedTags" :key="tagID">
-      <label v-on:click="unassignTag(tagID)">
-        <input
-          type="checkbox"
-          checked="true"
-          class="checkedCheckbox"
-          :style="{ 'background-color': $store.getters.tagColorFromId(tagID) }"
-        />
-        {{ $store.getters.tagNameFromId(tagID) }}</label
-      >
-    </div>
-    <div class="header">Nonassigned Tags</div>
     <div
-      class="nonassignedTagEntry"
+      class="tagEntry"
+      v-for="tagID in this.assignedTags"
+      :key="tagID"
+      v-on:click="unassignTag(tagID)"
+    >
+      <div
+        class="checkedCircle"
+        :style="{ 'background-color': $store.getters.tagColorFromId(tagID) }"
+      ></div>
+      <div class="assignedTagLabel">
+        {{ $store.getters.tagNameFromId(tagID) }}
+      </div>
+    </div>
+    <div class="header nonAssignedTags">Nonassigned Tags</div>
+    <div
+      class="tagEntry"
       v-for="nonassignedTagID in this.nonassignedTags"
       :key="'nonAssigned' + nonassignedTagID"
+      v-on:click="assignTag(nonassignedTagID)"
     >
-      <label v-on:click="assignTag(nonassignedTagID)">
-        <input type="checkbox" />
-        {{ $store.getters.tagNameFromId(nonassignedTagID) }}</label
-      >
+      <div
+        class="uncheckedCircle"
+        :style="{
+          'background-color': $store.getters.tagColorFromId(nonassignedTagID),
+        }"
+      ></div>
+      <div class="nonassignedTagLabel">
+        {{ $store.getters.tagNameFromId(nonassignedTagID) }}
+      </div>
+    </div>
     </div>
   </floating>
 </template>
@@ -36,7 +51,9 @@ export default {
     return {
       linkID,
       assignedTags,
-      nonassignedTags: this.$store.state.tags.map(tag => tag.id).filter(item => !assignedTags.includes(item)),
+      nonassignedTags: this.$store.state.tags
+        .map((tag) => tag.id)
+        .filter((item) => !assignedTags.includes(item)),
     };
   },
   components: {
@@ -49,7 +66,9 @@ export default {
         linkID: this.linkID,
       });
       this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
-      this.nonassignedTags = this.$store.state.tags.map(tag => tag.id).filter(item => !this.assignedTags.includes(item));
+      this.nonassignedTags = this.$store.state.tags
+        .map((tag) => tag.id)
+        .filter((item) => !this.assignedTags.includes(item));
     },
     assignTag(tagID) {
       this.$store.commit("assignTag", {
@@ -57,23 +76,29 @@ export default {
         linkID: this.linkID,
       });
       this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
-      this.nonassignedTags = this.$store.state.tags.map(tag => tag.id).filter(item => !this.assignedTags.includes(item));
+      this.nonassignedTags = this.$store.state.tags
+        .map((tag) => tag.id)
+        .filter((item) => !this.assignedTags.includes(item));
     },
   },
 };
 </script>
 
 <style scoped>
-.tagsMenu {
+.tagsMenu{
   min-width: 100px;
   max-width: 180px;
   background: var(--dark-background-color);
   border-radius: 5px;
   border: 1px solid var(--active-background-color);
-  flex-direction: column;
   padding: 0;
+  max-height: 350px;
 }
-.tagsMenu > div {
+.tagsMenu > div{
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.tagsMenu > div > div {
   padding: 2px;
   width: 100%;
 }
@@ -82,25 +107,61 @@ export default {
   font-size: 12px;
   font-style: italic;
 }
-label {
-  cursor: pointer;
-  margin-left: 10px;
-  font-size: 14px;
-  font-weight: bold;
+
+.tagEntry {
+ align-items: center;
+ justify-content: center;
+ cursor: pointer;
 }
-label:hover {
-  filter: brightness(85%);
-  transition: filter 0.1s ease-in-out;
+.tagEntry:hover {
+ background-color: var(--active-background-color);
 }
-label input {
-  cursor: pointer;
-  margin-right: 4px;
+.assignedTagLabel {
+ cursor: pointer;
+ margin-left: 10px;
+ font-size: 14px;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ display: inline-block;
+ flex-grow: 2;
+ margin-top: 4px;
+ margin-bottom: 0px;
 }
-.checkedCheckbox {
-  -webkit-appearance: none;
-  border: 1px solid black;
-  padding: 9px; /*size of circle checkbox*/
-  border-radius: 50%;
-  display: inline-block;
+.checkedCircle {
+ height: 21px;
+ width: 21px;
+ min-width: 21px;
+ margin-left: 4px;
+ border-radius: 50%;
+ display: inline-block;
+ border: solid var(--active-background-color) 1px;
+}
+.nonAssignedTags {
+ border-top-style: solid;
+ border-top-width: 2px;
+ border-top-color: var(--active-background-color);
+ margin-top: 12px;
+}
+.nonassignedTagLabel {
+ cursor: pointer;
+ margin-left: 10px;
+ font-size: 12px;
+ filter: brightness(50%);
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ display: inline-block;
+ flex-grow: 2;
+ margin-top: 4px;
+ margin-bottom: 0px;
+}
+.uncheckedCircle {
+ height: 16px;
+ width: 16px;
+ min-width: 16px;
+ margin-left: 7px;
+ border-radius: 50%;
+ display: inline-block;
 }
 </style>

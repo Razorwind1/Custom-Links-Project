@@ -20,9 +20,6 @@ export default {
   mounted: function () {
     this.setContainerPosition(event);
   },
-  updated: function () {
-    this.setContainerPosition(event);
-  },
   methods: {
     setContainerPosition(event) {
         const mouseX = event.clientX;
