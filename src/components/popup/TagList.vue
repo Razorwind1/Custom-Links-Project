@@ -38,7 +38,7 @@
               >
                 <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
               </div>
-              <div @click="xDeleteTag(tag.id)">&#9932;</div>
+              <div class="xDeleteTag" @click="xDeleteTag(tag.id)">&#9932;</div>
             </div>
             <div class="tag-entry-bottom-row">
               <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
@@ -117,15 +117,17 @@ export default {
 input.tagLabel {
   background-color: var(--main-background-color);
   border: none;
-  padding: 3px;
-  padding-left: 10px;
-  padding-right: 40px;
+  padding: 1px;
+  padding-left: 3px;
+  padding-right: 0px;
   cursor: pointer;
   width: 120px;
+ text-overflow: ellipsis;
 }
 input.tagBeingEdited {
   background-color: var(--light-background-color);
   cursor: text;
+  padding-right: 40px;
 }
 .xStopEditing {
   margin-top: 1px;
@@ -138,14 +140,13 @@ input.tagBeingEdited {
   position: absolute;
   left: 92px;
 }
-.xDeleteTag {
+div.xDeleteTag {
   font-size: 11px;
   margin-right: -2px;
-  margin-top: 0px;
 }
 span.color-dot {
-  height: 25px;
-  width: 25px;
+  height: 23px;
+  width: 23px;
   border-radius: 50%;
   display: inline-block;
 }
@@ -183,10 +184,16 @@ span.color-dot {
   margin-left: 10px;
   margin-right: 10px;
   border-top: 2px solid var(--dark-background-color);
+  flex-direction: column;
 }
 .associated-link {
-  font-size: 80%;
-  margin-right: 25px;
+  font-size: 75%;
+  margin-left: -8px;
+ margin-right: -12px;
+ display: inline-block;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
 }
 
 /*for consistent pop-up css:*/

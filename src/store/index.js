@@ -99,7 +99,7 @@ const store = new Vuex.Store({
         arg: null
       },
 
-      
+
       editingFields: {
         active: false
       },
@@ -170,7 +170,7 @@ const store = new Vuex.Store({
         color: "#333"
       })
     },
-    editTag(state, payload){
+    editTag(state, payload) {
       const tag = state.tags.find(tag => tag.id == payload.tagID)
 
       tag.color = payload.newColor || tag.color
@@ -179,6 +179,8 @@ const store = new Vuex.Store({
     deleteTag(state, payload) {
       const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
       state.tags.splice(removeIndex, 1)
+
+      state.gridElements.forEach(element => { element.tagsList = element.tagsList.filter(tag => tag !== payload.id) });
     },
     assignTag(state, payload) {
       const index = state.links.find(gridEl => gridEl.id == payload.linkID).tags.indexOf(payload.tagID);
@@ -193,7 +195,7 @@ const store = new Vuex.Store({
       }
     },
     // Events
-      // Popup
+    // Popup
     showPopup(state, payload) {
       state.events.popup.active = true
       state.events.popup.arg = payload
@@ -202,7 +204,7 @@ const store = new Vuex.Store({
       state.events.popup.active = false
       state.events.popup.arg = null
     },
-      // Alert
+    // Alert
     showAlert(state, payload) {
       state.events.alert.active = true
       state.events.alert.arg = payload
@@ -211,7 +213,7 @@ const store = new Vuex.Store({
       state.events.alert.active = false
       state.events.alert.arg = null
     },
-      // Assigned Tags Menu
+    // Assigned Tags Menu
     showAssignedTagsMenu(state, payload) {
       state.events.assignedTagsMenu.active = true
       state.events.assignedTagsMenu.arg = payload
@@ -222,7 +224,7 @@ const store = new Vuex.Store({
       state.events.assignedTagsMenu.id = null
       state.events.assignedTagsMenu.event = null
     },
-      // Context Menu
+    // Context Menu
     showContextMenu(state, payload) {
       state.events.contextMenu.active = true
       state.events.contextMenu.arg = payload.content
@@ -233,7 +235,7 @@ const store = new Vuex.Store({
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
     },
-      // Color Picker
+    // Color Picker
     showColorPicker(state, payload) {
       state.events.colorPicker.active = true
       state.events.colorPicker.arg = payload.arg
@@ -244,7 +246,7 @@ const store = new Vuex.Store({
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
     },
-      // Other
+    // Other
     allowEditingFields(state) {
       state.events.editingFields.active = true
     },
