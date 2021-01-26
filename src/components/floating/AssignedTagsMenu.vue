@@ -95,8 +95,10 @@ export default {
   max-height: 350px;
 }
 .tagsMenu > div{
+  padding: 5px;
+  width: 100%;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .tagsMenu > div > div {
   padding: 2px;
@@ -112,6 +114,7 @@ export default {
  align-items: center;
  justify-content: center;
  cursor: pointer;
+ border-radius: 5px;
 }
 .tagEntry:hover {
  background-color: var(--active-background-color);
