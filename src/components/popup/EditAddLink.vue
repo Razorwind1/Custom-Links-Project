@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import validateInputs from "@/js/validation.js";
+import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 export default {
@@ -126,11 +126,11 @@ export default {
 
       if (inputValid) {
         if (this.popupArg.type === "add-link") {
-          this.$store.commit("addGridElement", {
+          this.$store.commit("addLink", {
             data: this.$data,
           });
         } else if (this.popupArg.type === "edit-link") {
-          this.$store.commit("editGridElement", {
+          this.$store.commit("editLink", {
             id: this.popupArg.linkID,
             data: this.$data,
           });
@@ -149,7 +149,7 @@ export default {
     this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
 
     if (this.popupArg.type === "edit-link") {
-      const linkData = this.$store.getters.getGridLink(this.popupArg.linkID);
+      const linkData = this.$store.getters.linkFromId(this.popupArg.linkID);
       this.label = linkData.content.label;
       this.address = linkData.content.address;
       this.type = linkData.type;

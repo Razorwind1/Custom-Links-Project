@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import EditAddLink from "@/components/EditAddLink.vue";
-import TagList from "@/components/TagList.vue";
+import EditAddLink from "@/components/popup/EditAddLink.vue";
+import TagList from "@/components/popup/TagList.vue";
 
 export default {
   data: function () {
@@ -37,6 +37,7 @@ export default {
     save: function () {
       if (this.popupArg.type == "tag-list") {
         this.closePopup();
+        this.$store.commit("closeColorPicker");
       }
       if (
         this.popupArg.type == "add-link" ||
@@ -47,6 +48,7 @@ export default {
     },
     closePopup: function () {
       this.$store.commit("closePopup");
+      this.$store.commit("closeColorPicker");
     },
   },
   components: {

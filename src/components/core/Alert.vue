@@ -40,7 +40,7 @@ export default {
     if (this.alertArg.type == "delete-link") {
       this.header = "Delete Link";
       this.content = `Are you sure you want to delete ${
-        this.$store.getters.getGridLink(this.alertArg.id).content.label
+        this.$store.getters.linkFromId(this.alertArg.id).content.label
       }?`;
       this.saveButtonLabel = "Delete";
       this.saveButtonClass = ["delete-link"];
@@ -50,7 +50,7 @@ export default {
     if (this.alertArg.type == "delete-tag") {
       this.header = "Delete Tag";
       this.content = `Are you sure you want to delete the '${
-        this.$store.getters.getTagName(this.alertArg.tagID)
+        this.$store.getters.tagNameFromId(this.alertArg.tagID)
       }' tag?`;
       this.saveButtonLabel = "Delete";
       this.saveButtonClass = ["delete-tag"];
@@ -74,7 +74,7 @@ export default {
   methods: {
     save: function() {
       if (this.alertArg.type == "delete-link") {
-        this.$store.commit("deleteGridElement", { id: this.alertArg.id });
+        this.$store.commit("deleteLink", { id: this.alertArg.id });
         this.$store.commit("closeAlert");
       }
       if (this.alertArg.type == "delete-tag") {

@@ -2,9 +2,9 @@ import { /*app, protocol, BrowserWindow,*/ ipcMain, dialog, shell, app } from 'e
 
 import imageBufferFromUrl from './js/img/imgBufferFromUrl'
 import saveLinkImageToFile from './js/img/saveLinkImageToFile'
-import writeStateToFile from './js/writeStateToFile'
+import writeStateToFile from './js/helper/writeStateToFile'
 
-import DIR from "./js/directories"
+import DIR from "./js/helper/directories"
 import path from "path"
 import fs from "fs"
 

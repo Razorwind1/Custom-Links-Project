@@ -1,12 +1,6 @@
 <template>
   <div class="container" :style="containerPosition" ref="container">
-    <div
-      v-for="(element, index) in this.$store.state.events.contextMenu.arg"
-      :key="index"
-      @click="element.click"
-    >
-      {{ element.label }}
-    </div>
+    <slot></slot>
   </div>
 </template>
 
@@ -20,11 +14,14 @@ export default {
       },
     };
   },
+  props: {
+      event: MouseEvent
+  },
   mounted: function () {
-    this.setContainerPosition(this.$store.state.events.contextMenu.event);
+    this.setContainerPosition(event);
   },
   updated: function () {
-    this.setContainerPosition(this.$store.state.events.contextMenu.event);
+    this.setContainerPosition(event);
   },
   methods: {
     setContainerPosition(event) {
@@ -56,21 +53,7 @@ export default {
 <style scoped>
 .container {
   position: absolute;
-  min-width: 100px;
-  max-width: 180px;
   background: var(--dark-background-color);
-  border-radius: 5px;
-  border: 1px solid var(--active-background-color);
-  cursor: pointer;
-  flex-direction: column;
   padding: 0;
-}
-.container > div {
-  border-radius: 5px;
-  padding: 10px;
-  width: 100%;
-}
-.container > div:hover {
-  background: var(--light-background-color);
 }
 </style>

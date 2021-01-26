@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { v4 as uniqueId } from 'uuid';
-import importCss from "@/js/importCss.js";
+import importCss from "@/js/helper/importCss.js";
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    gridElements: [
+    // State Data
+    links: [
       {
         id: 0,
         pos: {
@@ -18,7 +19,7 @@ const store = new Vuex.Store({
         },
         type: "file",
         style: "gameStyle",
-        tagsList: [1, 2],
+        tags: [1, 2],
         content: {
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
@@ -35,7 +36,7 @@ const store = new Vuex.Store({
         },
         type: "url",
         style: "codingStyle",
-        tagsList: [3],
+        tags: [3],
         content: {
           label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
@@ -75,6 +76,7 @@ const store = new Vuex.Store({
       }
     ],
     theme: "dark",
+    // Global Events
     events: {
       contextMenu: {
         active: false,
@@ -92,6 +94,12 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
+      assignedTagsMenu: {
+        active: false,
+        arg: null
+      },
+
+      
       editingFields: {
         active: false
       },
@@ -99,93 +107,93 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
-      assignedTagsMenu: {
-        active: false,
-        arg: null
-      }
     },
   },
-  mutations: {                                // FOR SYNC MUTATIONS
+  mutations: {
+    // State Operations
     setState(state, payload) {
-      state.gridElements = payload.gridElements || [],
-      state.styles = payload.styles || [],
-      state.tags = payload.tags || [],
-      state.theme = payload.theme || "dark"
+      state.links = payload.links || [],
+        state.styles = payload.styles || [],
+        state.tags = payload.tags || [],
+        state.theme = payload.theme || "dark"
     },
-    setAppTheme(state, payload){
+    setTheme(state, payload) {
       state.theme = payload
       importCss(payload)
     },
-
-    addGridElement(state, payload) {
-      const element = {
+    // Link Operations
+    addLink(state, payload) {
+      const link = {
         id: uniqueId()
       }
-      element.content = {}
-      element.pos = {
+      link.content = {}
+      link.pos = {
         x: 0,
         y: 0,
         sizeX: 1,
         sizeY: 1
       }
-      element.tagsList = []
+      link.tags = []
 
-      modifyLink(element, payload.data)
+      modifyLink(link, payload.data)
 
-      state.gridElements.push(element)
+      state.links.push(link)
     },
-    editGridElement(state, payload) {
-      const element = state.gridElements.find(element => element.id === payload.id)
+    editLink(state, payload) {
+      const link = state.links.find(link => link.id === payload.id)
 
-      modifyLink(element, payload.data)
+      modifyLink(link, payload.data)
     },
-    deleteGridElement(state, payload) {
-      const removeIndex = state.gridElements.findIndex(element => element.id === payload.id)
-      state.gridElements.splice(removeIndex, 1)
+    deleteLink(state, payload) {
+      const removeIndex = state.links.findIndex(link => link.id === payload.id)
+      state.links.splice(removeIndex, 1)
     },
-    
-    setGridElementPosition(state, payload) {
-      const element = state.gridElements.find(element => element.id === payload.id)
-      if (element) {
-        element.pos.x = payload.newX
-        element.pos.y = payload.newY
+    setLinkPosition(state, payload) {
+      const link = state.links.find(link => link.id === payload.id)
+      if (link) {
+        link.pos.x = payload.newX
+        link.pos.y = payload.newY
       }
     },
-    resizeGridElement(state, payload) {
-      const element = state.gridElements.find(element => element.id === payload.id)
-      if (element) {
-        element.pos.sizeX = payload.newW
-        element.pos.sizeY = payload.newH
+    setLinkSize(state, payload) {
+      const link = state.links.find(link => link.id === payload.id)
+      if (link) {
+        link.pos.sizeX = payload.newW
+        link.pos.sizeY = payload.newH
       }
     },
-
-    editTagColor(state, payload) {
-      state.tags.find(tag => tag.id == payload.tagID).color = payload.newColor;
+    // Tag Operations
+    addTag(state) {
+      state.tags.push({
+        id: uniqueId(),
+        name: "New Tag",
+        color: "#333"
+      })
     },
-    editTagName(state, payload) {
-      state.tags.find(tag => tag.id == payload.tagID).name = payload.newName;
+    editTag(state, payload){
+      const tag = state.tags.find(tag => tag.id == payload.tagID)
+
+      tag.color = payload.newColor || tag.color
+      tag.name = payload.newName || tag.name
+    },
+    deleteTag(state, payload) {
+      const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
+      state.tags.splice(removeIndex, 1)
     },
     assignTag(state, payload) {
-      const index = state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.indexOf(payload.tagID);
+      const index = state.links.find(gridEl => gridEl.id == payload.linkID).tags.indexOf(payload.tagID);
       if (index < 0) {
-        state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.push(payload.tagID);
+        state.links.find(gridEl => gridEl.id == payload.linkID).tags.push(payload.tagID);
       }
     },
     unassignTag(state, payload) {
-      const index = state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.indexOf(payload.tagID);
+      const index = state.links.find(gridEl => gridEl.id == payload.linkID).tags.indexOf(payload.tagID);
       if (index > -1) {
-        state.gridElements.find(gridEl => gridEl.id == payload.linkID).tagsList.splice(index, 1);
+        state.links.find(gridEl => gridEl.id == payload.linkID).tags.splice(index, 1);
       }
     },
-    linkHovered(state, payload) {
-      state.events.linkHovered.active = true
-      state.events.linkHovered.arg = payload
-    },
-    linkUnHovered(state) {
-      state.events.linkHovered.active = false
-      state.events.linkHovered.arg = null
-    },
-
+    // Events
+      // Popup
     showPopup(state, payload) {
       state.events.popup.active = true
       state.events.popup.arg = payload
@@ -194,7 +202,7 @@ const store = new Vuex.Store({
       state.events.popup.active = false
       state.events.popup.arg = null
     },
-
+      // Alert
     showAlert(state, payload) {
       state.events.alert.active = true
       state.events.alert.arg = payload
@@ -203,7 +211,8 @@ const store = new Vuex.Store({
       state.events.alert.active = false
       state.events.alert.arg = null
     },
-    assignedTagsMenu(state, payload) {
+      // Assigned Tags Menu
+    showAssignedTagsMenu(state, payload) {
       state.events.assignedTagsMenu.active = true
       state.events.assignedTagsMenu.arg = payload
       state.events.assignedTagsMenu.event = payload.event
@@ -213,7 +222,8 @@ const store = new Vuex.Store({
       state.events.assignedTagsMenu.id = null
       state.events.assignedTagsMenu.event = null
     },
-    contextMenu(state, payload) {
+      // Context Menu
+    showContextMenu(state, payload) {
       state.events.contextMenu.active = true
       state.events.contextMenu.arg = payload.content
       state.events.contextMenu.event = payload.event
@@ -223,8 +233,8 @@ const store = new Vuex.Store({
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
     },
-
-    colorPicker(state, payload) {
+      // Color Picker
+    showColorPicker(state, payload) {
       state.events.colorPicker.active = true
       state.events.colorPicker.arg = payload.arg
       state.events.colorPicker.event = payload.event
@@ -234,90 +244,52 @@ const store = new Vuex.Store({
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
     },
+      // Other
     allowEditingFields(state) {
       state.events.editingFields.active = true
     },
     closeEditingFields(state) {
       state.events.editingFields.active = false
     },
-    addNewTag(state) {
-      state.tags.push({
-        id: uniqueId(),
-        name: "New Tag",
-        color: "#333"
-      })
+    linkHovered(state, payload) {
+      state.events.linkHovered.active = true
+      state.events.linkHovered.arg = payload
     },
-    deleteTag(state, payload){
-      const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
-      state.tags.splice(removeIndex, 1)
-    }
-  },
-  actions: {                                  // FOR ASYNC ACTIONS
+    linkUnHovered(state) {
+      state.events.linkHovered.active = false
+      state.events.linkHovered.arg = null
+    },
   },
   getters: {
-    getGridElements: (state) => {
-      return state.gridElements
+    // Link Getters
+    linkFromId: (state) => (id) => {
+      return state.links.filter(element => element.id === id)[0]
     },
-    getGridLinks: (state) => {
-      return state.gridElements.filter(element => element.type === "link")
+    linksFromTag: (state) => (tagID) => {
+      return state.links.filter(link => link.tags.includes(tagID))
     },
-    getGridLink: (state) => (id) => {
-      return state.gridElements.filter(element => element.id === id)[0]
-    },
-    getStyle: (state) => (styleName) => {
+    // Style Getters
+    styleFromName: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
     },
-    getTagsofLink: (state) => (id) => {
-      return state.gridElements.find(gridEl => gridEl.id === id).tagsList;
+    // Tag Getters
+    tagsFromLinkId: (state) => (id) => {
+      return state.links.find(gridEl => gridEl.id === id).tags;
     },
-    getTagsNotofLink: (state) => (id) => {
-      const tagsOfLink = state.gridElements.find(gridEl => gridEl.id === id).tagsList;
-      var returnArray = [];
-      const allTags = state.tags;
-      var isAssignedtoLink = false;
-      for (var i=0; i<allTags.length; i++) {
-        isAssignedtoLink = false;
-        for (var j=0; j<tagsOfLink.length; j++) {
-          if (allTags[i].id === tagsOfLink[j]) {
-            isAssignedtoLink = true;
-            break;
-          }
-        }
-        if (isAssignedtoLink == false) {
-          returnArray.push(allTags[i].id);
-        }
-      }
-      return returnArray;
-    },
-    getTags: (state) => {
-      return state.tags
-    },
-    getTagName: (state) => (id) => {
+    tagNameFromId: (state) => (id) => {
       return state.tags.find(tag => tag.id === id).name;
     },
-    getTagColor: (state) => (id) => {
+    tagColorFromId: (state) => (id) => {
       if (state.tags.find(tag => tag.id === id) === undefined) {
         return id;
       } else {
         return state.tags.find(tag => tag.id === id).color;
       }
-
     },
-    getLinksByTag: (state) => (tagID) => {
-      const elementsArray = state.gridElements;
-      var retArray = [];
-      elementsArray.forEach(element => {
-        element.tagsList.forEach(tag => {
-          if (tag === tagID) {
-            retArray.push(element);
-          }
-        });
-      });
-      return retArray;
-    },
+    // State Data
     stateUserData: (state) => {
       return {
-        gridElements: state.gridElements,
+        links: state.links,
         styles: state.styles,
         tags: state.tags,
         theme: state.theme
@@ -329,15 +301,11 @@ const store = new Vuex.Store({
 export default store
 
 function modifyLink(element, data) {
-
   if (data.address && data.label) {
     element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-
     element.content.label = data.label
   }
-
   element.type = data.type || "url";
-
   if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
     window.ipcRenderer.send("save-link-image-to-file", { buffer: data.imgBuffer, label: data.imgLabel, id: element.id })

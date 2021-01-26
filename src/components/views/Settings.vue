@@ -29,7 +29,7 @@ export default {
       window.ipcRenderer.send("getFavicon", url);
     },
     theme(e){
-      this.$store.commit("setAppTheme", e.target.value)
+      this.$store.commit("setTheme", e.target.value)
     }
   },
 };

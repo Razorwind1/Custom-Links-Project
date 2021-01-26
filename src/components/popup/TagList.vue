@@ -2,11 +2,11 @@
   <div class="tag-list">
     <div class="header">
       <h2>Tag List</h2>
-      <div class="button new-tag" @click.stop="addNewTag()">New+</div>
+      <div class="button new-tag" @click.stop="addTag()">New+</div>
     </div>
     <div class="content">
       <div class="section">
-        <div v-for="(tag, index) in $store.getters.getTags" :key="index">
+        <div v-for="(tag, index) in $store.state.tags" :key="index">
           <div class="tag-entry">
             <div class="tag-entry-top-row">
               <input
@@ -29,7 +29,7 @@
                 v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
               >&#x2713;</div>
               <div
-                @click="
+                @click.stop="
                   colorPicker($event, {
                     tagID: tag.id,
                     tagColor: tag.color,
@@ -41,7 +41,7 @@
               <div @click="xDeleteTag(tag.id)">&#9932;</div>
             </div>
             <div class="tag-entry-bottom-row">
-              <div v-for="(link, i) in $store.getters.getLinksByTag(tag.id)" :key="i">
+              <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
                 <div class="associated-link">{{ link.content.label }}</div>
               </div>
             </div>
@@ -57,12 +57,12 @@ export default {
   data: function() {
     return {
       tagBeingEditedIdx: null,
-      tagsLength: this.$store.getters.getTags.length
+      tagsLength: this.$store.state.tags.length
     };
   },
   methods: {
     colorPicker: function(event, data) {
-      this.$store.commit("colorPicker", {
+      this.$store.commit("showColorPicker", {
         arg: {
           pickerType: "tag-color",
           tagColor: data.tagColor,
@@ -82,7 +82,7 @@ export default {
       this.$store.commit("closeEditingFields");
     },
     saveName(tagID) {
-      this.$store.commit("editTagName", {
+      this.$store.commit("editTag", {
         tagID,
         newName: this.$refs.tags[this.tagBeingEditedIdx].value
       });
@@ -91,8 +91,8 @@ export default {
     getTagLabelClass(tagName) {
       return "tag-entry-label-name-" + tagName;
     },
-    addNewTag() {
-      this.$store.commit("addNewTag");
+    addTag() {
+      this.$store.commit("addTag");
     },
     xDeleteTag(tagID) {
       this.$store.commit("showAlert", {
