@@ -33,15 +33,13 @@
           v-bind:style="getStyling(element.style)"
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
-          @mouseover="linkHovered(element.id)"
-          @mouseleave="linkUnHovered"
         >
           
-          <div class="assignedTagsIcon" v-show="$store.state.events.linkHovered.arg==element.id">
+          <div class="assignedTagsIcon">
             <img src="/assets/svg/freepik/svg/dh/label-tag.svg" alt="Assigned Tags Icon" @click.stop="assignedTagsMenu($event, element)">
           </div>
 
-          <div class="editIcon" v-show="$store.state.events.linkHovered.arg==element.id">
+          <div class="editIcon">
             <img src="\assets\icons\edit_white.png" alt="Edit Icon" @click.stop="contextMenuLink($event, element)"
             >
           </div>
@@ -91,7 +89,6 @@ export default {
       });
     },
     open: function (element_address) {
-      
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
@@ -163,7 +160,6 @@ export default {
       const imgUrl = imgUrlFromBuffer(imgBuffer);
       return imgUrl;
     },
-    //returns a special vue "Style Object" from the store
     getStyling: function (styleName) {
       const styleObject = this.$store.getters.styleFromName(styleName);
       return styleObject;
@@ -177,18 +173,6 @@ export default {
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
       this.updateGrid();
-    },
-    displayTagLabel: function (tagCircle) {
-      console.log(tagCircle);
-    },
-    hideTaglabel: function (tagCircle) {
-      console.log(tagCircle);
-    },
-    linkHovered: function (linkID) {
-      this.$store.commit("linkHovered", linkID)
-    },
-    linkUnHovered: function () {
-      this.$store.commit("linkUnHovered");
     },
     assignedTagsMenu: function(event, element) {
       this.$store.commit("showAssignedTagsMenu", {
@@ -235,6 +219,10 @@ export default {
   position: absolute;
   right: 5px;
   top: 5px;
+  display: none;
+}
+.vue-grid-item:hover .editIcon{
+  display: flex;
 }
 .editIcon img {
   width: 13px;
@@ -247,6 +235,10 @@ export default {
   position: absolute;
   left: 5px;
   top: 5px;
+  display: none;
+}
+.vue-grid-item:hover .assignedTagsIcon{
+  display: flex;
 }
 .assignedTagsIcon img {
   width: 13px;

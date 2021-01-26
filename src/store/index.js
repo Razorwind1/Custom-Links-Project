@@ -98,12 +98,6 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
-
-
-      linkHovered: {
-        active: false,
-        arg: null
-      },
     },
   },
   mutations: {
@@ -242,15 +236,6 @@ const store = new Vuex.Store({
       state.events.colorPicker.active = false
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
-    },
-    // Other
-    linkHovered(state, payload) {
-      state.events.linkHovered.active = true
-      state.events.linkHovered.arg = payload
-    },
-    linkUnHovered(state) {
-      state.events.linkHovered.active = false
-      state.events.linkHovered.arg = null
     },
   },
   getters: {
