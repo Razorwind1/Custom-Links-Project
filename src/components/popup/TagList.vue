@@ -11,22 +11,23 @@
             <div class="tag-entry-top-row">
               <input
                 class="tagLabel"
-                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && $store.state.events.editingFields.active}"
+                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && editingFields}"
                 @click="editingName(index)"
                 v-on:click.stop
                 :value="tag.name"
                 ref="tags"
                 v-on:keyup.enter="saveName(tag.id)"
+                @blur="editingFields = false"
               />
               <div
                 @click="stopEditingName()"
                 class="xStopEditing"
-                v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
+                v-show="tagBeingEditedIdx == index && editingFields"
               >&#9932;</div>
               <div
                 @click="saveName(tag.id)"
                 class="checkSaveLabel"
-                v-show="tagBeingEditedIdx == index && $store.state.events.editingFields.active"
+                v-show="tagBeingEditedIdx == index && editingFields"
               >&#x2713;</div>
               <div
                 @click.stop="
@@ -57,7 +58,8 @@ export default {
   data: function() {
     return {
       tagBeingEditedIdx: null,
-      tagsLength: this.$store.state.tags.length
+      tagsLength: this.$store.state.tags.length,
+      editingFields: false
     };
   },
   methods: {
@@ -74,12 +76,12 @@ export default {
     editingName(index) {
       this.$refs.tags[index].focus();
       this.tagBeingEditedIdx = index;
-      this.$store.commit("allowEditingFields");
+      this.editingFields = true;
     },
     stopEditingName() {
       this.$refs.tags[this.tagBeingEditedIdx].blur();
       this.tagBeingEditedIdx = null;
-      this.$store.commit("closeEditingFields");
+      this.editingFields = false;
     },
     saveName(tagID) {
       this.$store.commit("editTag", {

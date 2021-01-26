@@ -35,7 +35,6 @@ export default {
   methods: {
     closeMenus() {
       this.$store.commit("closeContextMenu");
-      this.$store.commit("closeEditingFields");
       this.$store.commit("closeAssignedTagsMenu");
     }
   },

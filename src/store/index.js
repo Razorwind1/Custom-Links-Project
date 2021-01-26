@@ -100,9 +100,6 @@ const store = new Vuex.Store({
       },
 
 
-      editingFields: {
-        active: false
-      },
       linkHovered: {
         active: false,
         arg: null
@@ -247,12 +244,6 @@ const store = new Vuex.Store({
       state.events.colorPicker.event = null
     },
     // Other
-    allowEditingFields(state) {
-      state.events.editingFields.active = true
-    },
-    closeEditingFields(state) {
-      state.events.editingFields.active = false
-    },
     linkHovered(state, payload) {
       state.events.linkHovered.active = true
       state.events.linkHovered.arg = payload
