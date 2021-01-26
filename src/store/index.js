@@ -180,7 +180,7 @@ const store = new Vuex.Store({
       const removeIndex = state.tags.findIndex(tag => tag.id === payload.id)
       state.tags.splice(removeIndex, 1)
 
-      state.gridElements.forEach(element => { element.tagsList = element.tagsList.filter(tag => tag !== payload.id) });
+      state.links.forEach(link => { link.tags = link.tags.filter(tag => tag !== payload.id) });
     },
     assignTag(state, payload) {
       const index = state.links.find(gridEl => gridEl.id == payload.linkID).tags.indexOf(payload.tagID);
