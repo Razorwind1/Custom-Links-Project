@@ -43,6 +43,7 @@ export default {
   border-top-left-radius: 15px;
   padding: 7px;
   background: var(--background-color);
+  overflow: auto;
 }
 
 .disable-input {

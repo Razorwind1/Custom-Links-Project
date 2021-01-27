@@ -1,16 +1,24 @@
 <template>
+<!-- 
+    :max-rows="3"
+    :margin="[20, 20]"
+    :is-mirrored="true"
+    :auto-size="true"
+    :use-css-transforms="false"
+    :breakpoints="false"
+    :cols="false"
+ -->
   <grid-layout
     :layout.sync="layout"
-    :col-num="6"
-    :max-rows="3"
-    :row-height="100"
+    :col-num="canvas.colNum"
+    :row-height="link.h"
     :is-draggable="true"
     :is-resizable="true"
     :vertical-compact="false"
     :prevent-collision="true"
     :responsive="false"
-    :style="{ width: '100%', height: '100%' }"
     :use-style-cursor="false"
+    :style="{ minWidth: link.w * canvas.colNum + 'px', height: '100%' }"
   >
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
@@ -61,6 +69,13 @@ export default {
   data() {
     return {
       layout: [],
+      link: {
+        w: 100,
+        h: 100
+      },
+      canvas: {
+        colNum: 6,
+      },
       movingElement: null,
     };
   },
@@ -279,8 +294,8 @@ export default {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-.vue-grid-layout {
-  overflow-y: auto;
+.vue-grid-layout{
+  /* display: block; */
 }
 .vue-grid-item {
   cursor: pointer !important;
