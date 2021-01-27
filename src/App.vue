@@ -105,8 +105,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
 
-  color: var(--main-text-color);
-  background-color: var(--dark-background-color);
+  color: var(--background-text);
+  background-color: var(--background-color);
   flex-direction: column;
 }
 .hidden {
@@ -119,15 +119,15 @@ html {
   border-radius: 10px;
 }
 ::-webkit-scrollbar:hover {
-  background-color: var(--light-background-color);
+  background-color: var(--background-hover);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--dark-background-color);
+  background-color: var(--background-accent);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--active-background-color);
+  background-color: var(--background-accent);
 }
 ::-webkit-scrollbar-button,
 ::-webkit-scrollbar-track-piece,
@@ -148,19 +148,19 @@ html {
 
 input {
   padding: 10px;
-  background-color: var(--dark-background-color);
-  color: var(--main-text-color-text-color);
+  background-color: var(--background-accent);
+  color: var(--background-text);
   border-radius: 3px;
   font-size: 16px;
-  border: 1px solid var(--active-background-color);
-  fill: var(--main-text-color);
+  border: 1px solid var(--background-active);
+  fill: var(--background-text);
   transition: border ease 200ms;
 }
 ::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 input:focus {
-  border: 1px solid var(--main-accent-color);
+  border: 1px solid var(--button-color);
   outline: none;
 }
 .required {

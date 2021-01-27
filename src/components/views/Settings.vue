@@ -6,6 +6,7 @@
         <option value="dark">Dark</option>
         <option value="light">Light</option>
         <option value="darkRed">Dark Red</option>
+        <option value="hufflepuff">Hufflepuff</option>
       </select>
     </div>
     <!--<button @click="getFavicon('https://duckduckgo.com/')">getFavicon Text</button>-->
@@ -79,8 +80,8 @@ export default {
 
 .settings select {
   width: 150px;
-  background-color: var(--dark-background-color);
-  color: var(--main-text-color);
+  background-color: var(--background-accent);
+  color: var(--background-text);
   border: none;
   height: 70%;
   padding: 0 10px;

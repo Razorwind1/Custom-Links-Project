@@ -191,7 +191,7 @@ div.edit-link {
 div.edit-link div.header {
   margin: 5px 0 10px 0;
   padding: 5px 0 15px 0;
-  border-bottom: 2px solid var(--dark-background-color);
+  border-bottom: 2px solid var(--line-color);
   align-items: center;
   justify-content: center;
 }
@@ -226,8 +226,8 @@ div.address-header > div {
 div.address-header div.button {
   font-size: 14px;
   font-style: italic;
-  background-color: var(--dark-background-color);
-  border: 1px solid var(--active-background-color);
+  background-color: var(--background-accent);
+  border: 1px solid var(--background-active);
   padding: 0 5px;
   border-radius: 0;
   border-bottom: none;
@@ -246,7 +246,7 @@ div.address-header div.button:last-child {
   border-top-right-radius: 10px;
 }
 div.address-header div.button.active {
-  background-color: var(--main-accent-color);
+  background-color: var(--button-color);
   opacity: 1;
 }
 
@@ -261,15 +261,15 @@ div.address-input div.button {
   position: absolute;
   right: 0;
   padding: 10px;
-  box-shadow: inset 0 0 1000px var(--main-background-color);
+  box-shadow: inset 0 0 1000px var(--background-color);
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border: 1px solid rgba(1, 1, 1, 0);
-  border-left: 1px solid var(--active-accent-color);
+  border-left: 1px solid var(--button-accent);
   transition: box-shadow 150ms ease-in-out;
 }
 div.address-input div.button:hover {
-  box-shadow: inset 0 0 1000px var(--light-background-color);
+  box-shadow: inset 0 0 1000px var(--background-hover);
 }
 
 div.img-selection {
@@ -278,8 +278,8 @@ div.img-selection {
 div.img-selection .img-container {
   width: 100px;
   height: 100px;
-  background: var(--dark-background-color);
-  border: 1px var(--dark-accent-color) solid;
+  background: var(--background-accent);
+  border: 1px var(--button-accent) solid;
   border-radius: 5px;
 }
 div.img-selection .img-container img {
@@ -295,14 +295,14 @@ div.img-selection > div.img-selection-info {
   flex-direction: column;
 }
 div.img-selection > div.img-selection-info input:focus {
-  border: 1px solid var(--active-background-color);
+  border: 1px solid var(--background-active);
 }
 div.img-selection div.button {
   padding: 15px;
-  background: var(--dark-background-color);
+  background: var(--background-accent);
   border-radius: 50px;
 }
 div.img-selection div.button:hover {
-  background: var(--active-background-color);
+  background: var(--background-active);
 }
 </style>

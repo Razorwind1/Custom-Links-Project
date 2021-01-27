@@ -64,24 +64,24 @@ export default {
   min-width: 150px;
   max-width: 252px;
   border-radius: 5px;
-  border: 1px solid var(--active-background-color);
+  border: 1px solid var(--background-accent);
   cursor: pointer;
   flex-direction: column;
   z-index: 903;
   padding: 0;
 }
 div.save {
-  background-color: var(--light-background-color);
+  background-color: var(--background-color);
   border-radius: 5px 5px 0px 0px;
 }
 div.save:hover {
-  background-color: var(--main-accent-color);
+  background-color: var(--accent-color);
 }
 div.close {
-  background-color: var(--light-background-color);
+  background-color: var(--background-color);
   border-radius: 0px 0px 5px 5px;
 }
 div.close:hover {
-  background-color: rgb(175, 35, 35);
+  background-color: var(--alert-color);
 }
 </style>

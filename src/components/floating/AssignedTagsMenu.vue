@@ -88,9 +88,9 @@ export default {
 .tagsMenu{
   min-width: 100px;
   max-width: 180px;
-  background: var(--dark-background-color);
+  background: var(--background-color);
   border-radius: 5px;
-  border: 1px solid var(--active-background-color);
+  border: 1px solid var(--background-accent);
   padding: 0;
   max-height: 350px;
 }
@@ -117,7 +117,7 @@ export default {
  border-radius: 5px;
 }
 .tagEntry:hover {
- background-color: var(--active-background-color);
+ background-color: var(--background-hover);
 }
 .assignedTagLabel {
  cursor: pointer;
@@ -138,12 +138,11 @@ export default {
  margin-left: 4px;
  border-radius: 50%;
  display: inline-block;
- border: solid var(--active-background-color) 1px;
 }
 .nonAssignedTags {
  border-top-style: solid;
  border-top-width: 2px;
- border-top-color: var(--active-background-color);
+ border-top-color: var(--line-color);
  margin-top: 12px;
 }
 .nonassignedTagLabel {

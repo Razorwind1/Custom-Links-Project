@@ -70,7 +70,7 @@ div.popup-overlay {
   justify-content: center;
 }
 div.popup-container {
-  background-color: var(--main-background-color);
+  background-color: var(--background-color);
   width: 400px;
   height: 80%;
   max-height: 500px;
@@ -89,7 +89,7 @@ div.popup-content {
 div.popup-buttons {
   height: 70px;
   width: 100%;
-  background: var(--dark-background-color);
+  background: var(--background-accent);
   border-radius: inherit;
   justify-content: space-between;
   padding: 10px;
@@ -98,12 +98,19 @@ div.popup-buttons > div {
   padding: 15px;
 }
 div.popup-buttons > div:hover {
-  background-color: var(--light-background-color);
+  background-color: var(--background-hover);
+}
+div.popup-buttons > div:active {
+  background-color: var(--background-active);
 }
 div.popup-buttons > div.button.save {
-  background-color: var(--main-accent-color);
+  background-color: var(--button-color);
+  color: var(--button-text);
 }
 div.popup-buttons > div.button.save:hover {
-  background-color: var(--active-accent-color);
+  background-color: var(--button-hover);
+}
+div.popup-buttons > div.button.save:active {
+  background-color: var(--button-accent);
 }
 </style>

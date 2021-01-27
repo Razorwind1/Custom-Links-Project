@@ -24,9 +24,9 @@ export default {
 .contextMenu {
   min-width: 100px;
   max-width: 180px;
-  background: var(--dark-background-color);
+  background: var(--background-color);
   border-radius: 5px;
-  border: 1px solid var(--active-background-color);
+  border: 1px solid var(--background-accent);
   cursor: pointer;
   flex-direction: column;
 }
@@ -36,6 +36,6 @@ export default {
   width: 100%;
 }
 .contextMenu > div:hover {
-  background: var(--light-background-color);
+  background: var(--background-hover);
 }
 </style>
