@@ -106,7 +106,7 @@ html {
   height: 100%;
 
   color: var(--background-text);
-  background-color: var(--background-color);
+  background-color: var(--background-accent);
   flex-direction: column;
 }
 .hidden {

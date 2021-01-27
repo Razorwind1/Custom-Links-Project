@@ -51,11 +51,11 @@ export default {
   color: var(--background-text);
   width: var(--nav-width);
   height: var(--nav-width);
-  border-radius: 50px;
+  border-radius: 50%;
   margin: 5px 0;
   transition: border-radius 100ms linear;
   background-color: var(--background-accent);
-  box-shadow: 0px 0px 15px 10px var(--background-color) inset;
+  box-shadow: 0px 0px 30px 5px var(--background-accent) inset;
 }
 #nav > div > a:hover {
   background-color: var(--nav-accent);
