@@ -50,7 +50,7 @@ export default {
 <style scoped>
 .container {
   position: absolute;
-  background: var(--dark-background-color);
+  background: var(--background-accent);
   padding: 0;
 }
 </style>

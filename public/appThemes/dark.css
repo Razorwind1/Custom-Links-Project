@@ -1,18 +1,24 @@
-
 :root {
-    --main-text-color: #eeeeee;
-    --secondary-text-color: #111111;
-  
-    --light-background-color: #4d4d4d;
-    --main-background-color: #2c2c2c;
-    --dark-background-color: #202020;
-    --active-background-color: #0e0e0e;
-  
-    --light-accent-color: #70ddbc;
-    --main-accent-color: #407e6b;
-    --dark-accent-color: #127054;
-    --active-accent-color: #034b35;
+    --background-color: #2c2c2c; /*main*/
+    --background-accent: #202020; /*dark*/
+    --background-active: #0e0e0e; /*active*/
+    --background-text: #eeeeee;
+    --background-hover: #4d4d4d; /*light*/
 
-    --dark-alert-color: #791313;
-    --light-alert-color: #ad2020;
-  }
+    --line-color: #202020;
+
+    --nav-accent: #407e6b;
+
+    --button-color: #407e6b;
+    --button-accent: #034b35; /*active/depressed*/
+    --button-text: #eeeeee;
+    --button-hover: #127054;
+
+    --link-color: #202020;
+    --link-text: #eeeeee;
+    --link-hover: #4d4d4d;
+
+    --alert-color: #791313;
+    --alert-text: #eeeeee;
+    --alert-hover: #ad2020;
+}

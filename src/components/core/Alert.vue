@@ -101,7 +101,7 @@ div.alert-overlay {
   justify-content: center;
 }
 div.alert-container {
-  background-color: var(--main-background-color);
+  background-color: var(--background-color);
   width: 400px;
   height: 200px;
   flex-direction: column;
@@ -118,7 +118,7 @@ div.alert-content h1 {
   font-size: 20px;
   padding: 10px;
   opacity: 0.8;
-  border-bottom: 1px solid var(--light-background-color);
+  border-bottom: 1px solid var(--line-color);
 }
 div.alert-content p {
   font-size: 15px;
@@ -129,7 +129,7 @@ div.alert-buttons {
   flex-direction: row-reverse;
   height: 60px;
   width: 100%;
-  background: var(--dark-background-color);
+  background: var(--background-accent);
   border-radius: inherit;
   justify-content: space-between;
   padding: 10px;
@@ -139,19 +139,20 @@ div.alert-buttons > div {
 }
 div.alert-buttons > div:hover {
   opacity: 1;
-  background-color: var(--light-background-color);
+  background-color: var(--background-hover);
 }
 div.alert-buttons > div.button.save {
-  background-color: var(--dark-accent-color);
+  background-color: var(--button-accent);
+  color: var(--alert-text);
 }
 div.alert-buttons > div.button.save:hover {
-  background-color: var(--main-accent-color);
+  background-color: var(--button-hover);
 }
 
 div.alert-buttons > div.button.delete-link {
-  background-color: var(--dark-alert-color);
+  background-color: var(--alert-color);
 }
 div.alert-buttons > div.button.delete-link:hover {
-  background-color: var(--light-alert-color);;
+  background-color: var(--alert-hover);
 }
 </style>

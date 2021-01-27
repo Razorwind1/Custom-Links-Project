@@ -1,18 +1,25 @@
 
 :root {
-    --main-text-color: #1d1d1d;
-    --secondary-text-color: #ececec;
-  
-    --light-background-color: #ffffff;
-    --main-background-color: #e7e7e7;
-    --dark-background-color: #d1d1d1;
-    --active-background-color: #afafaf;
-  
-    --light-accent-color: #92ffde;
-    --main-accent-color: #61d4b2;
-    --dark-accent-color: #50a189;
-    --active-accent-color: #58ffcd;
-    
-    --dark-alert-color: #e06767;
-    --light-alert-color: #f57d7d;
+    --background-color: #e7e7e7; /*main*/
+    --background-accent: #d1d1d1; /*dark*/
+    --background-active: #afafaf; /*active*/
+    --background-text: #1d1d1d;
+    --background-hover: #ffffff; /*light*/
+
+    --line-color: #ffffff;
+
+    --nav-accent: #ffffff;
+
+    --button-color: #61d4b2;
+    --button-accent: #92ffde; /*active/depressed*/
+    --button-text: #ffffff;
+    --button-hover: #50a189;
+
+    --link-color: #dbdbdb;
+    --link-text: #1d1d1d;
+    --link-hover: #cfcfcf;
+
+    --alert-color: #e06767;
+    --alert-text: #ffffff;
+    --alert-hover: #f57d7d;
   }

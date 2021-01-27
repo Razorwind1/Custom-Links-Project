@@ -1,0 +1,24 @@
+:root {
+    --background-color: #2c2c2c; /*main*/
+    --background-accent: #202020; /*dark*/
+    --background-active: #0e0e0e; /*active*/
+    --background-text: #eeeeee;
+    --background-hover: #141403; /*light*/
+
+    --line-color: #e4c722;
+
+    --nav-accent: #e4c722;
+
+    --button-color: #e4c722;
+    --button-accent: #bda623; /*active/depressed*/
+    --button-text: #202020;
+    --button-hover: #eed919;
+
+    --link-color: #202020;
+    --link-text: #e4c722;
+    --link-hover: #0e0e0e;
+
+    --alert-color: #000000;
+    --alert-text: #e4c722;
+    --alert-hover: #c30000;
+}

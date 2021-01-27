@@ -42,7 +42,7 @@ export default {
   flex-grow: 1;
   border-top-left-radius: 15px;
   padding: 7px;
-  background: var(--main-background-color);
+  background: var(--background-color);
 }
 
 .disable-input {

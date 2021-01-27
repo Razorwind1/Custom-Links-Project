@@ -42,29 +42,29 @@ export default {
   padding: 5px;
   border-radius: 15px 15px 0 0;
   justify-content: space-between;
-  background-color: var(--dark-background-color);
+  background-color: var(--background-accent);
 }
 #nav > div {
   flex-direction: column;
 }
 #nav > div > a {
-  color: var(--main-text-color);
+  color: var(--background-text);
   width: var(--nav-width);
   height: var(--nav-width);
   border-radius: 50px;
   margin: 5px 0;
   transition: border-radius 100ms linear;
-  background-color: var(--dark-background-color);
-  box-shadow: 0px 0px 15px 10px var(--main-background-color) inset;
+  background-color: var(--background-accent);
+  box-shadow: 0px 0px 15px 10px var(--background-color) inset;
 }
 #nav > div > a:hover {
-  background-color: var(--light-background-color);
+  background-color: var(--nav-accent);
 }
 #nav > div > a.add-link-button:hover {
   background-color: transparent;
 }
 #nav > div > a.router-link-exact-active {
-  background-color: var(--main-accent-color);
+  background-color: var(--nav-accent);
   border-radius: 15px;
 }
 

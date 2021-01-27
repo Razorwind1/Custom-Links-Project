@@ -127,7 +127,7 @@ input.tagLabel {
  text-overflow: ellipsis;
 }
 input.tagBeingEdited {
-  background-color: var(--light-background-color);
+  background-color: var(--dark-background-color);
   cursor: text;
   padding-right: 40px;
 }
@@ -153,7 +153,7 @@ span.color-dot {
   display: inline-block;
 }
 .tag-entry {
-  border: 2px solid var(--dark-background-color);
+  border: 2px solid var(--background-accent);
   width: 170px;
   display: flex;
   flex-flow: column;
@@ -170,7 +170,7 @@ span.color-dot {
   padding: 4px;
 }
 .tag-entry-top-row > div:hover {
-  background-color: var(--light-background-color);
+  background-color: var(--background-hover);
   border-radius: 5px;
   cursor: pointer;
 }
@@ -185,7 +185,7 @@ span.color-dot {
 .tag-entry-bottom-row {
   margin-left: 10px;
   margin-right: 10px;
-  border-top: 2px solid var(--dark-background-color);
+  border-top: 2px solid var(--background-accent);
   flex-direction: column;
 }
 .associated-link {
@@ -207,7 +207,7 @@ div.tag-list {
 div.tag-list div.header {
   margin: 5px 0 10px 0;
   padding: 5px 0 15px 0;
-  border-bottom: 2px solid var(--dark-background-color);
+  border-bottom: 2px solid var(--line-color);
   align-items: center;
   justify-content: center;
 }
@@ -233,7 +233,8 @@ div.tag-list div.section > h3 {
 
 .new-tag {
   font-size: 15px;
-  background-color: var(--main-accent-color);
+  background-color: var(--button-color);
+  color: var(--button-text);
   padding: 2px 5px;
   align-self: flex-start;
   margin-left: 10px;
@@ -241,9 +242,9 @@ div.tag-list div.section > h3 {
   transition: background-color 150ms ease-in-out;
 }
 .new-tag:hover {
-  background-color: var(--dark-accent-color);
+  background-color: var(--button-hover);
 }
 .new-tag:active {
-  background-color: var(--active-accent-color);
+  background-color: var(--button-accent);
 }
 </style>

@@ -279,45 +279,18 @@ export default {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-
-.tagIndicator-dot {
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-  margin-left: 5px;
-}
-.tagIndicator-bar {
-  color: transparent;
-}
-.tagIndicator-bar:hover {
-  display: inline-block;
-  position: absolute;
-  top: 18px;
-  height: 20px;
-  min-width: 20px;
-  border-radius: 5px;
-  padding: 10px;
-  padding-top: 0px;
-  background-color: inherit;
-
-  font-size: 13px;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans";
-  color: white;
-}
 .vue-grid-layout {
   overflow-y: auto;
 }
 .vue-grid-item {
   cursor: pointer !important;
   transition: background-color 100ms ease-in-out;
-  background-color: var(--dark-background-color);
+  background-color: var(--link-color);
   border-radius: 5px;
+  color: var(--link-text);
 }
 .vue-grid-item:hover {
-  background-color: var(--light-background-color);
+  background-color: var(--link-hover);
 }
 </style>
 

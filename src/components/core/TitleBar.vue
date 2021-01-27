@@ -61,9 +61,9 @@ export default {
 #title-bar {
   height: var(--title-bar-height);
   width: 100%;
-  background-color: var(--dark-background-color);
+  background-color: var(--background-accent);
   -webkit-app-region: drag;
-  border-bottom: var(--main-background-color) 1px solid;
+  border-bottom: var(--background-color) 1px solid;
 }
 #title-bar .content {
   width: 100%;
@@ -83,10 +83,11 @@ export default {
   height: var(--title-bar-height);
 }
 #title-bar .buttons > div:hover {
-  background-color: var(--active-background-color);
+  background-color: var(--background-hover);
 }
 #title-bar .buttons > div:active {
-  background-color: var(--light-background-color);
+  background-color: var(--background-hover);
+  filter:brightness(70%);
 }
 #title-bar .buttons > div.close {
   font-size: 14px;
