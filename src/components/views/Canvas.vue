@@ -1,5 +1,5 @@
 <template>
-<!-- 
+  <!-- 
     :max-rows="3"
     :margin="[20, 20]"
     :is-mirrored="true"
@@ -42,14 +42,20 @@
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
         >
-          
           <div class="assignedTagsIcon">
-            <img src="/assets/svg/freepik/svg/dh/label-tag.svg" alt="Assigned Tags Icon" @click.stop="assignedTagsMenu($event, element)">
+            <img
+              src="/assets/svg/freepik/svg/dh/label-tag.svg"
+              alt="Assigned Tags Icon"
+              @click.stop="assignedTagsMenu($event, element)"
+            />
           </div>
 
           <div class="editIcon">
-            <img src="\assets\icons\edit_white.png" alt="Edit Icon" @click.stop="contextMenuLink($event, element)"
-            >
+            <img
+              src="\assets\icons\edit_white.png"
+              alt="Edit Icon"
+              @click.stop="contextMenuLink($event, element)"
+            />
           </div>
           <div class="img-container">
             <img v-bind:src="getElementImg(element.id, element.img)" />
@@ -71,13 +77,22 @@ export default {
       layout: [],
       link: {
         w: 100,
-        h: 100
+        h: 100,
       },
       canvas: {
         colNum: 6,
       },
       movingElement: null,
+      containerWidth: 0,
     };
+  },
+  computed: {
+    maxLinkX: function () {
+      return Math.max(...this.layout.map((el) => el.x + el.w));
+    },
+    maxCanvasX: function () {
+      return Math.floor(this.containerWidth / this.link.w);
+    },
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -103,12 +118,28 @@ export default {
         });
       });
     },
+    updateGridSize: function (linkMoving) {
+      if (this.containerWidth) {
+        if (this.maxCanvasX > this.canvas.colNum) {
+          this.canvas.colNum = this.maxCanvasX;
+        }
+
+        if (this.maxCanvasX <= this.canvas.colNum) {
+          if (this.maxCanvasX > this.maxLinkX) this.canvas.colNum = this.maxCanvasX;
+          else this.canvas.colNum = this.maxLinkX;
+        }
+
+        if (linkMoving === true) {
+          if (this.maxLinkX === this.canvas.colNum) this.canvas.colNum++;
+        }
+      }
+    },
     open: function (element_address) {
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
       }
-        window.ipcRenderer.send("open", element_address);
+      window.ipcRenderer.send("open", element_address);
     },
     contextMenuLink: function (event, element) {
       this.$store.commit("showContextMenu", {
@@ -184,17 +215,23 @@ export default {
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
+      this.updateGridSize();
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
       this.updateGrid();
     },
-    assignedTagsMenu: function(event, element) {
+    assignedTagsMenu: function (event, element) {
       this.$store.commit("showAssignedTagsMenu", {
         element,
-        event
+        event,
       });
-    }
+    },
+    updateContainerWidth: function (){
+      if (this.$el && this.$el.parentNode)
+        this.containerWidth = this.$el.parentNode.clientWidth
+      this.updateGridSize()
+    },
   },
   created: function () {
     this.updateGrid();
@@ -217,10 +254,21 @@ export default {
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
+
+    this._mouseMove = function (e) {
+      if (e.path.find(el => el.className === "link") !== undefined && e.buttons == 1)
+        this.updateGridSize(true)
+    };
+    document.addEventListener("mousemove", this._mouseMove.bind(this));
+
+    this.updateContainerWidth()
+    window.addEventListener("resize", this.updateContainerWidth);
   },
   beforeDestroy: function () {
     this.unsubscribe();
     document.removeEventListener("keydown", this._keyListener);
+    document.removeEventListener("mousemove", this._mouseMove);
+    window.removeEventListener("resize", this.updateContainerWidth);
   },
 };
 </script>
@@ -236,7 +284,7 @@ export default {
   top: 5px;
   display: none;
 }
-.vue-grid-item:hover .editIcon{
+.vue-grid-item:hover .editIcon {
   display: flex;
 }
 .editIcon img {
@@ -244,7 +292,7 @@ export default {
 }
 .editIcon img:hover {
   filter: brightness(85%);
-  transition: filter 0.1s ease-in-out; 
+  transition: filter 0.1s ease-in-out;
 }
 .assignedTagsIcon {
   position: absolute;
@@ -252,15 +300,15 @@ export default {
   top: 5px;
   display: none;
 }
-.vue-grid-item:hover .assignedTagsIcon{
+.vue-grid-item:hover .assignedTagsIcon {
   display: flex;
 }
 .assignedTagsIcon img {
   width: 13px;
-} 
+}
 .assignedTagsIcon img:hover {
   filter: brightness(85%);
-  transition: filter 0.1s ease-in-out; 
+  transition: filter 0.1s ease-in-out;
 }
 
 .link {
@@ -294,7 +342,7 @@ export default {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-.vue-grid-layout{
+.vue-grid-layout {
   /* display: block; */
 }
 .vue-grid-item {
@@ -308,8 +356,3 @@ export default {
   background-color: var(--link-hover);
 }
 </style>
-
-
-
-
- 

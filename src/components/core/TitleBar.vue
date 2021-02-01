@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import closeMenus from "@/js/helper/closeMenus.js";
+
 export default {
   methods: {
+    closeMenus,
     close: function () {
       window.ipcRenderer.send("close-app");
     },
@@ -51,6 +54,7 @@ export default {
       }
       if (message === "blur") {
         this.windowFocused = false;
+        this.closeMenus()
       }
     });
   },

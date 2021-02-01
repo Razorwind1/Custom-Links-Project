@@ -41,7 +41,7 @@ export default {
 #app-main {
   flex-grow: 1;
   border-top-left-radius: 15px;
-  padding: 7px;
+  margin: 7px;
   background: var(--background-color);
   overflow: auto;
 }
