@@ -72,6 +72,7 @@ export default {
 }
 div.save {
   background-color: var(--background-color);
+  color: var(--background-text);
   border-radius: 5px 5px 0px 0px;
 }
 div.save:hover {
@@ -79,9 +80,11 @@ div.save:hover {
 }
 div.close {
   background-color: var(--background-color);
+  color: var(--background-text);
   border-radius: 0px 0px 5px 5px;
 }
 div.close:hover {
-  background-color: var(--alert-color);
+  background-color: var(--alert-hover);
+  color: var(--alert-text);
 }
 </style>

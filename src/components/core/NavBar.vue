@@ -61,7 +61,7 @@ export default {
   background-color: var(--nav-accent);
 }
 #nav > div > a.add-link-button:hover {
-  background-color: transparent;
+  
 }
 #nav > div > a.router-link-exact-active {
   background-color: var(--nav-accent);
