@@ -85,12 +85,11 @@ export default {
 
 
     this._keyListener = function (e) {
-      if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
-        if (e.target.tagName !== "INPUT" && this.stateHistory.length > 1){
+      if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
+        if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA" && this.stateHistory.length > 1){
           this.stateHistory.pop()
           this.$store.commit("setState", this.stateHistory.pop())
         }
-
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
