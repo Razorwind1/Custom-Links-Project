@@ -119,7 +119,9 @@ export default {
       });
     },
     updateGridSize: function (linkMoving) {
-      if (this.containerWidth) {
+      if (linkMoving === true) {
+        if (this.maxLinkX === this.canvas.colNum) this.canvas.colNum++;
+      } else if (this.containerWidth) {
         if (this.maxCanvasX > this.canvas.colNum) {
           this.canvas.colNum = this.maxCanvasX;
         }
@@ -127,10 +129,6 @@ export default {
         if (this.maxCanvasX <= this.canvas.colNum) {
           if (this.maxCanvasX > this.maxLinkX) this.canvas.colNum = this.maxCanvasX;
           else this.canvas.colNum = this.maxLinkX;
-        }
-
-        if (linkMoving === true) {
-          if (this.maxLinkX === this.canvas.colNum) this.canvas.colNum++;
         }
       }
     },
@@ -215,7 +213,6 @@ export default {
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
-      this.updateGridSize();
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
@@ -227,10 +224,10 @@ export default {
         event,
       });
     },
-    updateContainerWidth: function (){
+    updateContainerWidth: function () {
       if (this.$el && this.$el.parentNode)
-        this.containerWidth = this.$el.parentNode.clientWidth
-      this.updateGridSize()
+        this.containerWidth = this.$el.parentNode.clientWidth;
+      this.updateGridSize();
     },
   },
   created: function () {
@@ -256,12 +253,16 @@ export default {
     document.addEventListener("keydown", this._keyListener.bind(this));
 
     this._mouseMove = function (e) {
-      if (e.path.find(el => el.className === "link") !== undefined && e.buttons == 1)
-        this.updateGridSize(true)
+      if (e.path.find((el) => el.className === "link") !== undefined && e.buttons === 1)
+        this.updateGridSize(true);
+      if (e.buttons !== 1) {
+        this.updateGridSize();
+        this.movingElement = null;
+      }
     };
     document.addEventListener("mousemove", this._mouseMove.bind(this));
 
-    this.updateContainerWidth()
+    this.updateContainerWidth();
     window.addEventListener("resize", this.updateContainerWidth);
   },
   beforeDestroy: function () {
