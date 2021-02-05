@@ -11,6 +11,7 @@
   <grid-layout
     :layout.sync="layout"
     :col-num="canvas.colNum"
+    :margin="[canvas.margin, canvas.margin]"
     :row-height="link.h"
     :is-draggable="true"
     :is-resizable="true"
@@ -18,7 +19,7 @@
     :prevent-collision="true"
     :responsive="false"
     :use-style-cursor="false"
-    :style="{ minWidth: link.w * canvas.colNum + 'px', height: '100%' }"
+    :style="{ minWidth: (link.w + canvas.margin) * canvas.colNum + 'px', height: '100%' }"
   >
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
@@ -38,7 +39,7 @@
       >
         <div
           class="link"
-          v-bind:style="getStyling(element.style)"
+          :style="{...getStyling(element.style), marginBottom: canvas.margin + 'px'}"
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
         >
@@ -81,6 +82,7 @@ export default {
       },
       canvas: {
         colNum: 6,
+        margin: 10
       },
       movingElement: null,
       containerWidth: 0,
@@ -91,7 +93,7 @@ export default {
       return Math.max(...this.layout.map((el) => el.x + el.w));
     },
     maxCanvasX: function () {
-      return Math.floor(this.containerWidth / this.link.w);
+      return Math.floor(this.containerWidth / (this.link.w + this.canvas.margin));
     },
   },
   components: {
@@ -253,14 +255,18 @@ export default {
     document.addEventListener("keydown", this._keyListener.bind(this));
 
     this._mouseMove = function (e) {
-      if (e.path.find((el) => el.className === "link") !== undefined && e.buttons === 1)
-        this.updateGridSize(true);
       if (e.buttons !== 1) {
         this.updateGridSize();
         this.movingElement = null;
       }
     };
     document.addEventListener("mousemove", this._mouseMove.bind(this));
+
+    this._mouseDown = function (e) {
+      if (e.path.find((el) => el.className === "link") !== undefined && e.buttons === 1)
+        this.updateGridSize(true);
+    };
+    document.addEventListener("mousedown", this._mouseDown.bind(this));
 
     this.updateContainerWidth();
     window.addEventListener("resize", this.updateContainerWidth);
