@@ -24,6 +24,12 @@ import importCss from "@/js/helper/importCss.js";
 import closeMenus from "@/js/helper/closeMenus.js";
 
 export default {
+  data() {
+    return {
+      stateHistory: [],
+      stateHistoryCount: 50
+    };
+  },
   components: {
     TitleBar,
     AppContent,
@@ -39,6 +45,7 @@ export default {
   created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
     if (state) this.$store.commit("setState", state);
+    this.stateHistory.push(JSON.parse(JSON.stringify(state)))
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
@@ -62,18 +69,33 @@ export default {
 
     this.$store.watch(
       (state, getters) => getters.stateUserData,
-      newValue => {
+      (newValue) => {
         window.ipcRenderer.send("state-changed", newValue);
+        if (this.stateHistory.length > this.stateHistoryCount)
+          this.stateHistory.shift()
+
+        this.stateHistory.push(JSON.parse(JSON.stringify(newValue)))
       },
       {
         deep: true
       }
     );
 
+
+    this._keyListener = function (e) {
+      if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
+        if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA" && this.stateHistory.length > 1){
+          this.stateHistory.pop()
+          this.$store.commit("setState", this.stateHistory.pop())
+        }
+      }
+    };
+    document.addEventListener("keydown", this._keyListener.bind(this));
+
     window.addEventListener("resize", () => {
       this.closeMenus()
     });
-
+    
     importCss(this.$store.state.theme)
 
     window.ipcRenderer.send("app-created");
@@ -82,9 +104,9 @@ export default {
 </script>
 
 <style>
-:root{
-    --nav-width: 50px;
-    --title-bar-height: 30px;
+:root {
+  --nav-width: 50px;
+  --title-bar-height: 30px;
 }
 * {
   margin: 0;
@@ -106,7 +128,7 @@ html {
   height: 100%;
 
   color: var(--background-text);
-  background-color: var(--background-color);
+  background-color: var(--background-accent);
   flex-direction: column;
 }
 .hidden {
