@@ -21,6 +21,7 @@ import ContextMenu from "@/components/floating/ContextMenu.vue";
 import ColorPicker from "@/components/floating/ColorPicker.vue";
 import AssignedTagsMenu from "@/components/floating/AssignedTagsMenu.vue";
 import importCss from "@/js/helper/importCss.js";
+import closeMenus from "@/js/helper/closeMenus.js";
 
 export default {
   data() {
@@ -39,10 +40,7 @@ export default {
     AssignedTagsMenu
   },
   methods: {
-    closeMenus() {
-      this.$store.commit("closeContextMenu");
-      this.$store.commit("closeAssignedTagsMenu");
-    }
+    closeMenus
   },
   created: function() {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -94,8 +92,10 @@ export default {
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
 
-    window.addEventListener("resize", this.closeMenus());
-
+    window.addEventListener("resize", () => {
+      this.closeMenus()
+    });
+    
     importCss(this.$store.state.theme)
 
     window.ipcRenderer.send("app-created");

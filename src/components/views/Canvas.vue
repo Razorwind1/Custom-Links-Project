@@ -1,16 +1,25 @@
 <template>
+  <!-- 
+    :max-rows="3"
+    :margin="[20, 20]"
+    :is-mirrored="true"
+    :auto-size="true"
+    :use-css-transforms="false"
+    :breakpoints="false"
+    :cols="false"
+ -->
   <grid-layout
     :layout.sync="layout"
-    :col-num="6"
-    :max-rows="3"
-    :row-height="100"
+    :col-num="canvas.colNum"
+    :margin="[canvas.margin, canvas.margin]"
+    :row-height="link.h"
     :is-draggable="true"
     :is-resizable="true"
     :vertical-compact="false"
     :prevent-collision="true"
     :responsive="false"
-    :style="{ width: '100%', height: '100%' }"
     :use-style-cursor="false"
+    :style="{ minWidth: (link.w + canvas.margin) * canvas.colNum + 'px', height: '100%' }"
   >
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
@@ -30,18 +39,24 @@
       >
         <div
           class="link"
-          v-bind:style="getStyling(element.style)"
+          :style="{...getStyling(element.style), marginBottom: canvas.margin + 'px'}"
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
         >
-          
           <div class="assignedTagsIcon">
-            <img src="/assets/svg/freepik/svg/dh/label-tag.svg" alt="Assigned Tags Icon" @click.stop="assignedTagsMenu($event, element)">
+            <img
+              src="/assets/svg/freepik/svg/dh/label-tag.svg"
+              alt="Assigned Tags Icon"
+              @click.stop="assignedTagsMenu($event, element)"
+            />
           </div>
 
           <div class="editIcon">
-            <img src="\assets\icons\edit_white.png" alt="Edit Icon" @click.stop="contextMenuLink($event, element)"
-            >
+            <img
+              src="\assets\icons\edit_white.png"
+              alt="Edit Icon"
+              @click.stop="contextMenuLink($event, element)"
+            />
           </div>
           <div class="img-container">
             <img v-bind:src="getElementImg(element.id, element.img)" />
@@ -61,8 +76,25 @@ export default {
   data() {
     return {
       layout: [],
+      link: {
+        w: 100,
+        h: 100,
+      },
+      canvas: {
+        colNum: 6,
+        margin: 10
+      },
       movingElement: null,
+      containerWidth: 0,
     };
+  },
+  computed: {
+    maxLinkX: function () {
+      return Math.max(...this.layout.map((el) => el.x + el.w));
+    },
+    maxCanvasX: function () {
+      return Math.floor(this.containerWidth / (this.link.w + this.canvas.margin));
+    },
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -88,12 +120,26 @@ export default {
         });
       });
     },
+    updateGridSize: function (linkMoving) {
+      if (linkMoving === true) {
+        if (this.maxLinkX === this.canvas.colNum) this.canvas.colNum++;
+      } else if (this.containerWidth) {
+        if (this.maxCanvasX > this.canvas.colNum) {
+          this.canvas.colNum = this.maxCanvasX;
+        }
+
+        if (this.maxCanvasX <= this.canvas.colNum) {
+          if (this.maxCanvasX > this.maxLinkX) this.canvas.colNum = this.maxCanvasX;
+          else this.canvas.colNum = this.maxLinkX;
+        }
+      }
+    },
     open: function (element_address) {
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
       }
-        window.ipcRenderer.send("open", element_address);
+      window.ipcRenderer.send("open", element_address);
     },
     contextMenuLink: function (event, element) {
       this.$store.commit("showContextMenu", {
@@ -174,12 +220,17 @@ export default {
       this.$store.commit("setLinkSize", { id, newH, newW });
       this.updateGrid();
     },
-    assignedTagsMenu: function(event, element) {
+    assignedTagsMenu: function (event, element) {
       this.$store.commit("showAssignedTagsMenu", {
         element,
-        event
+        event,
       });
-    }
+    },
+    updateContainerWidth: function () {
+      if (this.$el && this.$el.parentNode)
+        this.containerWidth = this.$el.parentNode.clientWidth;
+      this.updateGridSize();
+    },
   },
   created: function () {
     this.updateGrid();
@@ -202,10 +253,29 @@ export default {
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
+
+    this._mouseMove = function (e) {
+      if (e.buttons !== 1) {
+        this.updateGridSize();
+        this.movingElement = null;
+      }
+    };
+    document.addEventListener("mousemove", this._mouseMove.bind(this));
+
+    this._mouseDown = function (e) {
+      if (e.path.find((el) => el.className === "link") !== undefined && e.buttons === 1)
+        this.updateGridSize(true);
+    };
+    document.addEventListener("mousedown", this._mouseDown.bind(this));
+
+    this.updateContainerWidth();
+    window.addEventListener("resize", this.updateContainerWidth);
   },
   beforeDestroy: function () {
     this.unsubscribe();
     document.removeEventListener("keydown", this._keyListener);
+    document.removeEventListener("mousemove", this._mouseMove);
+    window.removeEventListener("resize", this.updateContainerWidth);
   },
 };
 </script>
@@ -221,7 +291,7 @@ export default {
   top: 5px;
   display: none;
 }
-.vue-grid-item:hover .editIcon{
+.vue-grid-item:hover .editIcon {
   display: flex;
 }
 .editIcon img {
@@ -229,7 +299,7 @@ export default {
 }
 .editIcon img:hover {
   filter: brightness(85%);
-  transition: filter 0.1s ease-in-out; 
+  transition: filter 0.1s ease-in-out;
 }
 .assignedTagsIcon {
   position: absolute;
@@ -237,15 +307,15 @@ export default {
   top: 5px;
   display: none;
 }
-.vue-grid-item:hover .assignedTagsIcon{
+.vue-grid-item:hover .assignedTagsIcon {
   display: flex;
 }
 .assignedTagsIcon img {
   width: 13px;
-} 
+}
 .assignedTagsIcon img:hover {
   filter: brightness(85%);
-  transition: filter 0.1s ease-in-out; 
+  transition: filter 0.1s ease-in-out;
 }
 
 .link {
@@ -280,7 +350,7 @@ export default {
   cursor: pointer;
 }
 .vue-grid-layout {
-  overflow-y: auto;
+  /* display: block; */
 }
 .vue-grid-item {
   cursor: pointer !important;
@@ -293,8 +363,3 @@ export default {
   background-color: var(--link-hover);
 }
 </style>
-
-
-
-
- 
