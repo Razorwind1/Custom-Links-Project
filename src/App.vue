@@ -43,8 +43,8 @@ export default {
     closeMenus
   },
   created: function() {
-    const state = window.ipcRenderer.sendSync("state-read");
-    if (state) this.$store.commit("setState", state);
+    const state = window.ipcRenderer.sendSync("state-read")
+    if (state) this.$store.commit("setState", state)
     this.stateHistory.push(JSON.parse(JSON.stringify(state)))
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
@@ -137,7 +137,8 @@ html {
 
 /*   SCROLLBAR   */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 10px;
 }
 ::-webkit-scrollbar:hover {
@@ -193,5 +194,11 @@ span.required-text {
   font-size: 12px;
   margin-top: -5px;
   margin-left: 5px;
+}
+
+.text-overflow{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

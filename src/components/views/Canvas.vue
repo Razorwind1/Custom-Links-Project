@@ -39,7 +39,7 @@
       >
         <div
           class="link"
-          :style="{...getStyling(element.style), marginBottom: canvas.margin + 'px'}"
+          :style="getStyling(element.style)"
           @click="open(element.address)"
           @contextmenu.stop="contextMenuLink($event, element)"
         >
@@ -59,9 +59,9 @@
             />
           </div>
           <div class="img-container">
-            <img v-bind:src="getElementImg(element.id, element.img)" />
+            <img v-bind:src="getLinkImg(element.id, element.img)" />
           </div>
-          <label class="label">{{ element.label }}</label>
+          <label class="label text-overflow">{{ element.label }}</label>
         </div>
       </grid-item>
     </div>
@@ -82,7 +82,7 @@ export default {
       },
       canvas: {
         colNum: 6,
-        margin: 10
+        margin: 10,
       },
       movingElement: null,
       containerWidth: 0,
@@ -102,29 +102,31 @@ export default {
   },
   methods: {
     updateGrid: function () {
-      const links = this.$store.state.links;
+      const layoutActive = this.$store.state.layouts.find(
+        (layout) => layout.active === true
+      );
       this.layout = [];
 
-      links.forEach((element) => {
-        this.layout.push({
-          id: element.id,
-          x: element.pos.x,
-          y: element.pos.y,
-          w: element.pos.sizeX,
-          h: element.pos.sizeY,
-          i: element.id,
-          img: element.content.img,
-          style: element.style,
-          label: element.content.label,
-          address: element.content.address,
+      if (layoutActive)
+        layoutActive.items.forEach((element) => {
+          const link = this.$store.getters.linkFromId(element.id);
+          this.layout.push({
+            id: element.id,
+            x: element.pos.x,
+            y: element.pos.y,
+            w: element.pos.sizeX,
+            h: element.pos.sizeY,
+            i: element.id,
+            img: link.content.img,
+            style: link.style,
+            label: link.content.label,
+            address: link.content.address,
+          });
         });
-      });
     },
-    updateGridSize: function (linkMoving) {
-      if (linkMoving === true) {
-        if (this.maxLinkX === this.canvas.colNum) this.canvas.colNum++;
-      } else if (this.containerWidth) {
-        if (this.maxCanvasX > this.canvas.colNum) {
+    updateGridSize: function () {
+      if (this.containerWidth) {
+        if (this.maxCanvasX >= this.canvas.colNum) {
           this.canvas.colNum = this.maxCanvasX;
         }
 
@@ -157,6 +159,13 @@ export default {
                 type: "delete-link",
                 id: element.id,
               });
+            },
+          },
+          {
+            label: "Edit Tags",
+            click: () => {
+              this.$store.commit("closeContextMenu");
+              this.assignedTagsMenu(event, element);
             },
           },
         ],
@@ -198,7 +207,7 @@ export default {
         type: "add-link",
       });
     },
-    getElementImg: function (id, url) {
+    getLinkImg: function (id, url) {
       const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
         url,
@@ -208,17 +217,22 @@ export default {
     },
     getStyling: function (styleName) {
       const styleObject = this.$store.getters.styleFromName(styleName);
-      return styleObject;
+      if (styleObject[0])
+        return { ...styleObject[0], marginBottom: this.canvas.margin + "px" };
+      else return { marginBottom: this.canvas.margin + "px" };
     },
     moveEvent: function (i) {
       this.movingElement = i;
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
+      this.updateGrid()
+      this.updateContainerWidth()
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
       this.updateGrid();
+      this.updateContainerWidth()
     },
     assignedTagsMenu: function (event, element) {
       this.$store.commit("showAssignedTagsMenu", {
@@ -228,7 +242,7 @@ export default {
     },
     updateContainerWidth: function () {
       if (this.$el && this.$el.parentNode)
-        this.containerWidth = this.$el.parentNode.clientWidth;
+        this.containerWidth = this.$el.parentNode.offsetWidth;
       this.updateGridSize();
     },
   },
@@ -256,17 +270,10 @@ export default {
 
     this._mouseMove = function (e) {
       if (e.buttons !== 1) {
-        this.updateGridSize();
         this.movingElement = null;
       }
     };
     document.addEventListener("mousemove", this._mouseMove.bind(this));
-
-    this._mouseDown = function (e) {
-      if (e.path.find((el) => el.className === "link") !== undefined && e.buttons === 1)
-        this.updateGridSize(true);
-    };
-    document.addEventListener("mousedown", this._mouseDown.bind(this));
 
     this.updateContainerWidth();
     window.addEventListener("resize", this.updateContainerWidth);
@@ -344,9 +351,6 @@ export default {
   max-height: 20%;
   width: 100%;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
 }
 .vue-grid-layout {

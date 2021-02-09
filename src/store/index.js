@@ -11,12 +11,6 @@ const store = new Vuex.Store({
     links: [
       {
         id: 0,
-        pos: {
-          x: 0,
-          y: 0,
-          sizeX: 1,
-          sizeY: 1
-        },
         type: "file",
         style: "gameStyle",
         tags: [1, 2],
@@ -28,12 +22,6 @@ const store = new Vuex.Store({
       },
       {
         id: 1,
-        pos: {
-          x: 0,
-          y: 1,
-          sizeX: 1,
-          sizeY: 1
-        },
         type: "url",
         style: "codingStyle",
         tags: [3],
@@ -43,6 +31,34 @@ const store = new Vuex.Store({
           img: "github_icon.jpg",
         }
       },
+    ],
+    layouts: [
+      {
+        id: "ofjwof213123",
+        active: true,
+        name: "Gaming",
+        color: "#521",
+        items: [
+          {
+            id: 0,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
+          {
+            id: 1,
+            pos: {
+              x: 0,
+              y: 1,
+              sizeX: 1,
+              sizeY: 1
+            },
+          }
+        ]
+      }
     ],
     styles: [
       {
@@ -140,14 +156,14 @@ const store = new Vuex.Store({
       state.links.splice(removeIndex, 1)
     },
     setLinkPosition(state, payload) {
-      const link = state.links.find(link => link.id === payload.id)
+      const link = state.layouts.find(layout => layout.active === true).items.find(link => link.id === payload.id)
       if (link) {
         link.pos.x = payload.newX
         link.pos.y = payload.newY
       }
     },
     setLinkSize(state, payload) {
-      const link = state.links.find(link => link.id === payload.id)
+      const link = state.layouts.find(layout => layout.active === true).items.find(link => link.id === payload.id)
       if (link) {
         link.pos.sizeX = payload.newW
         link.pos.sizeY = payload.newH
@@ -245,6 +261,14 @@ const store = new Vuex.Store({
     },
     linksFromTag: (state) => (tagID) => {
       return state.links.filter(link => link.tags.includes(tagID))
+    },
+    // Layout Getters
+    activateLayout: (state) => (layoutId) => {
+      state.layouts.forEach(layout => layout.active = false)
+      const layout = state.layouts.find(layout => layout.id = layoutId)
+
+      if (layout)
+        layout.active = true
     },
     // Style Getters
     styleFromName: (state) => (styleName) => {
