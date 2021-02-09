@@ -5,6 +5,8 @@
     class="tagsMenu"
   >
   <div @click.stop>
+    <h4 :style="$store.getters.styleFromName(link.style)" class="text-overflow">{{link.content.label}}</h4>
+    <hr>
     <div class="header">Assigned Tags</div>
     <div
       class="tagEntry"
@@ -47,9 +49,11 @@ import floating from "@/components/floating/Floating.vue";
 export default {
   data: function () {
     let linkID = this.$store.state.events.assignedTagsMenu.arg.element.id;
+    let link = this.$store.getters.linkFromId(linkID);
     let assignedTags = this.$store.getters.tagsFromLinkId(linkID);
     return {
       linkID,
+      link,
       assignedTags,
       nonassignedTags: this.$store.state.tags
         .map((tag) => tag.id)
@@ -85,6 +89,16 @@ export default {
 </script>
 
 <style scoped>
+h4 {
+  margin: 0;
+  color: var(--text-accent);
+}
+hr{
+  height: 0px;
+  border: none;
+  border-bottom: 1px solid var(--line-accent);
+  outline: none;
+}
 .tagsMenu{
   min-width: 100px;
   max-width: 180px;

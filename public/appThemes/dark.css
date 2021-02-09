@@ -1,24 +1,26 @@
 :root {
-    --background-color: #2c2c2c; /*main*/
-    --background-accent: #202020; /*dark*/
-    --background-active: #0e0e0e; /*active*/
-    --background-text: #eeeeee;
-    --background-hover: #4d4d4d; /*light*/
+  --background-color: #2c2c2c; /*main*/
+  --background-accent: #202020; /*dark*/
+  --background-active: #0e0e0e; /*active*/
+  --background-hover: #4d4d4d; /*light*/
+  --background-text: #eeeeee;
 
-    --line-color: #202020;
+  --line-color: #202020;
 
-    --nav-accent: #407e6b;
+  --line-accent: #005f43;
+  --nav-accent: #407e6b;
+  --text-accent: #3cbb95;
 
-    --button-color: #407e6b;
-    --button-accent: #034b35; /*active/depressed*/
-    --button-text: #eeeeee;
-    --button-hover: #127054;
+  --button-color: #407e6b;
+  --button-accent: #034b35; /*active/depressed*/
+  --button-text: #eeeeee;
+  --button-hover: #127054;
 
-    --link-color: #202020;
-    --link-text: #eeeeee;
-    --link-hover: #4d4d4d;
+  --link-color: #202020;
+  --link-text: #eeeeee;
+  --link-hover: #4d4d4d;
 
-    --alert-color: #791313;
-    --alert-text: #eeeeee;
-    --alert-hover: #ad2020;
+  --alert-color: #791313;
+  --alert-text: #eeeeee;
+  --alert-hover: #ad2020;
 }

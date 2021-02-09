@@ -3,7 +3,7 @@
     <div
       v-for="(element, index) in this.$store.state.events.contextMenu.arg"
       :key="index"
-      @click="element.click"
+      @click.stop="element.click"
     >
       {{ element.label }}
     </div>
