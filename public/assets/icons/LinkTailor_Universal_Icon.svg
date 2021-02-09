@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.0 r15299"
-   sodipodi:docname="LinkTailor_Icon.svg"
+   sodipodi:docname="LinkTailor_Universal_Icon.svg"
    inkscape:export-filename="C:\Users\Daniel\Dropbox\D-UC Homework\Semester 10 - SenDes2 (Spring 2020)\LinkTailor_Universal_Icon.png"
    inkscape:export-xdpi="250.08"
    inkscape:export-ydpi="250.08">
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.69999999"
-     inkscape:cx="355.01574"
-     inkscape:cy="449.42836"
+     inkscape:zoom="0.24748737"
+     inkscape:cx="840.75463"
+     inkscape:cy="876.2564"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -58,7 +58,7 @@
      id="layer1"
      transform="translate(0,-87)">
     <path
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.58711946;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:#f0f0f0;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.58711946;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        d="m 143.63335,174.08226 c 17.42321,14.85213 24.63584,14.21668 41.7868,13.35079 L 106.95813,294.42872 28.49611,187.43306 c 20.610337,5.15972 38.186864,-9.11175 44.169494,-13.29311 25.471305,10.13041 53.133056,5.61283 70.967746,-0.0576 z"
        id="rect3680-8-5"
        inkscape:connector-curvature="0"
@@ -90,14 +90,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssss" />
     <ellipse
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.71556234;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:#f0f0f0;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.71556234;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="path4512-7-2-16-5-8"
        cx="120.9808"
        cy="158.70934"
        rx="10.244726"
        ry="4.8072605" />
     <ellipse
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.71556246;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="opacity:1;fill:#f0f0f0;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.71556246;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="path4512-7-2-16-5-8-0"
        cx="94.819542"
        cy="158.43312"
