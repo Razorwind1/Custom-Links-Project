@@ -2,18 +2,18 @@
   <div id="nav">
     <div>
       <router-link to="/" class="button">
-        <img src="/assets/svg/freepik/svg/008-home (2).svg" />
+        <img src="/assets/icons/freepik/svg/008-home (2).svg" />
       </router-link>
       <a class="add-link-button button" @click="addLink">
-        <img src="/assets/svg/freepik/png/051-add.png" />
+        <img src="/assets/icons/freepik/png/051-add.png" />
       </a>
     </div>
     <div>
       <a class="tag-list-button button" @click="tagList">
-        <img src="/assets/svg/freepik/svg/dh/label-tag.svg" />
+        <img src="/assets/icons/label-tag.svg" />
       </a>
       <router-link to="/settings" class="button">
-        <img src="/assets/svg/freepik/svg/002-settings (2).svg" />
+        <img src="/assets/icons/freepik/svg/002-settings (2).svg" />
       </router-link>
     </div>
   </div>
