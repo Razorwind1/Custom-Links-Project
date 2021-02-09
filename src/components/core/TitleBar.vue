@@ -2,7 +2,7 @@
   <div id="title-bar" :class="[windowFocused ? 'focused' : '']">
     <div v-if="!windowMaximized" class="top-resize"></div>
     <div class="content">
-      <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
+      <img src="/assets/icons/LinkTailor_Universal_Icon.svg" />
       <h1 class="app-title">Tailor Link</h1>
     </div>
     <div class="buttons">
@@ -76,8 +76,9 @@ export default {
   align-items: center;
 }
 #title-bar .content img {
-  height: 13px;
+  height: 20px;
   margin-right: 3px;
+  margin-top: -2px;
 }
 #title-bar .buttons {
   -webkit-app-region: no-drag;
@@ -112,6 +113,7 @@ export default {
 
 #title-bar .app-title {
   font-size: 15px;
+  margin-top: 1px;
 }
 
 #title-bar .buttons,
