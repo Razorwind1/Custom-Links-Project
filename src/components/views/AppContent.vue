@@ -1,6 +1,7 @@
 <template>
   <div
     id="app-content"
+    class="collapse-side-bar"
     :class="[
       this.$store.state.events.popup.active ||
       this.$store.state.events.alert.active ||
@@ -9,20 +10,26 @@
         ? 'disable-input'
         : '',
     ]"
+    @click="$event.currentTarget.classList.toggle('collapse-side-bar')"
   >
     <NavBar />
     <div id="app-main">
       <router-view />
+    </div>
+    <div id="side-bar">
+      <Links />
     </div>
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/core/NavBar.vue";
+import Links from "@/components/core/Links.vue";
 
 export default {
   components: {
     NavBar,
+    Links,
   },
   props: {
     popupVisible: Boolean,
@@ -47,5 +54,13 @@ export default {
 
 .disable-input {
   pointer-events: none;
+}
+
+#side-bar {
+  width: 300px;
+  transition: width ease-in 100ms;
+}
+div.collapse-side-bar #side-bar {
+  width: 0;
 }
 </style>

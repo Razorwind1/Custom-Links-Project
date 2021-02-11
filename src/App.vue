@@ -118,8 +118,9 @@ export default {
 * div {
   display: flex;
 }
-html {
+html, body {
   overflow: hidden;
+  height: 100%;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

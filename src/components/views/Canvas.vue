@@ -70,7 +70,7 @@
 
 <script>
 import VueGridLayout from "vue-grid-layout";
-import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+import getLinkImg from "@/js/img/getLinkImg.js";
 
 export default {
   data() {
@@ -207,14 +207,7 @@ export default {
         type: "add-link",
       });
     },
-    getLinkImg: function (id, url) {
-      const imgBuffer = window.ipcRenderer.sendSync("get-image-buffer", {
-        id,
-        url,
-      }).buffer;
-      const imgUrl = imgUrlFromBuffer(imgBuffer);
-      return imgUrl;
-    },
+    getLinkImg,
     getStyling: function (styleName) {
       const styleObject = this.$store.getters.styleFromName(styleName);
       if (styleObject[0])
