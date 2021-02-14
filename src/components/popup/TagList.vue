@@ -39,7 +39,11 @@
               >
                 <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
               </div>
-              <div class="xDeleteTag" @click="xDeleteTag(tag.id)">&#9932;</div>
+              <div class="delete-button">
+                <a class="delete-tag" @click="xDeleteTag(tag.id)">
+                  <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
+                </a>
+              </div>
             </div>
             <div class="tag-entry-bottom-row">
               <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
@@ -246,5 +250,9 @@ div.tag-list div.section > h3 {
 }
 .new-tag:active {
   background-color: var(--button-accent);
+}
+div.tag-list div.delete-button > a.delete-tag > img {
+  width: 117%;
+  margin: 3px bold;
 }
 </style>
