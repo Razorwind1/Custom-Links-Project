@@ -40,8 +40,8 @@
         <div
           class="link"
           :style="getStyling(element.style)"
-          @click="open(element.address, element.type)"
-          @contextmenu.stop="contextMenuLink($event, element)"
+          @click="open(element.id)"
+          @contextmenu.stop="contextMenuLink($event, element.id)"
         >
           <div class="assignedTagsIcon">
             <img
@@ -55,7 +55,7 @@
             <img
               src="\assets\icons\edit_white.png"
               alt="Edit Icon"
-              @click.stop="contextMenuLink($event, element)"
+              @click.stop="contextMenuLink($event, element.id)"
             />
           </div>
           <div class="img-container">
@@ -72,7 +72,7 @@
 import VueGridLayout from "vue-grid-layout";
 import getLinkImg from "@/js/img/getLinkImg.js";
 import openLink from "@/js/link/open.js";
-import contextMenuLinkFunc from "@/js/link/contextMenu.js";
+import contextMenuLink from "@/js/link/contextMenu.js";
 
 export default {
   data() {
@@ -122,8 +122,6 @@ export default {
             img: link.content.img,
             style: link.style,
             label: link.content.label,
-            address: link.content.address,
-            type: link.type,
           });
         });
     },
@@ -139,15 +137,15 @@ export default {
         }
       }
     },
-    open: function (element_address, element_type) {
+    open: function (elementId) {
       if (this.movingElement !== null) {
         this.movingElement = null;
         return;
       }
-      openLink(element_address, element_type).bind(this);
+      openLink.bind(this)(elementId);
     },
-    contextMenuLink: function ($event, element) {
-      contextMenuLinkFunc.bind(this)($event, element);
+    contextMenuLink: function ($event, elementId) {
+      contextMenuLink.bind(this)($event, elementId);
     },
     contextMenuCanvas: function (event) {
       this.$store.commit("showContextMenu", {
@@ -156,7 +154,7 @@ export default {
             label: "Open All",
             click: () => {
               this.layout.forEach((element) => {
-                this.open(element.address);
+                this.open(element.id);
               });
             },
           },
@@ -185,13 +183,9 @@ export default {
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
-      this.updateGrid();
-      this.updateContainerWidth();
     },
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
-      this.updateGrid();
-      this.updateContainerWidth();
     },
     updateContainerWidth: function () {
       this.$store.commit("toggleSidebar", {resizing: true})

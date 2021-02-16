@@ -158,6 +158,11 @@ const store = new Vuex.Store({
     deleteLink(state, payload) {
       const removeIndex = state.links.findIndex(link => link.id === payload.id)
       state.links.splice(removeIndex, 1)
+
+      state.layouts.forEach(layout => {
+        const removeIndex = layout.items.findIndex(link => link.id === payload.id)
+        if (removeIndex !== -1) layout.items.splice(removeIndex, 1)
+      })
     },
     setLinkPosition(state, payload) {
       const link = state.layouts.find(layout => layout.active === true).items.find(link => link.id === payload.id)

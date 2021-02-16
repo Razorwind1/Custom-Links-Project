@@ -1,5 +1,6 @@
-module.exports = function (event, element) {
-  console.log(this)
+module.exports = function (event, id) {
+  const element = this.$store.getters.linkFromId(id)
+  
   this.$store.commit("showContextMenu", {
     content: [
       {

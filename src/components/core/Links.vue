@@ -4,8 +4,8 @@
       class="link"
       v-for="link in $store.state.links"
       :key="link.id"
-      @click="openLink(link.content.address, link.type)"
-      @contextmenu.stop="contextMenuLink($event, link)"
+      @click="openLink(link.id)"
+      @contextmenu.stop="contextMenuLink($event, link.id)"
     >
       <img :src="getLinkImg(link.id, link.content.img)" alt="" />
       <label class="text-overflow">{{ link.content.label }}</label>
@@ -53,6 +53,9 @@ div.link img {
   align-items: center;
   justify-content: center;
   margin-right: 5px;
+}
+div.link label {
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar:hover {

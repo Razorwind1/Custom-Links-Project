@@ -1,4 +1,6 @@
-module.exports = function (link_address, link_type) {
-  window.ipcRenderer.send("open", link_address)
-  link_type
+module.exports = function (id) {
+  const element = this.$store.getters.linkFromId(id)
+
+  window.ipcRenderer.send("open", element.content.address)
+  
 }

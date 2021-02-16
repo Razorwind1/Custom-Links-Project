@@ -56,10 +56,11 @@ export default {
 }
 
 #side-bar {
-  width: 300px;
-  transition: width ease-in 100ms;
+  min-width: 250px;
+  width: 0;
+  transition: min-width ease-in 100ms;
 }
 div.collapse-side-bar #side-bar {
-  width: 0;
+  min-width: 0;
 }
 </style>
