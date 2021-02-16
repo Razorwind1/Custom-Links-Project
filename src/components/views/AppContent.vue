@@ -1,7 +1,6 @@
 <template>
   <div
     id="app-content"
-    class="collapse-side-bar"
     :class="[
       this.$store.state.events.popup.active ||
       this.$store.state.events.alert.active ||
@@ -9,8 +8,8 @@
       this.$store.state.events.assignedTagsMenu.active
         ? 'disable-input'
         : '',
+      this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar',
     ]"
-    @click="$event.currentTarget.classList.toggle('collapse-side-bar')"
   >
     <NavBar />
     <div id="app-main">

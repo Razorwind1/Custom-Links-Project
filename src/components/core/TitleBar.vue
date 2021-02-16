@@ -6,6 +6,7 @@
       <h1 class="app-title">Tailor Link</h1>
     </div>
     <div class="buttons">
+      <div @click="$store.commit('toggleSidebar')" class="sidebar button" :class="[$store.state.events.sidebar.active ? 'active' : '']">SB</div>
       <div @click="minimize" class="minimize button">&#9866;</div>
       <div @click="maximize" class="maximize button">&#9744;</div>
       <div @click="close" class="close button">&#9932;</div>
@@ -54,7 +55,7 @@ export default {
       }
       if (message === "blur") {
         this.windowFocused = false;
-        this.closeMenus()
+        this.closeMenus();
       }
     });
   },
@@ -91,7 +92,7 @@ export default {
 }
 #title-bar .buttons > div:active {
   background-color: var(--background-hover);
-  filter:brightness(70%);
+  filter: brightness(70%);
 }
 #title-bar .buttons > div.close {
   font-size: 14px;
@@ -101,6 +102,13 @@ export default {
 }
 #title-bar .buttons > div.close:active {
   background-color: rgb(255, 2, 2);
+}
+#title-bar .buttons .sidebar{
+  margin-right: 10px;
+  border-radius: 50%;
+}
+#title-bar .buttons .sidebar.active{
+  background-color: var(--button-accent);
 }
 
 #title-bar .top-resize {

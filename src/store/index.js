@@ -114,6 +114,10 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
+      sidebar: {
+        active: false,
+        arg: null
+      }
     },
   },
   mutations: {
@@ -253,6 +257,13 @@ const store = new Vuex.Store({
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
     },
+    // Sidebar
+    toggleSidebar(state, payload){
+      if (state.events.sidebar.active || (payload && payload.resizing))
+        state.events.sidebar.active = false
+      else 
+        state.events.sidebar.active = true
+    }
   },
   getters: {
     // Link Getters

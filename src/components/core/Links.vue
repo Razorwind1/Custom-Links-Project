@@ -1,7 +1,13 @@
 <template>
   <div class="container">
-    <div class="link" v-for="link in $store.state.links" :key="link.id">
-      <img :src="getLinkImg(link.id, link.content.img)" alt="">
+    <div
+      class="link"
+      v-for="link in $store.state.links"
+      :key="link.id"
+      @click="openLink(link.content.address, link.type)"
+      @contextmenu.stop="contextMenuLink($event, link)"
+    >
+      <img :src="getLinkImg(link.id, link.content.img)" alt="" />
       <label class="text-overflow">{{ link.content.label }}</label>
     </div>
   </div>
@@ -9,10 +15,14 @@
 
 <script>
 import getLinkImg from "@/js/img/getLinkImg.js";
+import openLink from "@/js/link/open.js";
+import contextMenuLink from "@/js/link/contextMenu.js";
 
 export default {
   methods: {
-    getLinkImg
+    getLinkImg,
+    openLink,
+    contextMenuLink
   },
 };
 </script>
@@ -22,6 +32,7 @@ div.container {
   flex-direction: column;
   overflow-y: auto;
   padding: 15px 10px 10px 15px;
+  border-left: 1px solid var(--background-color);
 }
 div.link {
   width: 100%;
@@ -43,7 +54,6 @@ div.link img {
   justify-content: center;
   margin-right: 5px;
 }
-
 
 ::-webkit-scrollbar:hover {
   background-color: var(--background-active);
