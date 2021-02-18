@@ -77,7 +77,7 @@ export default {
       this.nonassignedLayouts = this.$store.state.layouts.filter(layout => !this.assignedLayouts.includes(layout))
     }
   },
-  mounted: function (){
+  created: function (){
     this.updateLayouts()
   }
 };
