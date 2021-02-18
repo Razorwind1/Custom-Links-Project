@@ -2,12 +2,13 @@
   <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
     <v-app>
       <TitleBar />
-      <AppContent />
+      <AppContent ref="appContent" />
       <Popup v-if="this.$store.state.events.popup.active" />
       <Alert v-if="this.$store.state.events.alert.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
       <AssignedTagsMenu v-if="this.$store.state.events.assignedTagsMenu.active" />
+      <AssignedLayoutsMenu v-if="this.$store.state.events.assignedLayoutsMenu.active" />
     </v-app>
   </div>
 </template>
@@ -20,6 +21,7 @@ import Alert from "@/components/core/Alert.vue";
 import ContextMenu from "@/components/floating/ContextMenu.vue";
 import ColorPicker from "@/components/floating/ColorPicker.vue";
 import AssignedTagsMenu from "@/components/floating/AssignedTagsMenu.vue";
+import AssignedLayoutsMenu from "@/components/floating/AssignedLayoutsMenu.vue";
 import importCss from "@/js/helper/importCss.js";
 import closeMenus from "@/js/helper/closeMenus.js";
 
@@ -27,7 +29,7 @@ export default {
   data() {
     return {
       stateHistory: [],
-      stateHistoryCount: 50
+      stateHistoryCount: 50,
     };
   },
   components: {
@@ -37,20 +39,20 @@ export default {
     Alert,
     ContextMenu,
     ColorPicker,
-    AssignedTagsMenu
+    AssignedTagsMenu,
+    AssignedLayoutsMenu,
   },
   methods: {
-    closeMenus
+    closeMenus,
   },
-  created: function() {
+  created: function () {
     const state = window.ipcRenderer.sendSync("state-read")
     if (state) this.$store.commit("setState", state)
     this.stateHistory.push(JSON.parse(JSON.stringify(state)))
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {
-
-        args.open_dir = args.open_dir.match(/^ *(.*[^ ]) *$/)[1]     // This regex is used to delete ' ' character from the start and the end of the given string.
+        args.open_dir = args.open_dir.match(/^ *(.*[^ ]) *$/)[1]; // This regex is used to delete ' ' character from the start and the end of the given string.
 
         const nativeIconBuffer = window.ipcRenderer.sendSync(
           "get-native-icon",
@@ -60,8 +62,8 @@ export default {
         this.$store.commit("showPopup", {
           type: "add-link",
           address: args.open_dir,
-          label: window.path.parse(args.open_dir).name || 'My Drive',
-          linkType: window.ipcRenderer.sendSync("get-link-type", {link: args.open_dir}),
+          label: window.path.parse(args.open_dir).name || "My Drive",
+          linkType: window.ipcRenderer.sendSync("get-link-type", { link: args.open_dir }),
           nativeIconBuffer,
         });
       }
@@ -71,32 +73,37 @@ export default {
       (state, getters) => getters.stateUserData,
       (newValue) => {
         window.ipcRenderer.send("state-changed", newValue);
-        if (this.stateHistory.length > this.stateHistoryCount)
-          this.stateHistory.shift()
+        if (this.stateHistory.length > this.stateHistoryCount) this.stateHistory.shift();
 
-        this.stateHistory.push(JSON.parse(JSON.stringify(newValue)))
+        this.stateHistory.push(JSON.parse(JSON.stringify(newValue)));
+
+        if (this.$refs.appContent.$refs.canvas.updateGrid)
+          this.$refs.appContent.$refs.canvas.updateGrid();
       },
       {
-        deep: true
+        deep: true,
       }
     );
 
-
     this._keyListener = function (e) {
       if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
-        if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA" && this.stateHistory.length > 1){
-          this.stateHistory.pop()
-          this.$store.commit("setState", this.stateHistory.pop())
+        if (
+          e.target.tagName !== "INPUT" &&
+          e.target.tagName !== "TEXTAREA" &&
+          this.stateHistory.length > 1
+        ) {
+          this.stateHistory.pop();
+          this.$store.commit("setState", this.stateHistory.pop());
         }
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
 
     window.addEventListener("resize", () => {
-      this.closeMenus()
+      this.closeMenus();
     });
-    
-    importCss(this.$store.state.theme)
+
+    importCss(this.$store.state.theme);
 
     window.ipcRenderer.send("app-created");
   },
@@ -118,7 +125,8 @@ export default {
 * div {
   display: flex;
 }
-html, body {
+html,
+body {
   overflow: hidden;
   height: 100%;
 }
@@ -197,7 +205,7 @@ span.required-text {
   margin-left: 5px;
 }
 
-.text-overflow{
+.text-overflow {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

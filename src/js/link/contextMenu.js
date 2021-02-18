@@ -1,8 +1,16 @@
-module.exports = function (event, id) {
+import openLink from "@/js/link/open.js";
+
+export default function (event, id) {
   const element = this.$store.getters.linkFromId(id)
-  
+
   this.$store.commit("showContextMenu", {
     content: [
+      {
+        label: "Open",
+        click: () => {
+          openLink.bind(this)(element.id)
+        },
+      },
       {
         label: "Edit Link",
         click: () => {
@@ -14,22 +22,33 @@ module.exports = function (event, id) {
         },
       },
       {
-        label: "Delete Link",
-        click: () => {
-          this.$store.commit("showAlert", {
-            type: "delete-link",
-            id: element.id,
-          });
-        },
-      },
-      {
-        label: "Edit Tags",
+        label: "Tags",
         click: () => {
           this.$store.commit("closeContextMenu");
 
           this.$store.commit("showAssignedTagsMenu", {
             element,
             event,
+          });
+        },
+      },
+      {
+        label: "Layouts",
+        click: () => {
+          this.$store.commit("closeContextMenu");
+
+          this.$store.commit("showAssignedLayoutsMenu", {
+            element,
+            event,
+          });
+        },
+      },
+      {
+        label: "Delete Link",
+        click: () => {
+          this.$store.commit("showAlert", {
+            type: "delete-link",
+            id: element.id,
           });
         },
       },

@@ -196,17 +196,6 @@ export default {
   },
   created: function () {
     this.updateGrid();
-
-    this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (
-        mutation.type === "addLink" ||
-        mutation.type === "editLink" ||
-        mutation.type === "deleteLink" ||
-        mutation.type === "setState"
-      ) {
-        this.updateGrid();
-      }
-    });
   },
   mounted: function () {
     this._keyListener = function (e) {
@@ -229,7 +218,6 @@ export default {
     window.addEventListener("resize", this.updateContainerWidth);
   },
   beforeDestroy: function () {
-    this.unsubscribe();
     document.removeEventListener("keydown", this._keyListener);
     document.removeEventListener("mousemove", this._mouseMove);
     window.removeEventListener("resize", this.updateContainerWidth);

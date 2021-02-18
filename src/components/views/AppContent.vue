@@ -5,7 +5,8 @@
       this.$store.state.events.popup.active ||
       this.$store.state.events.alert.active ||
       this.$store.state.events.contextMenu.active ||
-      this.$store.state.events.assignedTagsMenu.active
+      this.$store.state.events.assignedTagsMenu.active ||
+      this.$store.state.events.assignedLayoutsMenu.active
         ? 'disable-input'
         : '',
       this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar',
@@ -13,7 +14,7 @@
   >
     <NavBar />
     <div id="app-main">
-      <router-view />
+      <router-view ref="canvas"/>
     </div>
     <div id="side-bar">
       <Links />

@@ -35,8 +35,8 @@ const store = new Vuex.Store({
     layouts: [
       {
         id: "ofjwof213123",
-        active: true,
-        name: "Gaming",
+        active: false,
+        name: "Home",
         color: "#521",
         items: [
           {
@@ -57,6 +57,40 @@ const store = new Vuex.Store({
               sizeY: 1
             },
           }
+        ]
+      },
+      {
+        id: "ofjwsdaof213123",
+        active: false,
+        name: "Gaming",
+        color: "#121",
+        items: [
+          {
+            id: 0,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
+        ]
+      },
+      {
+        id: "ofjwsdaof2131223",
+        active: true,
+        name: "Coding",
+        color: "#921",
+        items: [
+          {
+            id: 1,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
         ]
       }
     ],
@@ -114,6 +148,10 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
+      assignedLayoutsMenu: {
+        active: false,
+        arg: null
+      },
       sidebar: {
         active: false,
         arg: null
@@ -121,7 +159,7 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
-    // State Operations
+    // ------- State Operations ------- 
     setState(state, payload) {
       state.links = payload.links || [],
         state.styles = payload.styles || [],
@@ -132,7 +170,7 @@ const store = new Vuex.Store({
       state.theme = payload
       importCss(payload)
     },
-    // Link Operations
+    // ------- Link Operations ------- 
     addLink(state, payload) {
       const link = {
         id: uniqueId()
@@ -178,7 +216,7 @@ const store = new Vuex.Store({
         link.pos.sizeY = payload.newH
       }
     },
-    // Tag Operations
+    // ------- Tag Operations ------- 
     addTag(state) {
       state.tags.push({
         id: uniqueId(),
@@ -210,7 +248,46 @@ const store = new Vuex.Store({
         state.links.find(gridEl => gridEl.id == payload.linkID).tags.splice(index, 1);
       }
     },
-    // Events
+    // ------- Layout Operations ------- 
+    addLayout(state, layoutName, layoutColor) {
+      state.layouts.push({
+        id: uniqueId(),
+        name: layoutName,
+        color: layoutColor
+      })
+    },
+    editLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.id)
+
+      layout.color = payload.color || layout.color
+      layout.name = payload.name || layout.name
+    },
+    deleteLayout(state, id) {
+      const removeIndex = state.layouts.findIndex(layout => layout.id === id)
+      state.layouts.splice(removeIndex, 1)
+    },
+    assignLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.layoutId);
+      if (!layout.items.includes(item => item.id === payload.linkId)) {
+        layout.items.push({
+          id: payload.linkId,
+          pos: {
+            x: 0,
+            y: 0,
+            sizeX: 1,
+            sizeY: 1
+          },
+        })
+      }
+    },
+    unassignLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.layoutId)
+      const index = layout.items.findIndex(item => item.id === payload.linkId)
+      if (index !== -1) {
+        layout.items.splice(index, 1)
+      }
+    },
+    // ------- Events ------- 
     // Popup
     showPopup(state, payload) {
       state.events.popup.active = true
@@ -239,6 +316,17 @@ const store = new Vuex.Store({
       state.events.assignedTagsMenu.active = false
       state.events.assignedTagsMenu.id = null
       state.events.assignedTagsMenu.event = null
+    },
+    // Assigned Layouts Menu
+    showAssignedLayoutsMenu(state, payload) {
+      state.events.assignedLayoutsMenu.active = true
+      state.events.assignedLayoutsMenu.arg = payload
+      state.events.assignedLayoutsMenu.event = payload.event
+    },
+    closeAssignedLayoutsMenu(state) {
+      state.events.assignedLayoutsMenu.active = false
+      state.events.assignedLayoutsMenu.id = null
+      state.events.assignedLayoutsMenu.event = null
     },
     // Context Menu
     showContextMenu(state, payload) {
@@ -286,6 +374,9 @@ const store = new Vuex.Store({
       if (layout)
         layout.active = true
     },
+    layoutsFromLinkId: (state) => (id) => {
+      return state.layouts.filter(layout => layout.items.find(item => item.id === id) !== undefined)
+    },
     // Style Getters
     styleFromName: (state) => (styleName) => {
       return state.styles.filter(style => style.name === styleName)
@@ -308,9 +399,10 @@ const store = new Vuex.Store({
     stateUserData: (state) => {
       return {
         links: state.links,
+        layouts: state.layouts,
         styles: state.styles,
         tags: state.tags,
-        theme: state.theme
+        theme: state.theme,
       }
     }
   }
