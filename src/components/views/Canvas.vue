@@ -193,6 +193,12 @@ export default {
         this.containerWidth = this.$el.parentNode.offsetWidth;
       this.updateGridSize();
     },
+    assignedTagsMenu: function (event, element) {
+      this.$store.commit("showAssignedTagsMenu", {
+        element,
+        event,
+      });
+    },
   },
   created: function () {
     this.updateGrid();
