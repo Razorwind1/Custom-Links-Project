@@ -46,9 +46,9 @@ export default {
     closeMenus,
   },
   created: function () {
-    const state = window.ipcRenderer.sendSync("state-read")
-    if (state) this.$store.commit("setState", state)
-    this.stateHistory.push(JSON.parse(JSON.stringify(state)))
+    // const state = window.ipcRenderer.sendSync("state-read")
+    // if (state) this.$store.commit("setState", state)
+    // this.stateHistory.push(JSON.parse(JSON.stringify(state)))
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {

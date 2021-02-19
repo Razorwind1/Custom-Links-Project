@@ -10,6 +10,9 @@ export default function (event, id) {
         click: () => {
           openLink.bind(this)(element.id)
         },
+        style: {
+          backgroundColor: "var(--button-muted)"
+        }
       },
       {
         label: "Edit Link",
@@ -51,6 +54,9 @@ export default function (event, id) {
             id: element.id,
           });
         },
+        style: {
+          backgroundColor: "var(--alert-muted)"
+        }
       },
     ],
     event,

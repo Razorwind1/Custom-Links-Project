@@ -11,6 +11,7 @@
   --nav-accent: #407e6b;
   --text-accent: #3cbb95;
 
+  --button-muted: #264b40;
   --button-color: #407e6b;
   --button-accent: #034b35; /*active/depressed*/
   --button-text: #eeeeee;
@@ -20,6 +21,7 @@
   --link-text: #eeeeee;
   --link-hover: #4d4d4d;
 
+  --alert-muted: #4b2121;
   --alert-color: #791313;
   --alert-text: #eeeeee;
   --alert-hover: #ad2020;

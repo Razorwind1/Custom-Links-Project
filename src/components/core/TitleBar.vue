@@ -4,9 +4,27 @@
     <div class="content">
       <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
       <h1 class="app-title">Tailor Link</h1>
+      <div class="favourite-layouts">
+        <div
+          class="layout-circle"
+          v-for="layout in this.favouriteLayouts"
+          :key="layout.id"
+          :style="{ 'background-color': layout.color }"
+          :class="{ active: layout.active }"
+          @click="setLayout(layout.id)"
+        >
+          <div class="layout-name">{{layout.name}}</div>
+        </div>
+      </div>
     </div>
     <div class="buttons">
-      <div @click="$store.commit('toggleSidebar')" class="sidebar button" :class="[$store.state.events.sidebar.active ? 'active' : '']">SB</div>
+      <div
+        @click="$store.commit('toggleSidebar')"
+        class="sidebar button"
+        :class="[$store.state.events.sidebar.active ? 'active' : '']"
+      >
+        SB
+      </div>
       <div @click="minimize" class="minimize button">&#9866;</div>
       <div @click="maximize" class="maximize button">&#9744;</div>
       <div @click="close" class="close button">&#9932;</div>
@@ -18,6 +36,15 @@
 import closeMenus from "@/js/helper/closeMenus.js";
 
 export default {
+  data: function () {
+    return {
+      windowMaximized: false,
+      windowFocused: true,
+      favouriteLayouts: this.$store.state.layouts.filter(
+        (layout) => layout.favourite === true
+      ),
+    };
+  },
   methods: {
     closeMenus,
     close: function () {
@@ -35,12 +62,9 @@ export default {
     minimized: function () {
       this.windowMaximized = false;
     },
-  },
-  data: function () {
-    return {
-      windowMaximized: false,
-      windowFocused: true,
-    };
+    setLayout: function (id) {
+      this.$store.commit("activateLayout", id);
+    },
   },
   mounted: function () {
     window.ipcRenderer.on("app-state-changed", (event, message) => {
@@ -70,64 +94,114 @@ export default {
   -webkit-app-region: drag;
   border-bottom: var(--background-color) 1px solid;
 }
-#title-bar .content {
+.content {
   width: 100%;
   padding-left: 6px;
   justify-content: flex-start;
   align-items: center;
 }
-#title-bar .content img {
+img {
   height: 13px;
   margin-right: 3px;
 }
-#title-bar .buttons {
+.buttons {
   -webkit-app-region: no-drag;
 }
-#title-bar .buttons > div {
+.buttons > div {
   width: var(--title-bar-height);
   height: var(--title-bar-height);
 }
-#title-bar .buttons > div:hover {
+.buttons > div:hover {
   background-color: var(--background-hover);
 }
-#title-bar .buttons > div:active {
+.buttons > div:active {
   background-color: var(--background-hover);
   filter: brightness(70%);
 }
-#title-bar .buttons > div.close {
+.buttons > div.close {
   font-size: 14px;
 }
-#title-bar .buttons > div.close:hover {
+.buttons > div.close:hover {
   background-color: rgb(170, 15, 15);
 }
-#title-bar .buttons > div.close:active {
+.buttons > div.close:active {
   background-color: rgb(255, 2, 2);
 }
-#title-bar .buttons .sidebar{
+.buttons .sidebar {
   margin-right: 10px;
   border-radius: 50%;
 }
-#title-bar .buttons .sidebar.active{
+.buttons .sidebar.active {
   background-color: var(--button-accent);
 }
 
-#title-bar .top-resize {
+.top-resize {
   position: absolute;
   width: 100%;
   height: 2px;
   -webkit-app-region: no-drag;
 }
 
-#title-bar .app-title {
+.app-title {
   font-size: 15px;
 }
 
-#title-bar .buttons,
-#title-bar .content {
+.buttons,
+.content {
   opacity: 0.5;
 }
-#title-bar.focused .buttons,
-#title-bar.focused .content {
+.focused .buttons,
+.focused .content {
   opacity: 1;
+}
+
+.favourite-layouts {
+  font-size: .8rem;
+  -webkit-app-region: no-drag;
+  margin-left: 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 50;
+}
+.favourite-layouts .layout-circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid var(--background-hover);
+  cursor: pointer;
+  margin-left: 5px;
+  transition: border-color 100ms ease, transform 100ms ease;
+}
+.favourite-layouts .layout-circle.active {
+  border: 1px solid var(--background-text);
+}
+.favourite-layouts .layout-circle:hover {
+  transform: scale(1.5);
+  border: 1px solid var(--background-text);
+}
+.favourite-layouts .layout-circle:hover .layout-name {
+  display: flex;
+}
+.favourite-layouts .layout-name {
+  position: absolute;
+  top: 25px;
+  left: 7px;
+  transform: translateX(-50%);
+  background-color: var(--background-active);
+  padding: 5px 10px;
+  border-radius: 10px;
+  justify-content: center;
+  display: none;
+}
+.favourite-layouts .layout-name:before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  background-color: var(--background-active);
+  top: 0;
+  text-align: center;
+  transform: rotate(45deg) translateY(-25%) translateX(-25%);
 }
 </style>
