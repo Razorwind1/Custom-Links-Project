@@ -17,23 +17,17 @@
               class="button"
               :class="[this.type === 'url' ? 'active' : '']"
               @click="linkType('url')"
-            >
-              Web
-            </div>
+            >Web</div>
             <div
               class="button"
               :class="[this.type === 'folder' ? 'active' : '']"
               @click="linkType('folder')"
-            >
-              Folder
-            </div>
+            >Folder</div>
             <div
               class="button"
               :class="[this.type === 'file' ? 'active' : '']"
               @click="linkType('file')"
-            >
-              File
-            </div>
+            >File</div>
           </div>
         </div>
         <div class="address-input">
@@ -41,11 +35,10 @@
             type="text"
             v-model="address"
             :class="this.type === 'url' ? 'url' : ''"
+            @blur="grabLogo()"
             required
           />
-          <div class="button" v-show="type !== 'url'" @click="selectFile">
-            Open
-          </div>
+          <div class="button" v-show="type !== 'url'" @click="selectFile">Open</div>
         </div>
       </div>
       <div class="section">
@@ -61,6 +54,10 @@
         </div>
       </div>
     </div>
+    <div class="attribution">
+      Logos made by
+      <span v-on:click="attributionLink">Clearbit</span>
+    </div>
   </div>
 </template>
 
@@ -69,7 +66,7 @@ import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
 
 export default {
-  data: function () {
+  data: function() {
     return {
       popupActive: this.$store.state.events.popup.active,
       popupArg: this.$store.state.events.popup.arg,
@@ -81,11 +78,15 @@ export default {
       imgSrc: null,
 
       imgBuffer: null,
-      imgLabel: null,
+      imgLabel: null
     };
   },
   methods: {
-    selectImage: function () {
+    grabLogo: function() {
+      this.imgSrc = `https://logo.clearbit.com/${this.address}`;
+      this.imgLabel = this.imgSrc;
+    },
+    selectImage: function() {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
       if (!image) return;
 
@@ -94,9 +95,9 @@ export default {
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
-    selectFile: function () {
+    selectFile: function() {
       const file = window.ipcRenderer.sendSync("open-file-dialog", {
-        type: this.type,
+        type: this.type
       });
       if (!file) return;
 
@@ -110,42 +111,47 @@ export default {
       this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
       this.imgBuffer = nativeIconBuffer;
     },
-    getElementImg: function (id, url) {
+    getElementImg: function(id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
-        url,
+        url
       });
+
+      if (!image) return;
 
       this.imgSrc = imgUrlFromBuffer(image.buffer);
 
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
-    saveLink: function () {
+    saveLink: function() {
       const inputValid = validateInputs(this.$el);
 
       if (inputValid) {
         if (this.popupArg.type === "add-link") {
           this.$store.commit("addLink", {
-            data: this.$data,
+            data: this.$data
           });
         } else if (this.popupArg.type === "edit-link") {
           this.$store.commit("editLink", {
             id: this.popupArg.linkID,
-            data: this.$data,
+            data: this.$data
           });
         }
         this.$store.commit("closePopup");
       }
     },
-    header: function () {
+    header: function() {
       return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
     },
-    linkType: function (type) {
+    linkType: function(type) {
       this.type = type;
     },
+    attributionLink: function() {
+      window.shell.openExternal("https://www.clearbit.com");
+    }
   },
-  mounted: function () {
+  mounted: function() {
     this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
 
     if (this.popupArg.type === "edit-link") {
@@ -173,12 +179,12 @@ export default {
     if (inputs[0]) inputs[0].focus();
 
     // Enter Key to Submit The Form
-    inputs.forEach((input) =>
+    inputs.forEach(input =>
       input.addEventListener("keyup", ({ key }) => {
         key === "Enter" ? this.$emit("save-click") : "";
       })
     );
-  },
+  }
 };
 </script>
 
@@ -304,5 +310,27 @@ div.img-selection div.button {
 }
 div.img-selection div.button:hover {
   background: var(--background-active);
+}
+.edit-link .attribution {
+  user-select: none;
+  height: auto;
+  display: block;
+  position: fixed;
+  bottom: 2px;
+  left: 0px;
+  width: 100%;
+  margin: 0;
+  text-align: right;
+  padding: 0 6px;
+  font-size: 12px;
+  background-color: transparent;
+  opacity: 0.5;
+}
+.edit-link .attribution:hover {
+  opacity: 0.9;
+}
+.edit-link .attribution span {
+  color: rgb(108, 187, 233);
+  cursor: pointer;
 }
 </style>
