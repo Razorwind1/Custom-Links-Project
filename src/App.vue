@@ -77,8 +77,7 @@ export default {
 
         this.stateHistory.push(JSON.parse(JSON.stringify(newValue)));
 
-        if (this.$refs.appContent.$refs.canvas.updateGrid)
-          this.$refs.appContent.$refs.canvas.updateGrid();
+        this.$refs.appContent.$refs.canvas.updateGrid?.();
       },
       {
         deep: true,

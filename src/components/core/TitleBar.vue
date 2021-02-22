@@ -185,7 +185,7 @@ img {
 }
 .favourite-layouts .layout-name {
   position: absolute;
-  top: 25px;
+  top: 30px;
   left: 7px;
   transform: translateX(-50%);
   background-color: var(--background-active);

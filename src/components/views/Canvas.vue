@@ -124,6 +124,8 @@ export default {
             label: link.content.label,
           });
         });
+
+      this.updateContainerWidth()
     },
     updateGridSize: function () {
       if (this.containerWidth) {
