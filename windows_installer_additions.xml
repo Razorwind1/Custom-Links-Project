@@ -1,0 +1,37 @@
+<!--Created by Daniel Hickman.
+This file contains windows registry stuff for the installer that the build_installer.js file does not account for. (I bet there's a way to put it in there but I don't know how)
+
+Running build_installer.js creates a .wxs file in the "windows_installer" directory that can be edited with custom XML that WiX tools can read & use.
+
+My thought is I can construct registry keys (& perhaps other stuff) here, copy/paste it into the .wxs file, and then run the following WiX commands to create the .msi installer from the modified .wxs file:
+
+Candle.exe sampleFile.wxs <-turns the .wxs file into an intermediate stage file, a .wixobj
+Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
+-->
+
+<!--Change the windows registry values-->
+<!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
+<DirectoryRef Id="TARGETDIR">
+    <Component Id="RegistryEntry1" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\TailorLink">
+            <RegistryValue KeyPath="yes" Type="string" Value="Save to TailorLink"/>
+            <RegistryValue Name="Icon" Type='multiString' Value='[INSTALLDIR]'/>
+            <RegistryValue Name="Icon" Type='multiString' Value='Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe' Action='append'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\TailorLink\command">
+            <RegistryValue Name="Icon" Type='string' Value='[INSTALLDIR]\\Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe \"--open_dir=%V \"'/>
+        </RegistryKey>
+    </Component>
+</DirectoryRef>
+
+
+<!--Add this within a <Feature> tag to tell Windows installer to actually install the Registry Entreis:-->
+<ComponentRef Id="RegistryEntry1" />
+
+
+
+
+<UIRef Id="WixUI_Mondo" />
+<UIRef Id="WixUI_ErrorProgressText" />

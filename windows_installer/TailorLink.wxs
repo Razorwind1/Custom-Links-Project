@@ -110,7 +110,6 @@
       <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
     </UI>
-    <UIRef Id="WixUI_Common" />
 
 
     <!-- Step 2: Add files and directories -->
@@ -441,12 +440,14 @@
     </DirectoryRef>
 
 
+    <!--DH added: Registry values-->
+
     <!-- Lets cleanup any files that are were not part of the initial install
     via this MSI. Such as newer versions installed by the auto-updater. -->
     <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
       <Component Id="PurgeOnUninstall" Guid="b84c13c8-420a-4e08-8194-7f3b65eb62b8" Win64="no">
         <CreateFolder/>
-        <util:RemoveFolderEx On="uninstall" Property="INSTALLPATH" />
+        <!-- <util:RemoveFolderEx On="uninstall" Property="INSTALLPATH" /> -->
       </Component>
     </DirectoryRef>
 
