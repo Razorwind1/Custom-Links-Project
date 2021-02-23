@@ -24,6 +24,7 @@ const store = new Vuex.Store({
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
           img: "Steam_icon_logo.png",
+          customImg: false
         }
       },
       {
@@ -41,6 +42,7 @@ const store = new Vuex.Store({
           label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "github_icon.jpg",
+          customImg: false
         }
       },
     ],
@@ -279,11 +281,11 @@ const store = new Vuex.Store({
 export default store
 
 function modifyLink(element, data) {
-  if (data.address && data.label) {
-    element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-    element.content.label = data.label
-  }
+  element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+  element.content.label = data.label
+  element.content.customImg = data.customImg
   element.type = data.type || "url";
+  
   if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
     window.ipcRenderer.send("save-link-image-to-file", { buffer: data.imgBuffer, label: data.imgLabel, id: element.id })

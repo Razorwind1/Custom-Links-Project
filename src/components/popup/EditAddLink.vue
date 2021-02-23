@@ -17,17 +17,23 @@
               class="button"
               :class="[this.type === 'url' ? 'active' : '']"
               @click="linkType('url')"
-            >Web</div>
+            >
+              Web
+            </div>
             <div
               class="button"
               :class="[this.type === 'folder' ? 'active' : '']"
               @click="linkType('folder')"
-            >Folder</div>
+            >
+              Folder
+            </div>
             <div
               class="button"
               :class="[this.type === 'file' ? 'active' : '']"
               @click="linkType('file')"
-            >File</div>
+            >
+              File
+            </div>
           </div>
         </div>
         <div class="address-input">
@@ -35,7 +41,7 @@
             type="text"
             v-model="address"
             :class="this.type === 'url' ? 'url' : ''"
-            @blur="grabLogo()"
+            @keyup="grabLogo()"
             required
           />
           <div class="button" v-show="type !== 'url'" @click="selectFile">Open</div>
@@ -55,7 +61,7 @@
       </div>
     </div>
     <div class="attribution">
-      Logos made by
+      Logos by
       <span v-on:click="attributionLink">Clearbit</span>
     </div>
   </div>
@@ -64,9 +70,10 @@
 <script>
 import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+import request from "request";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       popupActive: this.$store.state.events.popup.active,
       popupArg: this.$store.state.events.popup.arg,
@@ -74,47 +81,62 @@ export default {
       label: "",
       address: "",
       type: "url",
+      customImg: false,
 
       imgSrc: null,
 
       imgBuffer: null,
-      imgLabel: null
+      imgLabel: null,
     };
   },
   methods: {
-    grabLogo: function() {
-      this.imgSrc = `https://logo.clearbit.com/${this.address}`;
-      this.imgLabel = this.imgSrc;
+    grabLogo: function () {
+      if (this.customImg === true || this.type !== "url" || this.address === "") return;
+
+      if (!this.address.match(/^[a-zA-Z]+:\/\//)) {
+        this.address = "http://" + this.address;
+      }
+
+      let host = new URL(this.address).host;
+      request(
+        { uri: `https://logo.clearbit.com/${host}`, encoding: null },
+        (err, res, buffer) => {
+          if (!err) {
+            this.imgBuffer = buffer;
+            this.imgSrc = imgUrlFromBuffer(buffer);
+            this.imgLabel = host;
+          }
+        }
+      );
     },
-    selectImage: function() {
+    selectImage: function () {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
       if (!image) return;
 
       this.imgSrc = imgUrlFromBuffer(image.buffer);
+      this.customImg = true;
 
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
-    selectFile: function() {
+    selectFile: function () {
       const file = window.ipcRenderer.sendSync("open-file-dialog", {
-        type: this.type
+        type: this.type,
       });
       if (!file) return;
 
-      const nativeIconBuffer = window.ipcRenderer.sendSync(
-        "get-native-icon",
-        file
-      );
+      const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", file);
 
       this.address = file;
       this.label = this.imgLabel = window.path.parse(file).name;
       this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
       this.imgBuffer = nativeIconBuffer;
+      this.customImg = true;
     },
-    getElementImg: function(id, url) {
+    getElementImg: function (id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
-        url
+        url,
       });
 
       if (!image) return;
@@ -124,34 +146,34 @@ export default {
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
-    saveLink: function() {
+    saveLink: function () {
       const inputValid = validateInputs(this.$el);
 
       if (inputValid) {
         if (this.popupArg.type === "add-link") {
           this.$store.commit("addLink", {
-            data: this.$data
+            data: this.$data,
           });
         } else if (this.popupArg.type === "edit-link") {
           this.$store.commit("editLink", {
             id: this.popupArg.linkID,
-            data: this.$data
+            data: this.$data,
           });
         }
         this.$store.commit("closePopup");
       }
     },
-    header: function() {
+    header: function () {
       return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
     },
-    linkType: function(type) {
+    linkType: function (type) {
       this.type = type;
     },
-    attributionLink: function() {
+    attributionLink: function () {
       window.shell.openExternal("https://www.clearbit.com");
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
 
     if (this.popupArg.type === "edit-link") {
@@ -159,6 +181,7 @@ export default {
       this.label = linkData.content.label;
       this.address = linkData.content.address;
       this.type = linkData.type;
+      this.customImg = linkData.content.customImg;
     }
     if (
       this.popupArg.type === "add-link" &&
@@ -173,18 +196,20 @@ export default {
       this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer);
       this.imgBuffer = this.popupArg.nativeIconBuffer;
       this.type = this.popupArg.linkType;
+      this.customImg = true;
     }
+    this.grabLogo();
 
     const inputs = document.querySelectorAll("input");
     if (inputs[0]) inputs[0].focus();
 
     // Enter Key to Submit The Form
-    inputs.forEach(input =>
+    inputs.forEach((input) =>
       input.addEventListener("keyup", ({ key }) => {
-        key === "Enter" ? this.$emit("save-click") : "";
+        key === "Enter" ? this.saveLink() : "";
       })
     );
-  }
+  },
 };
 </script>
 

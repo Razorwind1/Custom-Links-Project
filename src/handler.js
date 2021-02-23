@@ -43,7 +43,7 @@ export default function handler(win) {
         const imgSrc = dialog.showOpenDialogSync(win, {
             title: "Select Image",
             filters: [{
-                name: 'jpg, png, svg', extensions: ['jpg', 'png', 'svg']
+                name: 'jpg, png', extensions: ['jpg', 'png']
             }]
         })
         if (imgSrc && imgSrc[0]) {
