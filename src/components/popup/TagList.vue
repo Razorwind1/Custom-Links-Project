@@ -191,15 +191,22 @@ span.color-dot {
   margin-right: 10px;
   border-top: 2px solid var(--background-accent);
   flex-direction: column;
+  max-height: 150px;
+  overflow-y:scroll;
+  overflow-x:hidden;
 }
 .associated-link {
   font-size: 75%;
-  margin-left: -8px;
+  margin-left: 0px;
  margin-right: -12px;
  display: inline-block;
  overflow: hidden;
  text-overflow: ellipsis;
  white-space: nowrap;
+}
+.associated-link:hover {
+  filter: brightness(80%);
+  cursor: pointer;
 }
 
 /*for consistent pop-up css:*/
