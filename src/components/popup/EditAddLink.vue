@@ -54,7 +54,10 @@
             <img :src="imgSrc" @click="selectImage" />
           </div>
           <div class="img-selection-info">
-            <input type="text" v-model="imgLabel" readonly disabled />
+            <div class="reset-image-container">
+              <input type="text overflow" v-model="imgLabel" readonly disabled />
+              <button class="reset-image-button button" @click="resetImage">X</button>
+            </div>
             <div class="button" @click="selectImage">Select Image</div>
           </div>
         </div>
@@ -70,6 +73,7 @@
 <script>
 import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+import defaultImgBuffer from "@/js/img/defaultImgBuffer.js";
 import request from "request";
 
 export default {
@@ -91,23 +95,29 @@ export default {
   },
   methods: {
     grabLogo: function () {
-      if (this.customImg === true || this.type !== "url" || this.address === "") return;
-
-      if (!this.address.match(/^[a-zA-Z]+:\/\//)) {
+      if (this.address !== "" && !this.address.match(/^[a-zA-Z]+:\/\//)) {
         this.address = "http://" + this.address;
       }
+
+      if (this.customImg === true || this.type !== "url" || this.address === "") return;
 
       let host = new URL(this.address).host;
       request(
         { uri: `https://logo.clearbit.com/${host}`, encoding: null },
         (err, res, buffer) => {
           if (!err) {
-            this.imgBuffer = buffer;
-            this.imgSrc = imgUrlFromBuffer(buffer);
-            this.imgLabel = host;
+            this.imgBuffer = buffer
+            this.imgSrc = imgUrlFromBuffer(buffer)
+            this.imgLabel = host
           }
         }
       );
+    },
+    resetImage: function () {
+      this.customImg = false
+      this.imgBuffer = new Buffer.from(defaultImgBuffer, "base64")
+      this.imgSrc = imgUrlFromBuffer(this.imgBuffer)
+      this.imgLabel = "default_icon.png"
     },
     selectImage: function () {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
@@ -243,7 +253,7 @@ div.edit-link div.section h3 {
   opacity: 0.9;
 }
 div.edit-link div.section input {
-  margin-bottom: 5px;
+  padding-right: 30px;
 }
 
 div.address-header {
@@ -309,6 +319,8 @@ div.img-selection {
 div.img-selection .img-container {
   width: 100px;
   height: 100px;
+  min-width: 100px;
+  min-height: 100px;
   background: var(--background-accent);
   border: 1px var(--button-accent) solid;
   border-radius: 5px;
@@ -357,5 +369,15 @@ div.img-selection div.button:hover {
 .edit-link .attribution span {
   color: rgb(108, 187, 233);
   cursor: pointer;
+}
+.reset-image-container {
+  position: relative;
+  margin-bottom: 5px;
+}
+.reset-image-button {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 30px;
 }
 </style>
