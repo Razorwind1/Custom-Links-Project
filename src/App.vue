@@ -195,4 +195,8 @@ span.required-text {
   margin-left: 5px;
 }
 
+.hidden {
+  display:none;
+}
+
 </style>

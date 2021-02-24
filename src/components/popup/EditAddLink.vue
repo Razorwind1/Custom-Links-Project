@@ -52,6 +52,11 @@
         <div class="img-selection">
           <div class="img-container">
             <img :src="imgSrc" @click="selectImage" />
+
+            <div class="attribution" :class="{ hidden: !imgFetchClearbit }">
+              Logos by
+              <span v-on:click="attributionLink" style="margin-left: 2px;">Clearbit</span>
+            </div>
           </div>
           <div class="img-selection-info">
             <div class="reset-image-container">
@@ -62,10 +67,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="attribution">
-      Logos by
-      <span v-on:click="attributionLink">Clearbit</span>
     </div>
   </div>
 </template>
@@ -86,6 +87,7 @@ export default {
       address: "",
       type: "url",
       customImg: false,
+      imgFetchClearbit: false,
 
       imgSrc: null,
 
@@ -101,23 +103,27 @@ export default {
 
       if (this.customImg === true || this.type !== "url" || this.address === "") return;
 
+
+
       let host = new URL(this.address).host;
       request(
         { uri: `https://logo.clearbit.com/${host}`, encoding: null },
         (err, res, buffer) => {
           if (!err) {
-            this.imgBuffer = buffer
-            this.imgSrc = imgUrlFromBuffer(buffer)
-            this.imgLabel = host
+            this.imgBuffer = buffer;
+            this.imgSrc = imgUrlFromBuffer(buffer);
+            this.imgLabel = host;
+            this.imgFetchClearbit = true;
           }
         }
       );
     },
     resetImage: function () {
-      this.customImg = false
-      this.imgBuffer = new Buffer.from(defaultImgBuffer, "base64")
-      this.imgSrc = imgUrlFromBuffer(this.imgBuffer)
-      this.imgLabel = "default_icon.png"
+      this.customImg = false;
+      this.imgBuffer = new Buffer.from(defaultImgBuffer, "base64");
+      this.imgSrc = imgUrlFromBuffer(this.imgBuffer);
+      this.imgLabel = "default_icon.png";
+      this.imgFetchClearbit = false;
     },
     selectImage: function () {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
@@ -128,6 +134,7 @@ export default {
 
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
+      this.imgFetchClearbit = false;
     },
     selectFile: function () {
       const file = window.ipcRenderer.sendSync("open-file-dialog", {
@@ -142,6 +149,7 @@ export default {
       this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
       this.imgBuffer = nativeIconBuffer;
       this.customImg = true;
+      this.imgFetchClearbit = false;
     },
     getElementImg: function (id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
@@ -180,7 +188,7 @@ export default {
       this.type = type;
     },
     attributionLink: function () {
-      window.shell.openExternal("https://www.clearbit.com");
+      window.ipcRenderer.send("open", "https://www.clearbit.com");
     },
   },
   mounted: function () {
@@ -324,6 +332,7 @@ div.img-selection .img-container {
   background: var(--background-accent);
   border: 1px var(--button-accent) solid;
   border-radius: 5px;
+  position: relative;
 }
 div.img-selection .img-container img {
   max-width: 100%;
@@ -350,15 +359,10 @@ div.img-selection div.button:hover {
 }
 .edit-link .attribution {
   user-select: none;
-  height: auto;
-  display: block;
-  position: fixed;
-  bottom: 2px;
-  left: 0px;
+  position: absolute;
+  bottom: -20px;
+  text-align: center;
   width: 100%;
-  margin: 0;
-  text-align: right;
-  padding: 0 6px;
   font-size: 12px;
   background-color: transparent;
   opacity: 0.5;
