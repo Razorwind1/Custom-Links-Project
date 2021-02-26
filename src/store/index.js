@@ -341,6 +341,14 @@ const store = new Vuex.Store({
       state.events.assignedTagsMenu.event = null
     },
 
+    // Layouts Menu
+    closeLayoutsMenu(state) {
+      if (state.events.popup.arg?.type === "layout-list"){
+        state.events.popup.active = false
+        state.events.popup.arg = null
+      }
+    },
+
     // Assigned Layouts Menu
     showAssignedLayoutsMenu(state, payload) {
       state.events.assignedLayoutsMenu.active = true

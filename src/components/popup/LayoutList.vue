@@ -1,17 +1,14 @@
 <template>
-<div>
-  
-</div>
-  <popup>
-    <div class="popup-content">
-      <div class="content">
-        <div class="section">
-          <h3 required>Name</h3>
-          <input type="text" v-model="label" required />
+    <popup @click="bruh">
+      <div class="popup-content">
+        <div class="content">
+          <div class="section">
+            <h3 required>Name</h3>
+            <input type="text" v-model="label" required />
+          </div>
         </div>
       </div>
-    </div>
-  </popup>
+    </popup>
 </template>
 
 <script>
@@ -36,6 +33,9 @@ export default {
   },
 
   methods: {
+    bruh: function () {
+      alert()
+    },
     closePopup: function () {
       this.$store.commit("closePopup");
       this.$store.commit("closeColorPicker");
@@ -248,6 +248,4 @@ div.img-selection div.button {
 div.img-selection div.button:hover {
   background: var(--background-active);
 }
-
-
 </style>
