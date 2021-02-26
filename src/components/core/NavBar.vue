@@ -1,7 +1,7 @@
 <template>
   <div id="nav">
     <div>
-      <router-link to="/" class="button">
+      <router-link to="/" class="button" @contextmenu.native="layoutsMenu" @dblclick.native="layoutsMenu">
         <img src="/assets/svg/freepik/svg/008-home (2).svg" />
       </router-link>
       <a class="add-link-button button" @click="addLink">
@@ -30,6 +30,11 @@ export default {
     tagList: function () {
       this.$store.commit("showPopup", {
         type: "tag-list",
+      });
+    },
+    layoutsMenu: function () {
+      this.$store.commit("showPopup", {
+        type: "layout-list",
       });
     },
   },
@@ -61,7 +66,6 @@ export default {
   background-color: var(--nav-accent);
 }
 #nav > div > a.add-link-button:hover {
-  
 }
 #nav > div > a.router-link-exact-active {
   background-color: var(--nav-accent);
@@ -73,7 +77,6 @@ export default {
   transition: width ease-in-out 100ms;
   -webkit-user-drag: none;
   filter: grayscale(80%);
-  
 }
 #nav > div > a.add-link-button > img {
   filter: grayscale(30%);

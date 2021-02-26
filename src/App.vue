@@ -5,6 +5,7 @@
       <AppContent ref="appContent" />
       <TagList v-if="this.$store.state.events.popup.active && this.$store.state.events.popup.arg.type === 'tag-list'" />
       <EditAddLink v-if="this.$store.state.events.popup.active && (this.$store.state.events.popup.arg.type === 'edit-link' || this.$store.state.events.popup.arg.type === 'add-link')" />
+      <LayoutList v-if="this.$store.state.events.popup.active && this.$store.state.events.popup.arg.type === 'layout-list'" />
       <Alert v-if="this.$store.state.events.alert.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
@@ -18,6 +19,7 @@
 import TitleBar from "@/components/core/TitleBar.vue";
 import AppContent from "@/components/views/AppContent.vue";
 import EditAddLink from "@/components/popup/EditAddLink.vue";
+import LayoutList from "@/components/popup/LayoutList.vue";
 import TagList from "@/components/popup/TagList.vue";
 import Alert from "@/components/core/Alert.vue";
 import ContextMenu from "@/components/floating/ContextMenu.vue";
@@ -40,6 +42,7 @@ export default {
     EditAddLink,
     TagList,
     Alert,
+    LayoutList,
     ContextMenu,
     ColorPicker,
     AssignedTagsMenu,
