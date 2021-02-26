@@ -1,77 +1,81 @@
 <template>
-  <div class="edit-link">
-    <div class="header">
-      <h2>{{ header() }}</h2>
-    </div>
-    <div class="content">
-      <div class="section">
-        <h3 required>Name</h3>
-        <input type="text" v-model="label" required />
+  <popup>
+    <div class="popup-content">
+      <div class="header">
+        <h2>{{ header() }}</h2>
       </div>
-      <div class="section">
-        <div class="address-header">
-          <h3>Address</h3>
+      <div class="content">
+        <div class="section">
+          <h3 required>Name</h3>
+          <input type="text" v-model="label" required />
+        </div>
+        <div class="section">
+          <div class="address-header">
+            <h3>Address</h3>
 
-          <div>
-            <div
-              class="button"
-              :class="[this.type === 'url' ? 'active' : '']"
-              @click="linkType('url')"
-            >
-              Web
+            <div>
+              <div
+                class="button"
+                :class="[this.type === 'url' ? 'active' : '']"
+                @click="linkType('url')"
+              >
+                Web
+              </div>
+              <div
+                class="button"
+                :class="[this.type === 'folder' ? 'active' : '']"
+                @click="linkType('folder')"
+              >
+                Folder
+              </div>
+              <div
+                class="button"
+                :class="[this.type === 'file' ? 'active' : '']"
+                @click="linkType('file')"
+              >
+                File
+              </div>
             </div>
-            <div
-              class="button"
-              :class="[this.type === 'folder' ? 'active' : '']"
-              @click="linkType('folder')"
-            >
-              Folder
-            </div>
-            <div
-              class="button"
-              :class="[this.type === 'file' ? 'active' : '']"
-              @click="linkType('file')"
-            >
-              File
-            </div>
+          </div>
+          <div class="address-input">
+            <input
+              type="text"
+              v-model="address"
+              :class="this.type === 'url' ? 'url' : ''"
+              required
+            />
+            <div class="button" v-show="type !== 'url'" @click="selectFile">Open</div>
           </div>
         </div>
-        <div class="address-input">
-          <input
-            type="text"
-            v-model="address"
-            :class="this.type === 'url' ? 'url' : ''"
-            required
-          />
-          <div class="button" v-show="type !== 'url'" @click="selectFile">
-            Open
-          </div>
-        </div>
-      </div>
-      <div class="section">
-        <h3>Image</h3>
-        <div class="img-selection">
-          <div class="img-container">
-            <img :src="imgSrc" @click="selectImage" />
-          </div>
-          <div class="img-selection-info">
-            <input type="text" v-model="imgLabel" readonly disabled />
-            <div class="button" @click="selectImage">Select Image</div>
+        <div class="section">
+          <h3>Image</h3>
+          <div class="img-selection">
+            <div class="img-container">
+              <img :src="imgSrc" @click="selectImage" />
+            </div>
+            <div class="img-selection-info">
+              <input type="text" v-model="imgLabel" readonly disabled />
+              <div class="button" @click="selectImage">Select Image</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="popup-buttons">
+      <div @click="closePopup" class="button">Cancel</div>
+      <div @click="saveLink" class="button save">{{ header() }}</div>
+    </div>
+  </popup>
 </template>
 
 <script>
 import validateInputs from "@/js/helper/validation.js";
 import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+import popup from "@/components/popup/Popup.vue";
 
 export default {
   data: function () {
     return {
-      popupActive: this.$store.state.events.popup.active,
       popupArg: this.$store.state.events.popup.arg,
 
       label: "",
@@ -84,7 +88,12 @@ export default {
       imgLabel: null,
     };
   },
+
   methods: {
+    closePopup: function () {
+      this.$store.commit("closePopup");
+      this.$store.commit("closeColorPicker");
+    },
     selectImage: function () {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
       if (!image) return;
@@ -100,10 +109,7 @@ export default {
       });
       if (!file) return;
 
-      const nativeIconBuffer = window.ipcRenderer.sendSync(
-        "get-native-icon",
-        file
-      );
+      const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", file);
 
       this.address = file;
       this.label = this.imgLabel = window.path.parse(file).name;
@@ -179,39 +185,30 @@ export default {
       })
     );
   },
+  components: {
+    popup,
+  },
 };
 </script>
 
 <style scoped>
-div.edit-link {
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-div.edit-link div.header {
-  margin: 5px 0 10px 0;
-  padding: 5px 0 15px 0;
-  border-bottom: 2px solid var(--line-color);
-  align-items: center;
-  justify-content: center;
-}
-div.edit-link div.content {
+.popup-content div.content {
   height: 100%;
   flex-direction: column;
   overflow: auto;
 }
 
-div.edit-link div.section {
+.popup-content div.section {
   flex-direction: column;
   margin: 10px;
 }
-div.edit-link div.section h3 {
+.popup-content div.section h3 {
   margin-bottom: 5px;
   margin-left: 5px;
   font-size: 14px;
   opacity: 0.9;
 }
-div.edit-link div.section input {
+.popup-content div.section input {
   margin-bottom: 5px;
 }
 
@@ -305,4 +302,6 @@ div.img-selection div.button {
 div.img-selection div.button:hover {
   background: var(--background-active);
 }
+
+
 </style>
