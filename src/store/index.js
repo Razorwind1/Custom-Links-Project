@@ -302,8 +302,6 @@ const store = new Vuex.Store({
 
       if (layout)
         layout.active = true
-
-      console.log(layout)
     },
 
 
