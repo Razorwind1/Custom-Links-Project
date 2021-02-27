@@ -9,27 +9,41 @@ Candle.exe sampleFile.wxs <-turns the .wxs file into an intermediate stage file,
 Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
 -->
 
-<!--Change the windows registry values-->
-<!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
-<DirectoryRef Id="TARGETDIR">
-    <Component Id="RegistryEntry1" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
+<!--ONLY Copy/Paste the code between the comments below. Paste them in the Directory with Id="APPLICATIONROOTDIRECTORY" in the .wxs file-->
+<Directory Id="TARGETDIR" Name="SourceDir">
+  <Directory Id="ProgramFilesFolder">
+    <Directory Id="APPLICATIONROOTDIRECTORY" Name="TailorLink desktop application">
+    <!--Change the windows registry values-->
+        <!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
+      <Component Id="RegistryEntry1" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
         <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\TailorLink">
-            <RegistryValue KeyPath="yes" Type="string" Value="Save to TailorLink"/>
-            <RegistryValue Name="Icon" Type='multiString' Value='[INSTALLDIR]'/>
-            <RegistryValue Name="Icon" Type='multiString' Value='Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe' Action='append'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\TailorLink\command">
-            <RegistryValue Name="Icon" Type='string' Value='[INSTALLDIR]\\Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe \"--open_dir=%V \"'/>
+                     Key="Directory\Background\shell\TailorLink\command">            
+            <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
         </RegistryKey>
     </Component>
-</DirectoryRef>
+    <!--end of registry-adding code-->
+    <!--CHANGE the NEXT LINE Directory tag as well, updating the name field: Name="LinkTailorApp" instead of Name="app-1.0.0" or whatever version number is there-->
+    </Directory>
+  </Directory>
+</Directory>
 
+<!-- <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\TailorLink">
+            <RegistryValue KeyPath="yes" Type="string" Value="Save to TailorLink"/>
+            <RegistryValue Name="Icon" Type='multiString' Value='[INSTALLFOLDER]'/>
+            <RegistryValue Name="Icon" Type='multiString' Value='Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe' Action='append'/>
+        </RegistryKey> -->
 
-<!--Add this within a <Feature> tag to tell Windows installer to actually install the Registry Entreis:-->
+<!--Add this (within the id="Complete" <Feature> tag, but outside the "main application" tag so it's an option users can select or not) to tell Windows installer to actually install the Registry Entreis:-->
+<Feature Id="ContextMenuRegistry" Title="Context Menus" Level="2" Description="Windows context menu integration. This updates the Windows registry, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
 <ComponentRef Id="RegistryEntry1" />
+</Feature>
 
+
+
+<!--extra changes:-->
+<Property Id="VisibleProductName" Value="LinkTailor desktop application (Machine)" />
+<!-- <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
 
 
 
