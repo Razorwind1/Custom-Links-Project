@@ -2,10 +2,30 @@
   <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
     <v-app>
       <TitleBar />
-      <AppContent ref="appContent" />
-      <TagList v-if="this.$store.state.events.popup.active && this.$store.state.events.popup.arg.type === 'tag-list'" />
-      <EditAddLink v-if="this.$store.state.events.popup.active && (this.$store.state.events.popup.arg.type === 'edit-link' || this.$store.state.events.popup.arg.type === 'add-link')" />
-      <LayoutList v-if="this.$store.state.events.popup.active && this.$store.state.events.popup.arg.type === 'layout-list'" />
+      <div style="height: 100%">
+        <NavBar />
+        <AppContent ref="appContent" />
+      </div>
+
+      <TagList
+        v-if="
+          this.$store.state.events.popup.active &&
+          this.$store.state.events.popup.arg.type === 'tag-list'
+        "
+      />
+      <EditAddLink
+        v-if="
+          this.$store.state.events.popup.active &&
+          (this.$store.state.events.popup.arg.type === 'edit-link' ||
+            this.$store.state.events.popup.arg.type === 'add-link')
+        "
+      />
+      <LayoutList
+        v-if="
+          this.$store.state.events.popup.active &&
+          this.$store.state.events.popup.arg.type === 'layout-list'
+        "
+      />
       <Alert v-if="this.$store.state.events.alert.active" />
       <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
       <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
@@ -17,6 +37,7 @@
 
 <script>
 import TitleBar from "@/components/core/TitleBar.vue";
+import NavBar from "@/components/core/NavBar.vue";
 import AppContent from "@/components/views/AppContent.vue";
 import EditAddLink from "@/components/popup/EditAddLink.vue";
 import LayoutList from "@/components/popup/LayoutList.vue";
@@ -47,6 +68,7 @@ export default {
     ColorPicker,
     AssignedTagsMenu,
     AssignedLayoutsMenu,
+    NavBar,
   },
   methods: {
     closeMenus,
@@ -146,7 +168,7 @@ body {
   flex-direction: column;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 /*   SCROLLBAR   */

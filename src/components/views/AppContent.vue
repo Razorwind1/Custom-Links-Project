@@ -12,27 +12,29 @@
       this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar',
     ]"
   >
-    <NavBar />
     <div id="app-main">
-      <router-view ref="canvas"/>
+      <router-view ref="canvas" />
     </div>
-    <div id="side-bar">
+    <div id="side-bar" ref="sideBar">
       <Links />
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from "@/components/core/NavBar.vue";
 import Links from "@/components/core/Links.vue";
 
 export default {
   components: {
-    NavBar,
     Links,
   },
   props: {
     popupVisible: Boolean,
+  },
+  mounted() {
+    this.$refs.sideBar.addEventListener("transitionend", () => {
+      this.$refs.canvas.updateGrid?.();
+    });
   },
 };
 </script>
@@ -43,6 +45,8 @@ export default {
   flex-grow: 1;
   overflow: hidden;
   height: 100%;
+  background-color: var(--background-color);
+  border-top-left-radius: 10px;
 }
 
 #app-main {
@@ -59,6 +63,7 @@ export default {
 #side-bar {
   min-width: 250px;
   width: 0;
+  background-color: var(--background-accent);
   transition: min-width ease-in 100ms;
 }
 div.collapse-side-bar #side-bar {

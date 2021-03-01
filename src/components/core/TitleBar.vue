@@ -7,11 +7,11 @@
       <div class="favourite-layouts">
         <div
           class="layout-circle"
-          v-for="layout in this.favouriteLayouts"
+          v-for="layout in this.$store.state.layouts"
           :key="layout.id"
           :style="{ 'background-color': layout.color }"
-          :class="{ active: layout.active }"
-          @click="setLayout(layout.id)"
+          :class="{ active: layout.active, hidden: !layout.favourite }"
+          @click="setLayout(layout)"
         >
           <div class="layout-name">{{layout.name}}</div>
         </div>
@@ -40,9 +40,6 @@ export default {
     return {
       windowMaximized: false,
       windowFocused: true,
-      favouriteLayouts: this.$store.state.layouts.filter(
-        (layout) => layout.favourite === true
-      ),
     };
   },
   methods: {
@@ -62,8 +59,10 @@ export default {
     minimized: function () {
       this.windowMaximized = false;
     },
-    setLayout: function (id) {
-      this.$store.commit("activateLayout", id);
+    setLayout: function (layout) {
+      if (layout.active)
+        return
+      this.$store.commit("activateLayout", layout.id);
     },
   },
   mounted: function () {

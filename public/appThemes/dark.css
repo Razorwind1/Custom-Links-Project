@@ -3,6 +3,7 @@
   --background-accent: #202020; /*dark*/
   --background-active: #0e0e0e; /*active*/
   --background-hover: #4d4d4d; /*light*/
+  --background-muted: #3a3a3a; /*light*/
   --background-text: #eeeeee;
 
   --line-color: #202020;
@@ -15,7 +16,7 @@
   --button-color: #407e6b;
   --button-accent: #034b35; /*active/depressed*/
   --button-text: #eeeeee;
-  --button-hover: #127054;
+  --button-hover: #0fa176;
 
   --link-color: #202020;
   --link-text: #eeeeee;
