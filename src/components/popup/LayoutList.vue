@@ -1,251 +1,243 @@
 <template>
-    <popup @click="bruh">
-      <div class="popup-content">
-        <div class="content">
-          <div class="section">
-            <h3 required>Name</h3>
-            <input type="text" v-model="label" required />
+  <popup>
+    <div class="popup-content" @click.stop="reset">
+      <div class="content">
+        <h2>Layouts</h2>
+        <div
+          v-for="layout in this.$store.state.layouts"
+          :key="layout.id"
+          class="layout"
+          :class="{ active: layout.active, editing: layout.id === editingLayout }"
+          @click="selectLayout(layout)"
+        >
+          <input
+            class="name text-overflow"
+            :value="layout.name"
+            :ref="layout.id"
+            :disabled="layout.id !== editingLayout"
+            @change="setLayoutName"
+            @click.stop
+            @keyup="layoutInputKeyUp"
+          />
+          <input
+            type="color"
+            :value="layout.color"
+            @change="colorSelected"
+            :class="{ hidden: layout.id !== editingLayout }"
+            @click.stop
+          />
+          <div
+            class="edit"
+            @click.stop="editLayout(layout.id)"
+            :class="{ hidden: layout.id === editingLayout }"
+          >
+            <gearSvg />
           </div>
+          <div class="edit" :class="{ hidden: layout.id !== editingLayout }">
+            <saveSvg />
+          </div>
+          <div
+            class="remove"
+            :class="{ hidden: layout.id !== editingLayout }"
+            @click.stop="deleteLayout(layout.id)"
+          >
+            <removeSvg />
+          </div>
+          <img
+            class="favourite"
+            src="/assets/svg/freepik/png/021-favourite (3).png"
+            :class="{ hidden: !layout.favourite }"
+            @click.stop="toggleFavourite(layout.id)"
+          />
+          <img
+            class="favourite"
+            src="/assets/svg/freepik/png/021-favourite-white.png"
+            :class="{ hidden: layout.favourite }"
+            @click.stop="toggleFavourite(layout.id)"
+          />
         </div>
       </div>
-    </popup>
+    </div>
+  </popup>
 </template>
 
 <script>
-import validateInputs from "@/js/helper/validation.js";
-import imgUrlFromBuffer from "@/js/img/imgUrlFromBuffer.js";
+// import validateInputs from "@/js/helper/validation.js";
 import popup from "@/components/popup/Popup.vue";
+import gearSvg from "@/components/icons/gear.vue";
+import saveSvg from "@/components/icons/save.vue";
+import removeSvg from "@/components/icons/remove.vue";
 
 export default {
   data: function () {
     return {
       popupArg: this.$store.state.events.popup.arg,
-
-      label: "",
-      address: "",
-      type: "url",
-
-      imgSrc: null,
-
-      imgBuffer: null,
-      imgLabel: null,
+      editingLayout: null,
     };
   },
-
   methods: {
-    bruh: function () {
-      alert()
-    },
     closePopup: function () {
       this.$store.commit("closePopup");
-      this.$store.commit("closeColorPicker");
     },
-    selectImage: function () {
-      const image = window.ipcRenderer.sendSync("open-image-dialog");
-      if (!image) return;
-
-      this.imgSrc = imgUrlFromBuffer(image.buffer);
-
-      this.imgLabel = image.src;
-      this.imgBuffer = image.buffer;
+    toggleFavourite: function (id) {
+      this.$store.commit("toggleFavouriteLayout", id);
     },
-    selectFile: function () {
-      const file = window.ipcRenderer.sendSync("open-file-dialog", {
-        type: this.type,
+    selectLayout: function (layout) {
+      if (layout.active || layout.id === this.editingLayout) return;
+      this.$store.commit("activateLayout", layout.id);
+      this.editingLayout = null;
+    },
+    editLayout: function (id) {
+      this.editingLayout = id;
+      const input = this.$refs[id][0];
+      this.$nextTick(() => {
+        input.select();
       });
-      if (!file) return;
-
-      const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", file);
-
-      this.address = file;
-      this.label = this.imgLabel = window.path.parse(file).name;
-      this.imgSrc = imgUrlFromBuffer(nativeIconBuffer);
-      this.imgBuffer = nativeIconBuffer;
     },
-    getElementImg: function (id, url) {
-      const image = window.ipcRenderer.sendSync("get-image-buffer", {
-        id,
-        url,
-      });
-
-      this.imgSrc = imgUrlFromBuffer(image.buffer);
-
-      this.imgLabel = image.src;
-      this.imgBuffer = image.buffer;
+    deleteLayout: function (id) {
+      this.$store.commit("deleteLayout", id);
     },
-    saveLink: function () {
-      const inputValid = validateInputs(this.$el);
-
-      if (inputValid) {
-        if (this.popupArg.type === "add-link") {
-          this.$store.commit("addLink", {
-            data: this.$data,
-          });
-        } else if (this.popupArg.type === "edit-link") {
-          this.$store.commit("editLink", {
-            id: this.popupArg.linkID,
-            data: this.$data,
-          });
-        }
-        this.$store.commit("closePopup");
-      }
+    reset: function () {
+      this.editingLayout = null;
     },
-    header: function () {
-      return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
+    colorSelected: function ({ target }) {
+      this.$store.commit("editLayout", { color: target.value, id: this.editingLayout });
     },
-    linkType: function (type) {
-      this.type = type;
+    setLayoutName: function ({ target }) {
+      this.$store.commit("editLayout", { name: target.value, id: this.editingLayout });
+    },
+    layoutInputKeyUp: function (e) {
+      if (e.key === "Enter") this.editingLayout = null;
     },
   },
-  mounted: function () {
-    this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
-
-    if (this.popupArg.type === "edit-link") {
-      const linkData = this.$store.getters.linkFromId(this.popupArg.linkID);
-      this.label = linkData.content.label;
-      this.address = linkData.content.address;
-      this.type = linkData.type;
-    }
-    if (
-      this.popupArg.type === "add-link" &&
-      this.popupArg.address &&
-      this.popupArg.label &&
-      this.popupArg.nativeIconBuffer &&
-      this.popupArg.linkType
-    ) {
-      this.address = this.popupArg.address;
-      this.label = this.popupArg.label;
-      this.imgLabel = this.popupArg.label;
-      this.imgSrc = imgUrlFromBuffer(this.popupArg.nativeIconBuffer);
-      this.imgBuffer = this.popupArg.nativeIconBuffer;
-      this.type = this.popupArg.linkType;
-    }
-
-    const inputs = document.querySelectorAll("input");
-    if (inputs[0]) inputs[0].focus();
-
-    // Enter Key to Submit The Form
-    inputs.forEach((input) =>
-      input.addEventListener("keyup", ({ key }) => {
-        key === "Enter" ? this.$emit("save-click") : "";
-      })
-    );
-  },
+  mounted: function () {},
   components: {
     popup,
+    gearSvg,
+    saveSvg,
+    removeSvg,
   },
 };
 </script>
 
 <style scoped>
+.popup-content {
+  padding: 0;
+}
 .popup-content div.content {
   height: 100%;
+  width: 100%;
+  padding: 10px;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: auto;
 }
 
-.popup-content div.section {
-  flex-direction: column;
-  margin: 10px;
-}
-.popup-content div.section h3 {
-  margin-bottom: 5px;
-  margin-left: 5px;
-  font-size: 14px;
-  opacity: 0.9;
-}
-.popup-content div.section input {
-  margin-bottom: 5px;
+.popup-content div.content h2{
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+  border-bottom: 1px solid black;
+  margin-bottom : 5px;
 }
 
-div.address-header {
+.popup-content div.content .layout {
   position: relative;
-}
-div.address-header > div {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-}
-div.address-header div.button {
-  font-size: 14px;
-  font-style: italic;
+  max-height: 80px;
+  height: 80px;
+  margin: 5px;
+  padding: 10px 20px;
   background-color: var(--background-accent);
-  border: 1px solid var(--background-active);
-  padding: 0 5px;
-  border-radius: 0;
-  border-bottom: none;
-  border-left: none;
-  opacity: 0.6;
-  transition: background-color 200ms ease-in-out;
-  transition: opacity 200ms ease-in-out;
-}
-div.address-header div.button:hover {
-  opacity: 1;
-}
-div.address-header div.button:first-child {
-  border-top-left-radius: 10px;
-}
-div.address-header div.button:last-child {
-  border-top-right-radius: 10px;
-}
-div.address-header div.button.active {
-  background-color: var(--button-color);
-  opacity: 1;
-}
-
-div.address-input {
-  flex-direction: column;
-  position: relative;
-}
-div.address-input input:not(.url) {
-  padding-right: 4rem;
-}
-div.address-input div.button {
-  position: absolute;
-  right: 0;
-  padding: 10px;
-  box-shadow: inset 0 0 1000px var(--background-color);
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border: 1px solid rgba(1, 1, 1, 0);
-  border-left: 1px solid var(--button-accent);
-  transition: box-shadow 150ms ease-in-out;
-}
-div.address-input div.button:hover {
-  box-shadow: inset 0 0 1000px var(--background-hover);
-}
-
-div.img-selection {
-  padding: 10px;
-}
-div.img-selection .img-container {
-  width: 100px;
-  height: 100px;
-  background: var(--background-accent);
-  border: 1px var(--button-accent) solid;
-  border-radius: 5px;
-}
-div.img-selection .img-container img {
-  max-width: 100%;
-  max-height: 100%;
-  width: inherit;
-  height: inherit;
-  object-fit: contain;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 40px auto 40px 40px;
+  grid-template-rows: auto;
+  grid-template-areas: "fav name name button-edit";
   cursor: pointer;
+  transition: background-color 200ms, transform 200ms;
 }
-div.img-selection > div.img-selection-info {
-  margin: 0 10px;
-  flex-direction: column;
+.popup-content div.content .layout.editing {
+  grid-template-columns: 40px auto 40px 40px;
+  grid-template-areas: "fav name button-color button-edit";
 }
-div.img-selection > div.img-selection-info input:focus {
-  border: 1px solid var(--background-active);
+.popup-content div.content .layout:hover {
+  background-color: var(--background-muted);
+  transform: scale(1.02);
 }
-div.img-selection div.button {
-  padding: 15px;
-  background: var(--background-accent);
-  border-radius: 50px;
+.popup-content div.content .layout.active {
+  background-color: var(--background-active);
+  transform: scale(1.01);
 }
-div.img-selection div.button:hover {
-  background: var(--background-active);
+.popup-content div.content .layout img.favourite {
+  grid-area: fav;
+}
+.popup-content div.content .layout input.name {
+  grid-area: name;
+  width: 100%;
+  font-size: 26px;
+  padding-right: 10px;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+.popup-content div.content .layout input.name[disabled] {
+  pointer-events: none;
+  border: none;
+}
+.popup-content div.content .layout input.name[disabled]::selection {
+  background-color: transparent;
+  user-select: none;
+}
+
+.popup-content div.content .layout .edit,
+.popup-content div.content .layout .remove {
+  display: flex;
+  place-items: center;
+}
+.popup-content div.content .edit {
+  fill: var(--button-color);
+  grid-area: button-edit;
+}
+.popup-content div.content .remove {
+  fill: var(--alert-hover);
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(30%) translateY(-30%);
+}
+.popup-content div.content .layout svg {
+  min-width: 25px;
+  transition: transform 150ms ease-out;
+}
+.popup-content div.content .layout svg:hover {
+  transform: scale(1.25);
+}
+.popup-content div.content .layout svg:active {
+  transform: scale(0.9);
+}
+
+.popup-content div.content .layout input[type="color"] {
+  padding: 0;
+  margin: 0;
+  border: none;
+  width: 23px;
+  height: 25px;
+  cursor: pointer;
+  grid-area: button-color;
+}
+.popup-content div.content .layout input[type="color"]:hover {
+  border: 1px solid var(--button-hover);
+}
+
+.popup-content div.content .layout img {
+  width: 25px;
+  height: 25px;
+  transition: transform 150ms ease-out;
+}
+.popup-content div.content .layout img:hover {
+  transform: scale(1.3);
 }
 </style>

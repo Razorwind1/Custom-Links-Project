@@ -125,7 +125,7 @@ export default {
           });
         });
 
-      this.updateContainerWidth()
+      this.updateContainerWidth();
     },
     updateGridSize: function () {
       if (this.containerWidth) {
@@ -190,7 +190,6 @@ export default {
       this.$store.commit("setLinkSize", { id, newH, newW });
     },
     updateContainerWidth: function () {
-      this.$store.commit("toggleSidebar", {resizing: true})
       if (this.$el && this.$el.parentNode)
         this.containerWidth = this.$el.parentNode.offsetWidth;
       this.updateGridSize();
@@ -207,7 +206,12 @@ export default {
   },
   mounted: function () {
     this._keyListener = function (e) {
-      if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
+      if (
+        e.key === "a" &&
+        (e.ctrlKey || e.metaKey) &&
+        e.target.tagName !== "INPUT" &&
+        e.target.tagName !== "TEXTAREA"
+      ) {
         this.$store.commit("showPopup", {
           type: "add-link",
         });

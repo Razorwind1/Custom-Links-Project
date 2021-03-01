@@ -38,7 +38,7 @@ const store = new Vuex.Store({
         active: false,
         favourite: true,
         name: "Home",
-        color: "#521",
+        color: "#502010",
         items: [
           {
             id: 0,
@@ -65,7 +65,7 @@ const store = new Vuex.Store({
         active: false,
         favourite: true,
         name: "Gaming",
-        color: "#121",
+        color: "#102010",
         items: [
           {
             id: 0,
@@ -83,7 +83,7 @@ const store = new Vuex.Store({
         active: true,
         favourite: true,
         name: "Coding",
-        color: "#921",
+        color: "#902010",
         items: [
           {
             id: 1,
@@ -164,10 +164,11 @@ const store = new Vuex.Store({
   mutations: {
     // ------- State Operations ------- 
     setState(state, payload) {
-      state.links = payload.links || [],
-        state.styles = payload.styles || [],
-        state.tags = payload.tags || [],
-        state.theme = payload.theme || "dark"
+      state.links = payload.links || []
+      state.layouts = payload.layouts || []
+      state.styles = payload.styles || []
+      state.tags = payload.tags || []
+      state.theme = payload.theme || "dark"
     },
     setTheme(state, payload) {
       state.theme = payload
@@ -296,12 +297,17 @@ const store = new Vuex.Store({
         layout.items.splice(index, 1)
       }
     },
-    activateLayout(state, id){
+    activateLayout(state, id) {
       state.layouts.forEach(layout => layout.active = false)
       const layout = state.layouts.find(layout => layout.id === id)
 
       if (layout)
         layout.active = true
+    },
+    toggleFavouriteLayout(state, id) {
+      const layout = state.layouts.find(layout => layout.id == id)
+
+      layout.favourite = !layout.favourite
     },
 
 
@@ -341,7 +347,7 @@ const store = new Vuex.Store({
 
     // Layouts Menu
     closeLayoutsMenu(state) {
-      if (state.events.popup.arg?.type === "layout-list"){
+      if (state.events.popup.arg?.type === "layout-list") {
         state.events.popup.active = false
         state.events.popup.arg = null
       }
@@ -384,10 +390,10 @@ const store = new Vuex.Store({
     },
 
     // Sidebar
-    toggleSidebar(state, payload){
+    toggleSidebar(state, payload) {
       if (state.events.sidebar.active || (payload && payload.resizing))
         state.events.sidebar.active = false
-      else 
+      else
         state.events.sidebar.active = true
     }
   },
