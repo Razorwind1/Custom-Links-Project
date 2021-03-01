@@ -15,10 +15,44 @@ Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
     <Directory Id="APPLICATIONROOTDIRECTORY" Name="TailorLink desktop application">
     <!--Change the windows registry values-->
         <!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
-      <Component Id="RegistryEntry1" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
+      <Component Id="ConextMenuRegistryEntries" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
         <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\TailorLink\command">            
+                     Key="Directory\Background\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\LinkTailor\command">            
             <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+        </RegistryKey>
+        
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor\command">            
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+        </RegistryKey>
+
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor\command">            
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
         </RegistryKey>
     </Component>
     <!--end of registry-adding code-->
@@ -35,17 +69,18 @@ Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
         </RegistryKey> -->
 
 <!--Add this (within the id="Complete" <Feature> tag, but outside the "main application" tag so it's an option users can select or not) to tell Windows installer to actually install the Registry Entreis:-->
-<Feature Id="ContextMenuRegistry" Title="Context Menus" Level="2" Description="Windows context menu integration. This updates the Windows registry, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
-<ComponentRef Id="RegistryEntry1" />
+<Feature Id="ContextMenuRegistry" Title="Context Menus" Level="2" Description="Windows context menu integration. New Windows registry entries, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
+<ComponentRef Id="ConextMenuRegistryEntries" />
 </Feature>
 
 
 
 <!--extra changes:-->
 <Property Id="VisibleProductName" Value="LinkTailor desktop application (Machine)" />
-<!-- <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
+<!--instead of: <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
+Description="The main components to run the LinkTailor application."
+<!--instead of: Description="The main components to run the applications."-->
 
-
-
+<!--nope-->
 <UIRef Id="WixUI_Mondo" />
 <UIRef Id="WixUI_ErrorProgressText" />

@@ -120,10 +120,44 @@
         <Directory Id="APPLICATIONROOTDIRECTORY" Name="TailorLink desktop application">
         <!--Change the windows registry values-->
         <!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
-      <Component Id="RegistryEntry1" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
+      <Component Id="ConextMenuRegistryEntries" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
         <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\TailorLink\command">            
+                     Key="Directory\Background\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\LinkTailor\command">            
             <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+        </RegistryKey>
+        
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="*\shell\LinkTailor\command">            
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+        </RegistryKey>
+
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor">  
+            <RegistryValue Type='string' Value='Save to LinkTailor'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor">  
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\LinkTailor\command">            
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
         </RegistryKey>
     </Component>
     <!--end of registry-adding code-->
@@ -553,7 +587,7 @@
         <ComponentRef Id="PurgeOnUninstall" />
       </Feature>
       <Feature Id="ContextMenuRegistry" Title="Right-Click Menus" Level="2" Description="Windows context menu integration. This updates the Windows registry, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
-        <ComponentRef Id="RegistryEntry1" />
+        <ComponentRef Id="ConextMenuRegistryEntries" />
       </Feature>
     </Feature> 
   </Product>
