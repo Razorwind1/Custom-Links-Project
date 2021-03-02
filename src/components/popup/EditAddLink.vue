@@ -17,23 +17,17 @@
               class="button"
               :class="[this.type === 'url' ? 'active' : '']"
               @click="linkType('url')"
-            >
-              Web
-            </div>
+            >Web</div>
             <div
               class="button"
               :class="[this.type === 'folder' ? 'active' : '']"
               @click="linkType('folder')"
-            >
-              Folder
-            </div>
+            >Folder</div>
             <div
               class="button"
               :class="[this.type === 'file' ? 'active' : '']"
               @click="linkType('file')"
-            >
-              File
-            </div>
+            >File</div>
           </div>
         </div>
         <div class="address-input">
@@ -78,7 +72,7 @@ import defaultImgBuffer from "@/js/img/defaultImgBuffer.js";
 import request from "request";
 
 export default {
-  data: function () {
+  data: function() {
     return {
       popupActive: this.$store.state.events.popup.active,
       popupArg: this.$store.state.events.popup.arg,
@@ -92,18 +86,17 @@ export default {
       imgSrc: null,
 
       imgBuffer: null,
-      imgLabel: null,
+      imgLabel: null
     };
   },
   methods: {
-    grabLogo: function () {
+    grabLogo: function() {
       if (this.address !== "" && !this.address.match(/^[a-zA-Z]+:\/\//)) {
         this.address = "http://" + this.address;
       }
 
-      if (this.customImg === true || this.type !== "url" || this.address === "") return;
-
-
+      if (this.customImg === true || this.type !== "url" || this.address === "")
+        return;
 
       let host = new URL(this.address).host;
       request(
@@ -118,14 +111,14 @@ export default {
         }
       );
     },
-    resetImage: function () {
+    resetImage: function() {
       this.customImg = false;
       this.imgBuffer = new Buffer.from(defaultImgBuffer, "base64");
       this.imgSrc = imgUrlFromBuffer(this.imgBuffer);
       this.imgLabel = "default_icon.png";
       this.imgFetchClearbit = false;
     },
-    selectImage: function () {
+    selectImage: function() {
       const image = window.ipcRenderer.sendSync("open-image-dialog");
       if (!image) return;
 
@@ -136,13 +129,16 @@ export default {
       this.imgBuffer = image.buffer;
       this.imgFetchClearbit = false;
     },
-    selectFile: function () {
+    selectFile: function() {
       const file = window.ipcRenderer.sendSync("open-file-dialog", {
-        type: this.type,
+        type: this.type
       });
       if (!file) return;
 
-      const nativeIconBuffer = window.ipcRenderer.sendSync("get-native-icon", file);
+      const nativeIconBuffer = window.ipcRenderer.sendSync(
+        "get-native-icon",
+        file
+      );
 
       this.address = file;
       this.label = this.imgLabel = window.path.parse(file).name;
@@ -151,10 +147,10 @@ export default {
       this.customImg = true;
       this.imgFetchClearbit = false;
     },
-    getElementImg: function (id, url) {
+    getElementImg: function(id, url) {
       const image = window.ipcRenderer.sendSync("get-image-buffer", {
         id,
-        url,
+        url
       });
 
       if (!image) return;
@@ -164,34 +160,34 @@ export default {
       this.imgLabel = image.src;
       this.imgBuffer = image.buffer;
     },
-    saveLink: function () {
+    saveLink: function() {
       const inputValid = validateInputs(this.$el);
 
       if (inputValid) {
         if (this.popupArg.type === "add-link") {
           this.$store.commit("addLink", {
-            data: this.$data,
+            data: this.$data
           });
         } else if (this.popupArg.type === "edit-link") {
           this.$store.commit("editLink", {
             id: this.popupArg.linkID,
-            data: this.$data,
+            data: this.$data
           });
         }
         this.$store.commit("closePopup");
       }
     },
-    header: function () {
+    header: function() {
       return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
     },
-    linkType: function (type) {
+    linkType: function(type) {
       this.type = type;
     },
-    attributionLink: function () {
+    attributionLink: function() {
       window.ipcRenderer.send("open", "https://www.clearbit.com");
-    },
+    }
   },
-  mounted: function () {
+  mounted: function() {
     this.getElementImg(this.popupArg.linkID, this.popupArg.imgUrl);
 
     if (this.popupArg.type === "edit-link") {
@@ -222,12 +218,12 @@ export default {
     if (inputs[0]) inputs[0].focus();
 
     // Enter Key to Submit The Form
-    inputs.forEach((input) =>
+    inputs.forEach(input =>
       input.addEventListener("keyup", ({ key }) => {
         key === "Enter" ? this.saveLink() : "";
       })
     );
-  },
+  }
 };
 </script>
 
