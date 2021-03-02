@@ -1,12 +1,23 @@
 <!--Created by Daniel Hickman.
-This file contains windows registry stuff for the installer that the build_installer.js file does not account for. (I bet there's a way to put it in there but I don't know how)
+This file pertains to the windows registry entries (context menu integration) for the installer that the build_installer.js file does not account for.
 
-Running build_installer.js creates a .wxs file in the "windows_installer" directory that can be edited with custom XML that WiX tools can read & use.
+The code in this doc can be copy/pasted to complete the installer after build_installer.js is run.
 
-My thought is I can construct registry keys (& perhaps other stuff) here, copy/paste it into the .wxs file, and then run the following WiX commands to create the .msi installer from the modified .wxs file:
+Steps:
+1) Run build_installer.js
+    -COMMAND (from Custom-Links-Project): node build_installer.js
+    -this will create a .wxs file in the "windows_installer" directory.
+    -it will also create an .msi file but that doesn't have the registry stuff in it yet, so you can delete it. We will create our own .msi file by the commands in step 3.
+2) Edit that .wxs file
+    -copy/paste xml code from this file as directed below
+3) Run the commands to build the .msi (installer file)
+    from the windows_installer directory:
+    -COMMAND1: Candle.exe LinkTailor.wxs -ext WixUtilExtension
+    -COMMAND2: Light.exe LinkTailor.wixobj -ext WixUtilExtension -ext WixUIExtension
+    Note: you must have WiX tools installed to run these commands!
 
 Candle.exe sampleFile.wxs <-turns the .wxs file into an intermediate stage file, a .wixobj
-Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
+Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
 -->
 
 <!--ONLY Copy/Paste the code between the comments below. Paste them in the Directory with Id="APPLICATIONROOTDIRECTORY" in the .wxs file-->
@@ -61,14 +72,8 @@ Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
   </Directory>
 </Directory>
 
-<!-- <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\TailorLink">
-            <RegistryValue KeyPath="yes" Type="string" Value="Save to TailorLink"/>
-            <RegistryValue Name="Icon" Type='multiString' Value='[INSTALLFOLDER]'/>
-            <RegistryValue Name="Icon" Type='multiString' Value='Custom-Links-Project\\dist_electron\\win-unpacked/link-manager.exe' Action='append'/>
-        </RegistryKey> -->
 
-<!--Add this (within the id="Complete" <Feature> tag, but outside the "main application" tag so it's an option users can select or not) to tell Windows installer to actually install the Registry Entreis:-->
+<!--Add this after the /Feature tag with id="main application" (but within the id="Complete" <Feature> tag) to give the user the option to install the registry entries or not:-->
 <Feature Id="ContextMenuRegistry" Title="Context Menus" Level="2" Description="Windows context menu integration. New Windows registry entries, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
 <ComponentRef Id="ConextMenuRegistryEntries" />
 </Feature>
@@ -81,6 +86,3 @@ Light.exe sampleFile.wixobj   <-creates an .msi file from the .wixobj
 Description="The main components to run the LinkTailor application."
 <!--instead of: Description="The main components to run the applications."-->
 
-<!--nope-->
-<UIRef Id="WixUI_Mondo" />
-<UIRef Id="WixUI_ErrorProgressText" />

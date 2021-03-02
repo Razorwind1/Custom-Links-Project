@@ -8,7 +8,7 @@ const path = require('path');
 //define input and output directory
 const APP_DIR = path.resolve(__dirname, './dist_electron/win-unpacked');
 const OUT_DIR = path.resolve(__dirname, './windows_installer');
-const ICO_PATH = path.resolve(__dirname, './public/assets/icons/logo.png')
+const ICO_PATH = path.resolve(__dirname, './public/assets/icons/LinkTailor_Universal_Icon.svg')
 
 //instansiate the MSICreator
 const msiCreator = new MSICreator({
