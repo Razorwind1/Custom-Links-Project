@@ -103,6 +103,9 @@ img {
   height: 13px;
   margin-right: 3px;
 }
+.close, .minimize, .maximize {
+  pointer-events: all !important;
+}
 .buttons {
   -webkit-app-region: no-drag;
 }

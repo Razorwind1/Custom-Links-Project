@@ -262,11 +262,15 @@ const store = new Vuex.Store({
 
 
     // ------- Layout Operations ------- 
-    addLayout(state, layoutName, layoutColor) {
+    addLayout(state, payload) {
       state.layouts.push({
         id: uniqueId(),
-        name: layoutName,
-        color: layoutColor
+        name: payload.name,
+        color: payload.color,
+        theme: payload.theme,
+        active: false,
+        favourite: false,
+        items: []
       })
     },
     editLayout(state, payload) {
@@ -308,6 +312,11 @@ const store = new Vuex.Store({
         layout.active = true
     },
     toggleFavouriteLayout(state, id) {
+      if (state.layouts.filter(layout => layout.favourite === true).length >= 10) {
+        state.events.alert.active = true
+        state.events.alert.arg = {type: "layout-favourite-fail"}
+        return;
+      }
       const layout = state.layouts.find(layout => layout.id == id)
 
       layout.favourite = !layout.favourite

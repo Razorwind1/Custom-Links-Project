@@ -2,7 +2,10 @@
   <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
     <v-app>
       <TitleBar />
-      <div style="height: 100%">
+      <div
+        style="height: 100%"
+        :class="[this.eventsActive() ? 'disable-input' : '']"
+      >
         <NavBar />
         <AppContent ref="appContent" />
       </div>
@@ -72,6 +75,15 @@ export default {
   },
   methods: {
     closeMenus,
+    eventsActive: function () {
+      return (
+        this.$store.state.events.popup.active ||
+        this.$store.state.events.alert.active ||
+        this.$store.state.events.contextMenu.active ||
+        this.$store.state.events.assignedTagsMenu.active ||
+        this.$store.state.events.assignedLayoutsMenu.active
+      );
+    }
   },
   created: function () {
     // const state = window.ipcRenderer.sendSync("state-read")
@@ -236,5 +248,9 @@ span.required-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.disable-input {
+  pointer-events: none;
 }
 </style>

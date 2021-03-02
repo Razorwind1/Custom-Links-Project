@@ -8,6 +8,7 @@ export default function (event, id) {
       {
         label: "Open",
         click: () => {
+          this.$store.commit("closeContextMenu");
           openLink.bind(this)(element.id)
         },
         style: {
@@ -17,6 +18,7 @@ export default function (event, id) {
       {
         label: "Edit Link",
         click: () => {
+          this.$store.commit("closeContextMenu");
           this.$store.commit("showPopup", {
             type: "edit-link",
             linkID: element.id,
@@ -28,7 +30,6 @@ export default function (event, id) {
         label: "Tags",
         click: () => {
           this.$store.commit("closeContextMenu");
-
           this.$store.commit("showAssignedTagsMenu", {
             element,
             event,
@@ -39,7 +40,6 @@ export default function (event, id) {
         label: "Layouts",
         click: () => {
           this.$store.commit("closeContextMenu");
-
           this.$store.commit("showAssignedLayoutsMenu", {
             element,
             event,
@@ -49,6 +49,7 @@ export default function (event, id) {
       {
         label: "Delete Link",
         click: () => {
+          this.$store.commit("closeContextMenu");
           this.$store.commit("showAlert", {
             type: "delete-link",
             id: element.id,

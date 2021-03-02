@@ -1,16 +1,7 @@
 <template>
   <div
     id="app-content"
-    :class="[
-      this.$store.state.events.popup.active ||
-      this.$store.state.events.alert.active ||
-      this.$store.state.events.contextMenu.active ||
-      this.$store.state.events.assignedTagsMenu.active ||
-      this.$store.state.events.assignedLayoutsMenu.active
-        ? 'disable-input'
-        : '',
-      this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar',
-    ]"
+    :class="[this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar']"
   >
     <div id="app-main">
       <router-view ref="canvas" />
@@ -56,9 +47,6 @@ export default {
   overflow: auto;
 }
 
-.disable-input {
-  pointer-events: none;
-}
 
 #side-bar {
   min-width: 250px;
