@@ -46,6 +46,16 @@ export default {
       this.saveButtonClass = ["delete-link"];
       this.closeButton = true;
     }
+    
+    if (this.alertArg.type == "delete-layout") {
+      this.header = "Delete Layout";
+      this.content = `Are you sure you want to delete ${
+        this.$store.getters.layoutFromId(this.alertArg.id).name
+      }?`;
+      this.saveButtonLabel = "Delete";
+      this.saveButtonClass = ["delete-link"];
+      this.closeButton = true;
+    }
 
     if (this.alertArg.type == "delete-tag") {
       this.header = "Delete Tag";
@@ -80,7 +90,12 @@ export default {
       if (this.alertArg.type == "delete-tag") {
         this.$store.commit("deleteTag", { id: this.alertArg.tagID });
         this.$store.commit("closeAlert");
-      } else this.$store.commit("closeAlert");
+      }
+      if (this.alertArg.type == "delete-layout") {
+        this.$store.commit("deleteLayout", { id: this.alertArg.id });
+        this.$store.commit("closeAlert");
+      } 
+      else this.$store.commit("closeAlert");
     },
     closeAlert: function() {
       this.$store.commit("closeAlert");

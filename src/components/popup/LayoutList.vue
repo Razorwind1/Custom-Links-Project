@@ -1,6 +1,6 @@
 <template>
   <popup>
-    <div class="popup-content" @click.stop="reset">
+    <div class="popup-content" @click.stop="discardChanges">
       <div class="content">
         <h2>Layouts</h2>
         <div
@@ -8,7 +8,7 @@
           :key="layout.id"
           class="layout"
           :class="{ active: layout.active, editing: layout.id === editingLayout }"
-          @click="selectLayout(layout)"
+          @click.stop="selectLayout(layout)"
         >
           <input
             class="name text-overflow"
@@ -33,28 +33,35 @@
           >
             <gearSvg />
           </div>
-          <div class="edit" :class="{ hidden: layout.id !== editingLayout }">
-            <saveSvg />
+          <div
+            class="discard"
+            :class="{ hidden: layout.id !== editingLayout }"
+            @click.stop="discardChanges"
+          >
+            <discardSvg />
           </div>
           <div
-            class="remove"
+            class="save"
+            :class="{ hidden: layout.id !== editingLayout }"
+            @click.stop="saveChanges"
+          >
+            <checkmarkSvg />
+          </div>
+          <div
+            class="trash"
             :class="{ hidden: layout.id !== editingLayout }"
             @click.stop="deleteLayout(layout.id)"
           >
-            <removeSvg />
+            <trashSvg />
           </div>
-          <img
+          <div
             class="favourite"
-            src="/assets/svg/freepik/png/021-favourite (3).png"
-            :class="{ hidden: !layout.favourite }"
+            :class="{ hidden: layout.id === editingLayout }"
             @click.stop="toggleFavourite(layout.id)"
-          />
-          <img
-            class="favourite"
-            src="/assets/svg/freepik/png/021-favourite-white.png"
-            :class="{ hidden: layout.favourite }"
-            @click.stop="toggleFavourite(layout.id)"
-          />
+          >
+            <heartSvg v-if="layout.favourite" />
+            <heartEmptySvg v-if="!layout.favourite" />
+          </div>
         </div>
       </div>
     </div>
@@ -65,14 +72,19 @@
 // import validateInputs from "@/js/helper/validation.js";
 import popup from "@/components/popup/Popup.vue";
 import gearSvg from "@/components/icons/gear.vue";
-import saveSvg from "@/components/icons/save.vue";
-import removeSvg from "@/components/icons/remove.vue";
+import discardSvg from "@/components/icons/close-round.vue";
+import trashSvg from "@/components/icons/trash.vue";
+import heartEmptySvg from "@/components/icons/heart-empty.vue";
+import heartSvg from "@/components/icons/heart.vue";
+import checkmarkSvg from "@/components/icons/checkmark.vue";
 
 export default {
   data: function () {
     return {
       popupArg: this.$store.state.events.popup.arg,
       editingLayout: null,
+      name: null,
+      color: null,
     };
   },
   methods: {
@@ -83,9 +95,10 @@ export default {
       this.$store.commit("toggleFavouriteLayout", id);
     },
     selectLayout: function (layout) {
-      if (layout.active || layout.id === this.editingLayout) return;
-      this.$store.commit("activateLayout", layout.id);
-      this.editingLayout = null;
+      if (layout.id !== this.editingLayout) {
+        this.discardChanges();
+      }
+      if (layout.id !== this.editingLayout && !layout.active) this.$store.commit("activateLayout", layout.id);
     },
     editLayout: function (id) {
       this.editingLayout = id;
@@ -95,27 +108,46 @@ export default {
       });
     },
     deleteLayout: function (id) {
-      this.$store.commit("deleteLayout", id);
-    },
-    reset: function () {
-      this.editingLayout = null;
+      this.$store.commit("showAlert", {
+        type: "delete-layout",
+        id: id,
+      });
     },
     colorSelected: function ({ target }) {
-      this.$store.commit("editLayout", { color: target.value, id: this.editingLayout });
+      this.color = target.value;
     },
     setLayoutName: function ({ target }) {
-      this.$store.commit("editLayout", { name: target.value, id: this.editingLayout });
+      this.name = target.value;
     },
     layoutInputKeyUp: function (e) {
-      if (e.key === "Enter") this.editingLayout = null;
+      if (e.key === "Enter") this.saveChanges();
+      if (e.key === "Escape") this.discardChanges();
+    },
+    discardChanges: function () {
+      this.editingLayout = null;
+      this.name = null;
+      this.color = null;
+    },
+    saveChanges: function () {
+      this.$store.commit("editLayout", {
+        color: this.color,
+        name: this.name,
+        id: this.editingLayout,
+      });
+      this.editingLayout = null;
+      this.name = null;
+      this.color = null;
     },
   },
   mounted: function () {},
   components: {
     popup,
     gearSvg,
-    saveSvg,
-    removeSvg,
+    discardSvg,
+    trashSvg,
+    heartEmptySvg,
+    heartSvg,
+    checkmarkSvg,
   },
 };
 </script>
@@ -132,19 +164,19 @@ export default {
   overflow-y: auto;
 }
 
-.popup-content div.content h2{
+.popup-content div.content h2 {
   width: 100%;
   text-align: center;
   font-size: 30px;
   padding: 10px;
   border-bottom: 1px solid black;
-  margin-bottom : 5px;
+  margin-bottom: 5px;
 }
 
 .popup-content div.content .layout {
   position: relative;
-  max-height: 80px;
-  height: 80px;
+  max-height: 50px;
+  height: 50px;
   margin: 5px;
   padding: 10px 20px;
   background-color: var(--background-accent);
@@ -159,7 +191,7 @@ export default {
 }
 .popup-content div.content .layout.editing {
   grid-template-columns: 40px auto 40px 40px;
-  grid-template-areas: "fav name button-color button-edit";
+  grid-template-areas: "button-trash name button-color button-edit";
 }
 .popup-content div.content .layout:hover {
   background-color: var(--background-muted);
@@ -169,14 +201,11 @@ export default {
   background-color: var(--background-active);
   transform: scale(1.01);
 }
-.popup-content div.content .layout img.favourite {
-  grid-area: fav;
-}
 .popup-content div.content .layout input.name {
   grid-area: name;
   width: 100%;
   font-size: 26px;
-  padding-right: 10px;
+  padding: 0 10px;
   border-top: 0;
   border-left: 0;
   border-right: 0;
@@ -192,17 +221,27 @@ export default {
   user-select: none;
 }
 
-.popup-content div.content .layout .edit,
-.popup-content div.content .layout .remove {
-  display: flex;
-  place-items: center;
-}
 .popup-content div.content .edit {
   fill: var(--button-color);
   grid-area: button-edit;
 }
-.popup-content div.content .remove {
+.popup-content div.content .favourite {
   fill: var(--alert-hover);
+  grid-area: fav;
+}
+.popup-content div.content .trash {
+  fill: var(--alert-hover);
+  grid-area: button-trash;
+}
+.popup-content div.content .discard {
+  fill: var(--alert-hover);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-30%) translateY(-30%);
+}
+.popup-content div.content .save {
+  fill: var(--button-color);
   position: absolute;
   top: 0;
   right: 0;
@@ -210,7 +249,7 @@ export default {
 }
 .popup-content div.content .layout svg {
   min-width: 25px;
-  transition: transform 150ms ease-out;
+  transition: transform 50ms ease-out;
 }
 .popup-content div.content .layout svg:hover {
   transform: scale(1.25);
@@ -230,14 +269,5 @@ export default {
 }
 .popup-content div.content .layout input[type="color"]:hover {
   border: 1px solid var(--button-hover);
-}
-
-.popup-content div.content .layout img {
-  width: 25px;
-  height: 25px;
-  transition: transform 150ms ease-out;
-}
-.popup-content div.content .layout img:hover {
-  transform: scale(1.3);
 }
 </style>

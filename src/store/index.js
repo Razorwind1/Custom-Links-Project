@@ -39,6 +39,7 @@ const store = new Vuex.Store({
         favourite: true,
         name: "Home",
         color: "#502010",
+        theme: "default",
         items: [
           {
             id: 0,
@@ -66,6 +67,7 @@ const store = new Vuex.Store({
         favourite: true,
         name: "Gaming",
         color: "#102010",
+        theme: "default",
         items: [
           {
             id: 0,
@@ -84,6 +86,7 @@ const store = new Vuex.Store({
         favourite: true,
         name: "Coding",
         color: "#902010",
+        theme: "default",
         items: [
           {
             id: 1,
@@ -406,6 +409,9 @@ const store = new Vuex.Store({
       return state.links.filter(link => link.tags.includes(tagID))
     },
     // Layout Getters
+    layoutFromId: (state) => (id) => {
+      return state.layouts.filter(layout => layout.id === id)[0]
+    },
     layoutsFromLinkId: (state) => (id) => {
       return state.layouts.filter(layout => layout.items.find(item => item.id === id) !== undefined)
     },
