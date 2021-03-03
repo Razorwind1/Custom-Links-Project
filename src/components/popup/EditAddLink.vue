@@ -145,7 +145,7 @@ export default {
       }
     },
     header: function () {
-      return this.popupArg.type === "add-link" ? "Add Link" : "Edit Link";
+      return this.popupArg.type === "add-link" ? "Add Link" : "Save";
     },
     linkType: function (type) {
       this.type = type;
