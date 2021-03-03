@@ -1,0 +1,24 @@
+:root {
+    --background-color:#222f5b; /*main*/
+    --background-accent:#0e1a40; /*dark*/
+    --background-active: #5d5d5d; /*active*/
+    --background-text: #ffffff;
+    --background-hover: #4d4d4d; /*light*/
+
+    --line-color: #946b2d;
+
+    --nav-accent: #222fb5;
+
+    --button-color: #946b2d;
+    --button-accent:#946b2d;/*active/depressed*/
+    --button-text: #ffffff;
+    --button-hover: #946b2d;
+
+    --link-color:#0e1a40;
+    --link-text: #ffffff;
+    --link-hover: #946b2d;
+
+    --alert-color: #ffffff;
+    --alert-text: #ffffff;
+    --alert-hover: #f57d7d;
+  }

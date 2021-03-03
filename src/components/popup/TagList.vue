@@ -51,10 +51,15 @@
                 </div>
                 <div class="xDeleteTag" @click="xDeleteTag(tag.id)">&#9932;</div>
               </div>
-              <div class="tag-entry-bottom-row">
-                <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
-                  <div class="associated-link">{{ link.content.label }}</div>
-                </div>
+              <div class="delete-button">
+                <a class="delete-tag" @click="xDeleteTag(tag.id)">
+                  <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
+                </a>
+              </div>
+            </div>
+            <div class="tag-entry-bottom-row">
+              <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
+                <div class="associated-link">{{ link.content.label }}</div>
               </div>
             </div>
           </div>
@@ -207,15 +212,22 @@ span.color-dot {
   margin-right: 10px;
   border-top: 2px solid var(--background-accent);
   flex-direction: column;
+  max-height: 150px;
+  overflow-y:scroll;
+  overflow-x:hidden;
 }
 .associated-link {
   font-size: 75%;
-  margin-left: -8px;
-  margin-right: -12px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  margin-left: 0px;
+ margin-right: -12px;
+ display: inline-block;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+.associated-link:hover {
+  filter: brightness(80%);
+  cursor: pointer;
 }
 
 
@@ -256,5 +268,9 @@ span.color-dot {
 }
 .new-tag:active {
   background-color: var(--button-accent);
+}
+div.tag-list div.delete-button > a.delete-tag > img {
+  width: 117%;
+  margin: 3px bold;
 }
 </style>

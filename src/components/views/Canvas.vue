@@ -45,7 +45,7 @@
         >
           <div class="assignedTagsIcon">
             <img
-              src="/assets/svg/freepik/svg/dh/label-tag.svg"
+              src="/assets/icons\label-tag.svg"
               alt="Assigned Tags Icon"
               @click.stop="assignedTagsMenu($event, element)"
             />

@@ -2,7 +2,7 @@
   <div id="title-bar" :class="[windowFocused ? 'focused' : '']">
     <div v-if="!windowMaximized" class="top-resize"></div>
     <div class="content">
-      <img src="/assets/svg/freepik/svg/022-bookmark (2).svg" />
+      <img src="/assets/icons/LinkTailor_Universal_Icon.svg" />
       <h1 class="app-title">Tailor Link</h1>
       <div class="favourite-layouts">
         <div
@@ -99,9 +99,10 @@ export default {
   justify-content: flex-start;
   align-items: center;
 }
-img {
-  height: 13px;
+#title-bar .content img {
+  height: 20px;
   margin-right: 3px;
+  margin-top: -2px;
 }
 .close, .minimize, .maximize {
   pointer-events: all !important;
@@ -146,6 +147,7 @@ img {
 
 .app-title {
   font-size: 15px;
+  margin-top: 1px;
 }
 
 .buttons,
