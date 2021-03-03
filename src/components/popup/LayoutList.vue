@@ -154,7 +154,7 @@ export default {
           theme: "default",
         })
         .then((id) => {
-          this.editLayout(id).scrollIntoView();
+          this.editLayout(id).scrollIntoView({behavior: "smooth", block: "start"});
         });
     },
   },
