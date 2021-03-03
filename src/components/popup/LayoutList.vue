@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="add" @click="addLayout">
+        <div class="add" @click.stop="addLayout">
           <addSvg />
         </div>
       </div>
@@ -113,6 +113,7 @@ export default {
       this.$nextTick(() => {
         input.select();
       });
+      return input
     },
     deleteLayout: function (id) {
       this.$store.commit("showAlert", {
@@ -146,11 +147,15 @@ export default {
       this.color = null;
     },
     addLayout: function () {
-      this.$store.commit("addLayout", {
-        name: "New Layout",
-        color: "#111111",
-        theme: "default"
-      })
+      this.$store
+        .dispatch("addLayout", {
+          name: "New Layout",
+          color: "#111111",
+          theme: "default",
+        })
+        .then((id) => {
+          this.editLayout(id).scrollIntoView();
+        });
     },
   },
   mounted: function () {},
@@ -189,7 +194,7 @@ h2 {
 
 .layouts {
   padding: 10px;
-  padding-bottom: 60px;
+  padding-bottom: 70px;
   flex-direction: column;
   overflow-y: auto;
 }
@@ -252,7 +257,7 @@ input.name[disabled]::selection {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  box-shadow: 0 0 15px 5px var(--background-active)
+  box-shadow: 0 0 15px 5px var(--background-active);
 }
 .add svg:hover {
   fill: var(--background-active);

@@ -262,17 +262,6 @@ const store = new Vuex.Store({
 
 
     // ------- Layout Operations ------- 
-    addLayout(state, payload) {
-      state.layouts.push({
-        id: uniqueId(),
-        name: payload.name,
-        color: payload.color,
-        theme: payload.theme,
-        active: false,
-        favourite: false,
-        items: []
-      })
-    },
     editLayout(state, payload) {
       const layout = state.layouts.find(layout => layout.id == payload.id)
 
@@ -407,6 +396,21 @@ const store = new Vuex.Store({
         state.events.sidebar.active = false
       else
         state.events.sidebar.active = true
+    }
+  },
+  actions: {
+    async addLayout(context, payload) {
+      const id = uniqueId()
+      context.state.layouts.push({
+        id,
+        name: payload.name,
+        color: payload.color,
+        theme: payload.theme,
+        active: false,
+        favourite: false,
+        items: []
+      })
+      return id
     }
   },
   getters: {
