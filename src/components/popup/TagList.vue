@@ -49,17 +49,16 @@
                     :style="{ 'background-color': tag.color }"
                   ></span>
                 </div>
-                <div class="xDeleteTag" @click="xDeleteTag(tag.id)">&#9932;</div>
+                <div class="delete-button">
+                  <a class="delete-tag" @click="xDeleteTag(tag.id)">
+                    <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
+                  </a>
+                </div>
               </div>
-              <div class="delete-button">
-                <a class="delete-tag" @click="xDeleteTag(tag.id)">
-                  <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
-                </a>
-              </div>
-            </div>
-            <div class="tag-entry-bottom-row">
-              <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
-                <div class="associated-link">{{ link.content.label }}</div>
+              <div class="tag-entry-bottom-row">
+                <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
+                  <div class="associated-link">{{ link.content.label }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -126,7 +125,7 @@ export default {
     },
     close() {
       this.$store.commit("closePopup");
-    }
+    },
   },
   updated: function () {
     if (this.tagsLength < this.$refs.tags.length)
@@ -135,8 +134,8 @@ export default {
     this.tagsLength = this.$refs.tags.length;
   },
   components: {
-    popup
-  }
+    popup,
+  },
 };
 </script>
 
@@ -213,23 +212,22 @@ span.color-dot {
   border-top: 2px solid var(--background-accent);
   flex-direction: column;
   max-height: 150px;
-  overflow-y:scroll;
-  overflow-x:hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .associated-link {
   font-size: 75%;
   margin-left: 0px;
- margin-right: -12px;
- display: inline-block;
- overflow: hidden;
- text-overflow: ellipsis;
- white-space: nowrap;
+  margin-right: -12px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .associated-link:hover {
   filter: brightness(80%);
   cursor: pointer;
 }
-
 
 .popup-content div.content {
   height: 100%;
@@ -269,8 +267,8 @@ span.color-dot {
 .new-tag:active {
   background-color: var(--button-accent);
 }
-div.tag-list div.delete-button > a.delete-tag > img {
-  width: 117%;
+div.delete-button > a.delete-tag > img {
+  width: 20px;
   margin: 3px bold;
 }
 </style>

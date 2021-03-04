@@ -1,40 +1,35 @@
 <template>
   <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
-    <v-app>
-      <TitleBar />
-      <div
-        style="height: 100%"
-        :class="[this.eventsActive() ? 'disable-input' : '']"
-      >
-        <NavBar />
-        <AppContent ref="appContent" />
-      </div>
+    <TitleBar />
+    <div style="height: 100%" :class="[this.eventsActive() ? 'disable-input' : '']">
+      <NavBar />
+      <AppContent ref="appContent" />
+    </div>
 
-      <TagList
-        v-if="
-          this.$store.state.events.popup.active &&
-          this.$store.state.events.popup.arg.type === 'tag-list'
-        "
-      />
-      <EditAddLink
-        v-if="
-          this.$store.state.events.popup.active &&
-          (this.$store.state.events.popup.arg.type === 'edit-link' ||
-            this.$store.state.events.popup.arg.type === 'add-link')
-        "
-      />
-      <LayoutList
-        v-if="
-          this.$store.state.events.popup.active &&
-          this.$store.state.events.popup.arg.type === 'layout-list'
-        "
-      />
-      <Alert v-if="this.$store.state.events.alert.active" />
-      <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
-      <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
-      <AssignedTagsMenu v-if="this.$store.state.events.assignedTagsMenu.active" />
-      <AssignedLayoutsMenu v-if="this.$store.state.events.assignedLayoutsMenu.active" />
-    </v-app>
+    <TagList
+      v-if="
+        this.$store.state.events.popup.active &&
+        this.$store.state.events.popup.arg.type === 'tag-list'
+      "
+    />
+    <EditAddLink
+      v-if="
+        this.$store.state.events.popup.active &&
+        (this.$store.state.events.popup.arg.type === 'edit-link' ||
+          this.$store.state.events.popup.arg.type === 'add-link')
+      "
+    />
+    <LayoutList
+      v-if="
+        this.$store.state.events.popup.active &&
+        this.$store.state.events.popup.arg.type === 'layout-list'
+      "
+    />
+    <Alert v-if="this.$store.state.events.alert.active" />
+    <ContextMenu v-if="this.$store.state.events.contextMenu.active" />
+    <ColorPicker v-if="this.$store.state.events.colorPicker.active" />
+    <AssignedTagsMenu v-if="this.$store.state.events.assignedTagsMenu.active" />
+    <AssignedLayoutsMenu v-if="this.$store.state.events.assignedLayoutsMenu.active" />
   </div>
 </template>
 
@@ -83,12 +78,12 @@ export default {
         this.$store.state.events.assignedTagsMenu.active ||
         this.$store.state.events.assignedLayoutsMenu.active
       );
-    }
+    },
   },
   created: function () {
-    // const state = window.ipcRenderer.sendSync("state-read")
-    // if (state) this.$store.commit("setState", state)
-    // this.stateHistory.push(JSON.parse(JSON.stringify(state)))
+    const state = window.ipcRenderer.sendSync("state-read");
+    if (state) this.$store.commit("setState", state);
+    this.stateHistory.push(JSON.parse(JSON.stringify(state)));
 
     window.ipcRenderer.on("cmd-args", (event, args) => {
       if (args.open_dir) {

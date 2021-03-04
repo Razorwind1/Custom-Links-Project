@@ -29,6 +29,7 @@ export default {
 
 <style scoped>
 div.container {
+  width: 100%;
   flex-direction: column;
   overflow-y: auto;
   padding: 15px 10px 10px 15px;

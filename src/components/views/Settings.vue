@@ -10,7 +10,6 @@
         <option value="ravenclaw">Ravenclaw</option>
       </select>
     </div>
-    <!--<button @click="getFavicon('https://duckduckgo.com/')">getFavicon Text</button>-->
 
     <div class="attribution">
       Icons made by
@@ -26,9 +25,6 @@ export default {
   methods: {
     attributionLink: function () {
       window.shell.openExternal("https://www.flaticon.com/authors/freepik");
-    },
-    getFavicon: function (url) {
-      window.ipcRenderer.send("getFavicon", url);
     },
     theme(e){
       this.$store.commit("setTheme", e.target.value)

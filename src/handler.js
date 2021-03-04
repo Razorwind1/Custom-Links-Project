@@ -10,21 +10,7 @@ import fs from "fs"
 
 var argv = require('minimist')(process.argv);
 
-const webIconScraper = require("web-icon-scraper");
-
 export default function handler(win) {
-    ipcMain.on('getFavicon', (event, theUrl) => {
-        webIconScraper({
-            url: theUrl,
-            sort: "des",
-            limit: 3,
-            checkStatus: false,
-            followRedirectsCount: 0,
-        }).then((output) => {
-            console.log(output);
-        });
-        event.reply("this reply will contain the pic url?");
-    })
     ipcMain.on('close-app', () => {
         win.close()
     })

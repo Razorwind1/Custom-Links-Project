@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .contextMenu {
-  min-width: 100px;
+  min-width: 150px;
   max-width: 180px;
   background: var(--background-color);
   border-radius: 5px;
