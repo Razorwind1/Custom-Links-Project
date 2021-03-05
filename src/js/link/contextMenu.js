@@ -22,7 +22,7 @@ export default function (event, id) {
           this.$store.commit("showPopup", {
             type: "edit-link",
             linkID: element.id,
-            imgUrl: element.img,
+            imgUrl: element.content.img,
           });
         },
       },
