@@ -1,17 +1,25 @@
 :root {
-    --main-text-color: #eeeeee;
-    --secondary-text-color: #111111;
-  
-    --light-background-color: #ac5f5f;
-    --main-background-color: #7a2626;
-    --dark-background-color: #441818;
-    --active-background-color: #350404;
-  
-    --light-accent-color: #dddddd;
-    --main-accent-color: #585858;
-    --dark-accent-color: #2f2f2f;
-    --active-accent-color: #1d1d1d;
+  --background-color: #491111;
+  --background-accent: #330d0d;
+  --background-active: #7e0a0a;
+  --background-hover: #830000;
+  --background-text: #dddddd;
 
-    --dark-alert-color: #8a5cc5;
-    --light-alert-color: #7b32db;
-  }
+  --line-color: #727272;
+  --line-accent: #cfcfcf;
+
+  --nav-accent: #bb0000;
+  --text-accent: #dddddd;
+
+  --button-color: #7a0041;
+  --button-accent: #440024; /*active/depressed*/
+  --button-text: #eeeeee;
+  --button-hover: #be0065;
+
+  --link-color: #3a0505;
+  --link-text: #eeeeee;
+  --link-hover: #1a0808;
+
+  --alert-color: #7b32db;
+  --alert-text: #eeeeee;
+  --alert-hover: #8a5cc5;}

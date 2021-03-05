@@ -1,42 +1,42 @@
 <template>
 
   <floating
-    :event="this.$store.state.events.assignedTagsMenu.event"
-    class="tagsMenu"
+    :event="this.$store.state.events.assignedLayoutsMenu.event"
+    class="layoutsMenu"
   >
   <div @click.stop>
     <h4 :style="$store.getters.styleFromName(link.style)" class="text-overflow">{{link.content.label}}</h4>
     <hr>
-    <div class="header">Assigned Tags</div>
+    <div class="header">Assigned Layouts</div>
     <div
-      class="tagEntry"
-      v-for="tagID in this.assignedTags"
-      :key="tagID"
-      v-on:click="unassignTag(tagID)"
+      class="layoutEntry"
+      v-for="layout in this.assignedLayouts"
+      :key="layout.id"
+      v-on:click="unassignLayout(layout.id)"
     >
       <div
         class="checkedCircle"
-        :style="{ 'background-color': $store.getters.tagColorFromId(tagID) }"
+        :style="{ 'background-color': layout.color }"
       ></div>
-      <div class="assignedTagLabel">
-        {{ $store.getters.tagNameFromId(tagID) }}
+      <div class="assignedLayoutLabel">
+        {{ layout.name }}
       </div>
     </div>
-    <div class="header nonAssignedTags">Nonassigned Tags</div>
+    <div class="header nonAssignedLayouts">Not Assigned Layouts</div>
     <div
-      class="tagEntry"
-      v-for="nonassignedTagID in this.nonassignedTags"
-      :key="'nonAssigned' + nonassignedTagID"
-      v-on:click="assignTag(nonassignedTagID)"
+      class="LayoutEntry"
+      v-for="layout in this.nonassignedLayouts"
+      :key="layout.id"
+      v-on:click="assignLayout(layout.id)"
     >
       <div
         class="uncheckedCircle"
         :style="{
-          'background-color': $store.getters.tagColorFromId(nonassignedTagID),
+          'background-color': layout.color,
         }"
       ></div>
-      <div class="nonassignedTagLabel">
-        {{ $store.getters.tagNameFromId(nonassignedTagID) }}
+      <div class="nonassignedLayoutLabel">
+        {{ layout.name }}
       </div>
     </div>
     </div>
@@ -48,43 +48,38 @@ import floating from "@/components/floating/Floating.vue";
 
 export default {
   data: function () {
-    let linkID = this.$store.state.events.assignedTagsMenu.arg.element.id;
-    let link = this.$store.getters.linkFromId(linkID);
-    let assignedTags = this.$store.getters.tagsFromLinkId(linkID);
     return {
-      linkID,
-      link,
-      assignedTags,
-      nonassignedTags: this.$store.state.tags
-        .map((tag) => tag.id)
-        .filter((item) => !assignedTags.includes(item)),
+      link: this.$store.getters.linkFromId(this.$store.state.events.assignedLayoutsMenu.arg.element.id),
+      assignedLayouts: [],
+      nonassignedLayouts: []
     };
   },
   components: {
     floating,
   },
   methods: {
-    unassignTag(tagID) {
-      this.$store.commit("unassignTag", {
-        tagID,
-        linkID: this.linkID,
+    unassignLayout(layoutId) {
+      this.$store.commit("unassignLayout", {
+        layoutId,
+        linkId: this.link.id,
       });
-      this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
-      this.nonassignedTags = this.$store.state.tags
-        .map((tag) => tag.id)
-        .filter((item) => !this.assignedTags.includes(item));
+      this.updateLayouts()
     },
-    assignTag(tagID) {
-      this.$store.commit("assignTag", {
-        tagID,
-        linkID: this.linkID,
+    assignLayout(layoutId) {
+      this.$store.commit("assignLayout", {
+        layoutId,
+        linkId: this.link.id,
       });
-      this.assignedTags = this.$store.getters.tagsFromLinkId(this.linkID);
-      this.nonassignedTags = this.$store.state.tags
-        .map((tag) => tag.id)
-        .filter((item) => !this.assignedTags.includes(item));
+      this.updateLayouts()
     },
+    updateLayouts(){
+      this.assignedLayouts = this.$store.getters.layoutsFromLinkId(this.link.id)
+      this.nonassignedLayouts = this.$store.state.layouts.filter(layout => !this.assignedLayouts.includes(layout))
+    }
   },
+  created: function (){
+    this.updateLayouts()
+  }
 };
 </script>
 
@@ -99,7 +94,7 @@ hr{
   border-bottom: 1px solid var(--line-accent);
   outline: none;
 }
-.tagsMenu{
+.layoutsMenu{
   min-width: 100px;
   max-width: 180px;
   background: var(--background-color);
@@ -108,13 +103,13 @@ hr{
   padding: 0;
   max-height: 350px;
 }
-.tagsMenu > div{
+.layoutsMenu > div{
   padding: 5px;
   width: 100%;
   flex-direction: column;
   overflow-y: auto;
 }
-.tagsMenu > div > div {
+.layoutsMenu > div > div {
   padding: 2px;
   width: 100%;
 }
@@ -124,16 +119,16 @@ hr{
   font-style: italic;
 }
 
-.tagEntry {
+.layoutEntry {
  align-items: center;
  justify-content: center;
  cursor: pointer;
  border-radius: 5px;
 }
-.tagEntry:hover {
+.layoutEntry:hover {
  background-color: var(--background-hover);
 }
-.assignedTagLabel {
+.assignedLayoutLabel {
  cursor: pointer;
  margin-left: 10px;
  font-size: 14px;
@@ -153,13 +148,13 @@ hr{
  border-radius: 50%;
  display: inline-block;
 }
-.nonAssignedTags {
+.nonAssignedLayouts {
  border-top-style: solid;
  border-top-width: 2px;
  border-top-color: var(--line-color);
  margin-top: 12px;
 }
-.nonassignedTagLabel {
+.nonassignedLayoutLabel {
  cursor: pointer;
  margin-left: 10px;
  font-size: 12px;

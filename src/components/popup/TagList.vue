@@ -1,80 +1,104 @@
 <template>
-  <div class="tag-list">
-    <div class="header">
-      <h2>Tag List</h2>
-      <div class="button new-tag" @click.stop="addTag()">New+</div>
-    </div>
-    <div class="content">
-      <div class="section">
-        <div v-for="(tag, index) in $store.state.tags" :key="index">
-          <div class="tag-entry">
-            <div class="tag-entry-top-row">
-              <input
-                class="tagLabel"
-                v-bind:class="{ tagBeingEdited: tagBeingEditedIdx == index && editingFields}"
-                @click="editingName(index)"
-                v-on:click.stop
-                :value="tag.name"
-                ref="tags"
-                v-on:keyup.enter="saveName(tag.id)"
-                @blur="editingFields = false"
-              />
-              <div
-                @click="stopEditingName()"
-                class="xStopEditing"
-                v-show="tagBeingEditedIdx == index && editingFields"
-              >&#9932;</div>
-              <div
-                @click="saveName(tag.id)"
-                class="checkSaveLabel"
-                v-show="tagBeingEditedIdx == index && editingFields"
-              >&#x2713;</div>
-              <div
-                @click.stop="
-                  colorPicker($event, {
-                    tagID: tag.id,
-                    tagColor: tag.color,
-                  })
-                "
-              >
-                <span class="color-dot" :style="{ 'background-color': tag.color }"></span>
+  <popup>
+    <div class="popup-content">
+      <div class="header">
+        <h2>Tag List</h2>
+        <div class="button new-tag" @click.stop="addTag()">New+</div>
+      </div>
+      <div class="content">
+        <div class="section">
+          <div v-for="(tag, index) in $store.state.tags" :key="index">
+            <div class="tag-entry">
+              <div class="tag-entry-top-row">
+                <input
+                  class="tagLabel"
+                  v-bind:class="{
+                    tagBeingEdited: tagBeingEditedIdx == index && editingFields,
+                  }"
+                  @focus="editingName(index)"
+                  v-on:click.stop
+                  :value="tag.name"
+                  ref="tags"
+                  v-on:keyup.enter="saveName(tag.id)"
+                  @blur="stopEditingName()"
+                />
+                <div
+                  @click="stopEditingName()"
+                  class="xStopEditing"
+                  v-show="tagBeingEditedIdx == index && editingFields"
+                >
+                  &#9932;
+                </div>
+                <div
+                  @click="saveName(tag.id)"
+                  class="checkSaveLabel"
+                  v-show="tagBeingEditedIdx == index && editingFields"
+                >
+                  &#x2713;
+                </div>
+                <input type="color" :value="tag.color" @change="changeTagColor($event, tag.id)" />
+                <!-- <div
+                  @click.stop="
+                    colorPicker($event, {
+                      tagID: tag.id,
+                      tagColor: tag.color,
+                    })
+                  "
+                >
+                  <span
+                    class="color-dot"
+                    :style="{ 'background-color': tag.color }"
+                  ></span>
+                </div> -->
+                <div class="delete-button">
+                  <a class="delete-tag" @click="xDeleteTag(tag.id)">
+                    <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
+                  </a>
+                </div>
               </div>
-              <div class="delete-button">
-                <a class="delete-tag" @click="xDeleteTag(tag.id)">
-                  <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
-                </a>
-              </div>
-            </div>
-            <div class="tag-entry-bottom-row">
-              <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
-                <div class="associated-link">{{ link.content.label }}</div>
+              <div class="tag-entry-bottom-row">
+                <div v-for="(link, i) in $store.getters.linksFromTag(tag.id)" :key="i">
+                  <div class="associated-link">{{ link.content.label }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="popup-buttons">
+      <div @click="close" class="button save">Close</div>
+    </div>
+  </popup>
 </template>
 
 <script>
+import popup from "@/components/popup/Popup.vue";
+
 export default {
-  data: function() {
+  data: function () {
     return {
       tagBeingEditedIdx: null,
       tagsLength: this.$store.state.tags.length,
-      editingFields: false
+      editingFields: false,
     };
   },
   methods: {
-    colorPicker: function(event, data) {
-      this.$store.commit("showColorPicker", {
-        arg: {
-          pickerType: "tag-color",
-          tagColor: data.tagColor,
-          tagID: data.tagID
-        },
-        event
+    // colorPicker: function (event, data) {
+    //   this.$store.commit("showColorPicker", {
+    //     arg: {
+    //       pickerType: "tag-color",
+    //       tagColor: data.tagColor,
+    //       tagID: data.tagID,
+    //     },
+    //     event,
+    //   });
+    // },
+    changeTagColor: function (e, id) {
+      this.$store.commit("editTag", {
+        tagID: id,
+        newColor: e.target.value,
       });
     },
     editingName(index) {
@@ -90,7 +114,7 @@ export default {
     saveName(tagID) {
       this.$store.commit("editTag", {
         tagID,
-        newName: this.$refs.tags[this.tagBeingEditedIdx].value
+        newName: this.$refs.tags[this.tagBeingEditedIdx].value,
       });
       this.stopEditingName();
     },
@@ -103,19 +127,22 @@ export default {
     xDeleteTag(tagID) {
       this.$store.commit("showAlert", {
         type: "delete-tag",
-        tagID
+        tagID,
       });
-    }
+    },
+    close() {
+      this.$store.commit("closePopup");
+    },
   },
-  updated: function() {
+  updated: function () {
     if (this.tagsLength < this.$refs.tags.length)
       this.editingName(this.$refs.tags.length - 1);
 
     this.tagsLength = this.$refs.tags.length;
   },
-  props: {
-    saveLink: Boolean
-  }
+  components: {
+    popup,
+  },
 };
 </script>
 
@@ -128,10 +155,10 @@ input.tagLabel {
   padding-right: 0px;
   cursor: pointer;
   width: 120px;
- text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 input.tagBeingEdited {
-  background-color: var(--dark-background-color);
+  background-color: var(--background-hover);
   cursor: text;
   padding-right: 40px;
 }
@@ -192,51 +219,40 @@ span.color-dot {
   border-top: 2px solid var(--background-accent);
   flex-direction: column;
   max-height: 150px;
-  overflow-y:scroll;
-  overflow-x:hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .associated-link {
   font-size: 75%;
   margin-left: 0px;
- margin-right: -12px;
- display: inline-block;
- overflow: hidden;
- text-overflow: ellipsis;
- white-space: nowrap;
+  margin-right: -12px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .associated-link:hover {
   filter: brightness(80%);
   cursor: pointer;
 }
 
-/*for consistent pop-up css:*/
-div.tag-list {
+.popup-content div.content {
+  height: 100%;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-div.tag-list div.header {
-  margin: 5px 0 10px 0;
-  padding: 5px 0 15px 0;
-  border-bottom: 2px solid var(--line-color);
-  align-items: center;
-  justify-content: center;
-}
-div.tag-list div.content {
-  height: 100%;
   overflow: auto;
 }
-div.tag-list div.section {
+
+.popup-content div.section {
   flex-direction: column;
   margin: 1px 3px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
-div.tag-list div.section > * {
+.popup-content div.section > * {
   margin: 8px 5px;
 }
-div.tag-list div.section > h3 {
+.popup-content div.section > h3 {
   margin-bottom: 0;
   font-size: 14px;
   opacity: 0.9;
@@ -258,8 +274,8 @@ div.tag-list div.section > h3 {
 .new-tag:active {
   background-color: var(--button-accent);
 }
-div.tag-list div.delete-button > a.delete-tag > img {
-  width: 117%;
+div.delete-button > a.delete-tag > img {
+  width: 20px;
   margin: 3px bold;
 }
 </style>

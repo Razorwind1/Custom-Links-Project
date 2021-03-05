@@ -1,61 +1,13 @@
 <template>
   <div class="popup-overlay">
     <div class="popup-container">
-      <div class="popup-content">
-        <EditAddLink
-          v-if="popupArg.type === 'edit-link' || popupArg.type === 'add-link'"
-          ref="editAddLink"
-        />
-
-        <TagList v-if="popupArg.type === 'tag-list'" />
-      </div>
-      <div class="popup-buttons">
-        <div @click="closePopup" class="button">Cancel</div>
-        <div @click="save" class="button save" v-text="saveButtonLabel()"></div>
-      </div>
+        <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
-import EditAddLink from "@/components/popup/EditAddLink.vue";
-import TagList from "@/components/popup/TagList.vue";
-
-export default {
-  data: function () {
-    return {
-      popupArg: this.$store.state.events.popup.arg,
-    };
-  },
-  methods: {
-    saveButtonLabel: function () {
-      if (this.popupArg.type == "tag-list") return "Close";
-      if (this.popupArg.type == "add-link") return "Add Link";
-
-      return "Save";
-    },
-    save: function () {
-      if (this.popupArg.type == "tag-list") {
-        this.closePopup();
-        this.$store.commit("closeColorPicker");
-      }
-      if (
-        this.popupArg.type == "add-link" ||
-        this.popupArg.type == "edit-link"
-      ) {
-        this.$refs.editAddLink.saveLink();
-      }
-    },
-    closePopup: function () {
-      this.$store.commit("closePopup");
-      this.$store.commit("closeColorPicker");
-    },
-  },
-  components: {
-    EditAddLink,
-    TagList,
-  },
-};
+export default {};
 </script>
 
 <style scoped>
@@ -79,13 +31,26 @@ div.popup-container {
   border-radius: 5px;
   pointer-events: all;
 }
-div.popup-content {
+
+.popup-content {
+  flex-direction: column;
+  width: 100%;
   flex-grow: 1;
   align-items: center;
   justify-content: center;
   padding: 10px;
   height: inherit;
 }
+
+.popup-content div.header {
+  margin: 5px 0 10px 0;
+  padding: 5px 0 15px 0;
+  border-bottom: 2px solid var(--line-color);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 div.popup-buttons {
   height: 70px;
   width: 100%;

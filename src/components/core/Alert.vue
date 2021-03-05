@@ -1,5 +1,5 @@
 <template>
-  <div class="alert-overlay">
+  <div class="alert-overlay" @click.stop>
     <div class="alert-container">
       <div class="alert-content">
         <h1>{{ header }}</h1>
@@ -43,7 +43,17 @@ export default {
         this.$store.getters.linkFromId(this.alertArg.id).content.label
       }?`;
       this.saveButtonLabel = "Delete";
-      this.saveButtonClass = ["delete-link"];
+      this.saveButtonClass = ["delete"];
+      this.closeButton = true;
+    }
+    
+    if (this.alertArg.type == "delete-layout") {
+      this.header = "Delete Layout";
+      this.content = `Are you sure you want to delete ${
+        this.$store.getters.layoutFromId(this.alertArg.id).name
+      }?`;
+      this.saveButtonLabel = "Delete";
+      this.saveButtonClass = ["delete"];
       this.closeButton = true;
     }
 
@@ -53,21 +63,15 @@ export default {
         this.$store.getters.tagNameFromId(this.alertArg.tagID)
       }' tag?`;
       this.saveButtonLabel = "Delete";
-      this.saveButtonClass = ["delete-tag"];
+      this.saveButtonClass = ["delete"];
       this.closeButton = true;
     }
 
-    if (this.alertArg.type == "link-added") {
-      this.header = "Link Added";
-      this.content = `Your link ${this.alertArg.label} was added successfully!`;
-      this.saveButtonLabel = "Close";
-      this.closeButton = false;
-    }
-
-    if (this.alertArg.type == "link-edited") {
-      this.header = "Link Edited";
-      this.content = `Your link ${this.alertArg.label} was edited successfully!`;
-      this.saveButtonLabel = "Close";
+    if (this.alertArg.type == "layout-favourite-fail") {
+      this.header = "Limit Reached";
+      this.content = `You can't favourite more than 10 layouts!`;
+      this.saveButtonLabel = "Ok";
+      this.saveButtonClass = ["info"];
       this.closeButton = false;
     }
   },
@@ -80,7 +84,12 @@ export default {
       if (this.alertArg.type == "delete-tag") {
         this.$store.commit("deleteTag", { id: this.alertArg.tagID });
         this.$store.commit("closeAlert");
-      } else this.$store.commit("closeAlert");
+      }
+      if (this.alertArg.type == "delete-layout") {
+        this.$store.commit("deleteLayout", this.alertArg.id);
+        this.$store.commit("closeAlert");
+      } 
+      else this.$store.commit("closeAlert");
     },
     closeAlert: function() {
       this.$store.commit("closeAlert");
@@ -102,7 +111,7 @@ div.alert-overlay {
 }
 div.alert-container {
   background-color: var(--background-color);
-  width: 400px;
+  width: 450px;
   height: 200px;
   flex-direction: column;
   border-radius: 5px;
@@ -149,10 +158,16 @@ div.alert-buttons > div.button.save:hover {
   background-color: var(--button-hover);
 }
 
-div.alert-buttons > div.button.delete-link {
+div.alert-buttons > div.button.delete {
   background-color: var(--alert-color);
 }
-div.alert-buttons > div.button.delete-link:hover {
+div.alert-buttons > div.button.delete:hover {
   background-color: var(--alert-hover);
+}
+div.alert-buttons > div.button.info {
+  background-color: var(--button-color);
+}
+div.alert-buttons > div.button.info:hover {
+  background-color: var(--button-hover);
 }
 </style>

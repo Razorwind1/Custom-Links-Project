@@ -23,9 +23,9 @@ protocol.registerSchemesAsPrivileged([
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 610,
+    width: 615,
     height: 400,
-    minWidth: 610,
+    minWidth: 615,
     minHeight: 400,
     frame: false,
     backgroundColor: "#2c2c2c",

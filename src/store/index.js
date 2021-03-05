@@ -11,12 +11,6 @@ const store = new Vuex.Store({
     links: [
       {
         id: 0,
-        pos: {
-          x: 0,
-          y: 0,
-          sizeX: 1,
-          sizeY: 1
-        },
         type: "file",
         style: "gameStyle",
         tags: [1, 2],
@@ -24,16 +18,11 @@ const store = new Vuex.Store({
           label: "Steam",
           address: "C:/Program Files (x86)/Steam/steam.exe",
           img: "Steam_icon_logo.png",
+          customImg: false
         }
       },
       {
         id: 1,
-        pos: {
-          x: 0,
-          y: 1,
-          sizeX: 1,
-          sizeY: 1
-        },
         type: "url",
         style: "codingStyle",
         tags: [3],
@@ -41,8 +30,77 @@ const store = new Vuex.Store({
           label: "TailorLink GitHub",
           address: "https://github.com/Razorwind1/Custom-Links-Project",
           img: "github_icon.jpg",
+          customImg: false
         }
       },
+    ],
+    layouts: [
+      {
+        id: "0001",
+        active: false,
+        favourite: true,
+        name: "Home",
+        color: "#502010",
+        theme: "default",
+        items: [
+          {
+            id: 0,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
+          {
+            id: 1,
+            pos: {
+              x: 0,
+              y: 1,
+              sizeX: 1,
+              sizeY: 1
+            },
+          }
+        ]
+      },
+      {
+        id: "0002",
+        active: false,
+        favourite: true,
+        name: "Gaming",
+        color: "#102010",
+        theme: "default",
+        items: [
+          {
+            id: 0,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
+        ]
+      },
+      {
+        id: "0003",
+        active: true,
+        favourite: true,
+        name: "Coding",
+        color: "#902010",
+        theme: "default",
+        items: [
+          {
+            id: 1,
+            pos: {
+              x: 0,
+              y: 0,
+              sizeX: 1,
+              sizeY: 1
+            },
+          },
+        ]
+      }
     ],
     styles: [
       {
@@ -98,21 +156,32 @@ const store = new Vuex.Store({
         active: false,
         arg: null
       },
+      assignedLayoutsMenu: {
+        active: false,
+        arg: null
+      },
+      sidebar: {
+        active: false,
+        arg: null
+      }
     },
   },
   mutations: {
-    // State Operations
+    // ------- State Operations ------- 
     setState(state, payload) {
-      state.links = payload.links || [],
-        state.styles = payload.styles || [],
-        state.tags = payload.tags || [],
-        state.theme = payload.theme || "dark"
+      state.links = payload.links || []
+      state.layouts = payload.layouts || []
+      state.styles = payload.styles || []
+      state.tags = payload.tags || []
+      state.theme = payload.theme || "dark"
     },
     setTheme(state, payload) {
       state.theme = payload
       importCss(payload)
     },
-    // Link Operations
+
+
+    // ------- Link Operations ------- 
     addLink(state, payload) {
       const link = {
         id: uniqueId()
@@ -138,22 +207,29 @@ const store = new Vuex.Store({
     deleteLink(state, payload) {
       const removeIndex = state.links.findIndex(link => link.id === payload.id)
       state.links.splice(removeIndex, 1)
+
+      state.layouts.forEach(layout => {
+        const removeIndex = layout.items.findIndex(link => link.id === payload.id)
+        if (removeIndex !== -1) layout.items.splice(removeIndex, 1)
+      })
     },
     setLinkPosition(state, payload) {
-      const link = state.links.find(link => link.id === payload.id)
+      const link = state.layouts.find(layout => layout.active === true).items.find(link => link.id === payload.id)
       if (link) {
         link.pos.x = payload.newX
         link.pos.y = payload.newY
       }
     },
     setLinkSize(state, payload) {
-      const link = state.links.find(link => link.id === payload.id)
+      const link = state.layouts.find(layout => layout.active === true).items.find(link => link.id === payload.id)
       if (link) {
         link.pos.sizeX = payload.newW
         link.pos.sizeY = payload.newH
       }
     },
-    // Tag Operations
+
+
+    // ------- Tag Operations ------- 
     addTag(state) {
       state.tags.push({
         id: uniqueId(),
@@ -185,7 +261,61 @@ const store = new Vuex.Store({
         state.links.find(gridEl => gridEl.id == payload.linkID).tags.splice(index, 1);
       }
     },
-    // Events
+
+
+    // ------- Layout Operations ------- 
+    editLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.id)
+
+      layout.color = payload.color || layout.color
+      layout.name = payload.name || layout.name
+    },
+    deleteLayout(state, id) {
+      const removeIndex = state.layouts.findIndex(layout => layout.id === id)
+      state.layouts.splice(removeIndex, 1)
+    },
+    assignLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.layoutId);
+      if (!layout.items.includes(item => item.id === payload.linkId)) {
+        layout.items.push({
+          id: payload.linkId,
+          pos: {
+            x: 0,
+            y: 0,
+            sizeX: 1,
+            sizeY: 1
+          },
+        })
+      }
+    },
+    unassignLayout(state, payload) {
+      const layout = state.layouts.find(layout => layout.id == payload.layoutId)
+      const index = layout.items.findIndex(item => item.id === payload.linkId)
+      if (index !== -1) {
+        layout.items.splice(index, 1)
+      }
+    },
+    activateLayout(state, id) {
+      state.layouts.forEach(layout => layout.active = false)
+      const layout = state.layouts.find(layout => layout.id === id)
+
+      if (layout)
+        layout.active = true
+    },
+    toggleFavouriteLayout(state, id) {
+      if (state.layouts.filter(layout => layout.favourite === true).length >= 10) {
+        state.events.alert.active = true
+        state.events.alert.arg = {type: "layout-favourite-fail"}
+        return;
+      }
+      const layout = state.layouts.find(layout => layout.id == id)
+
+      layout.favourite = !layout.favourite
+    },
+
+
+    // ------- Events ------- 
+
     // Popup
     showPopup(state, payload) {
       state.events.popup.active = true
@@ -195,6 +325,7 @@ const store = new Vuex.Store({
       state.events.popup.active = false
       state.events.popup.arg = null
     },
+
     // Alert
     showAlert(state, payload) {
       state.events.alert.active = true
@@ -204,6 +335,7 @@ const store = new Vuex.Store({
       state.events.alert.active = false
       state.events.alert.arg = null
     },
+
     // Assigned Tags Menu
     showAssignedTagsMenu(state, payload) {
       state.events.assignedTagsMenu.active = true
@@ -215,6 +347,27 @@ const store = new Vuex.Store({
       state.events.assignedTagsMenu.id = null
       state.events.assignedTagsMenu.event = null
     },
+
+    // Layouts Menu
+    closeLayoutsMenu(state) {
+      if (state.events.popup.arg?.type === "layout-list") {
+        state.events.popup.active = false
+        state.events.popup.arg = null
+      }
+    },
+
+    // Assigned Layouts Menu
+    showAssignedLayoutsMenu(state, payload) {
+      state.events.assignedLayoutsMenu.active = true
+      state.events.assignedLayoutsMenu.arg = payload
+      state.events.assignedLayoutsMenu.event = payload.event
+    },
+    closeAssignedLayoutsMenu(state) {
+      state.events.assignedLayoutsMenu.active = false
+      state.events.assignedLayoutsMenu.id = null
+      state.events.assignedLayoutsMenu.event = null
+    },
+
     // Context Menu
     showContextMenu(state, payload) {
       state.events.contextMenu.active = true
@@ -226,6 +379,7 @@ const store = new Vuex.Store({
       state.events.contextMenu.arg = null
       state.events.contextMenu.event = null
     },
+
     // Color Picker
     showColorPicker(state, payload) {
       state.events.colorPicker.active = true
@@ -237,6 +391,29 @@ const store = new Vuex.Store({
       state.events.colorPicker.arg = null
       state.events.colorPicker.event = null
     },
+
+    // Sidebar
+    toggleSidebar(state, payload) {
+      if (state.events.sidebar.active || (payload && payload.resizing))
+        state.events.sidebar.active = false
+      else
+        state.events.sidebar.active = true
+    }
+  },
+  actions: {
+    async addLayout(context, payload) {
+      const id = uniqueId()
+      context.state.layouts.push({
+        id,
+        name: payload.name,
+        color: payload.color,
+        theme: payload.theme,
+        active: false,
+        favourite: false,
+        items: []
+      })
+      return id
+    }
   },
   getters: {
     // Link Getters
@@ -245,6 +422,13 @@ const store = new Vuex.Store({
     },
     linksFromTag: (state) => (tagID) => {
       return state.links.filter(link => link.tags.includes(tagID))
+    },
+    // Layout Getters
+    layoutFromId: (state) => (id) => {
+      return state.layouts.filter(layout => layout.id === id)[0]
+    },
+    layoutsFromLinkId: (state) => (id) => {
+      return state.layouts.filter(layout => layout.items.find(item => item.id === id) !== undefined)
     },
     // Style Getters
     styleFromName: (state) => (styleName) => {
@@ -268,9 +452,10 @@ const store = new Vuex.Store({
     stateUserData: (state) => {
       return {
         links: state.links,
+        layouts: state.layouts,
         styles: state.styles,
         tags: state.tags,
-        theme: state.theme
+        theme: state.theme,
       }
     }
   }
@@ -279,10 +464,10 @@ const store = new Vuex.Store({
 export default store
 
 function modifyLink(element, data) {
-  if (data.address && data.label) {
-    element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
-    element.content.label = data.label
-  }
+  element.content.address = data.address.match(/^"*([^"]+)"*$/)[1]     // This regex is used to delete (") character from the start and the end of the given string.
+  element.content.label = data.label
+  element.content.customImg = data.customImg
+
   element.type = data.type || "url";
   if (data.imgLabel && data.imgBuffer) {
     element.content.img = data.imgLabel
