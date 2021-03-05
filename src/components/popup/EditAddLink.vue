@@ -63,7 +63,7 @@
             <div class="img-selection-info">
               <div class="reset-image-container">
                 <input type="text overflow" v-model="imgLabel" readonly disabled />
-                <button class="reset-image-button button" @click="resetImage">X</button>
+                <div class="reset-image-button button" @click="resetImage">X</div>
               </div>
 
               <div class="button" @click="selectImage">Select Image</div>
@@ -378,10 +378,11 @@ div.img-selection div.button:hover {
   position: relative;
   margin-bottom: 5px;
 }
-.reset-image-button {
+div.img-selection div.reset-image-button {
   position: absolute;
   right: 0;
   height: 100%;
   width: 30px;
+  border-radius: 0;
 }
 </style>
