@@ -303,16 +303,5 @@ svg:active {
   transform: scale(0.9);
 }
 
-input[type="color"] {
-  padding: 0;
-  margin: 0;
-  border: none;
-  width: 23px;
-  height: 25px;
-  cursor: pointer;
-  grid-area: button-color;
-}
-input[type="color"]:hover {
-  border: 1px solid var(--button-hover);
-}
+
 </style>

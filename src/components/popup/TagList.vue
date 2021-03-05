@@ -36,7 +36,8 @@
                 >
                   &#x2713;
                 </div>
-                <div
+                <input type="color" :value="tag.color" @change="changeTagColor($event, tag.id)" />
+                <!-- <div
                   @click.stop="
                     colorPicker($event, {
                       tagID: tag.id,
@@ -48,7 +49,7 @@
                     class="color-dot"
                     :style="{ 'background-color': tag.color }"
                   ></span>
-                </div>
+                </div> -->
                 <div class="delete-button">
                   <a class="delete-tag" @click="xDeleteTag(tag.id)">
                     <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
@@ -84,14 +85,20 @@ export default {
     };
   },
   methods: {
-    colorPicker: function (event, data) {
-      this.$store.commit("showColorPicker", {
-        arg: {
-          pickerType: "tag-color",
-          tagColor: data.tagColor,
-          tagID: data.tagID,
-        },
-        event,
+    // colorPicker: function (event, data) {
+    //   this.$store.commit("showColorPicker", {
+    //     arg: {
+    //       pickerType: "tag-color",
+    //       tagColor: data.tagColor,
+    //       tagID: data.tagID,
+    //     },
+    //     event,
+    //   });
+    // },
+    changeTagColor: function (e, id) {
+      this.$store.commit("editTag", {
+        tagID: id,
+        newColor: e.target.value,
       });
     },
     editingName(index) {

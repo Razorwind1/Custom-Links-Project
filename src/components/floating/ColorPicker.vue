@@ -2,16 +2,11 @@
   <floating :event="this.$store.state.events.colorPicker.event" class="colorPicker">
     <div @click="saveColor" class="button save">&check;</div>
     <div @click.stop>
-      <v-color-picker
-        class="myColorPicker"
-        v-on:input="colorPickerColor"
-        dot-size="40"
-        mode="hexa"
-        v-bind:dark="darkThemeActive()"
-        v-bind:value="oldColor"
-        width="250"
-        canvas-height="100"
-      ></v-color-picker>
+      <input
+        type="color"
+        :value="oldColor"
+        @change="colorPickerColor"
+      />
     </div>
     <div class="button close" @click="closeColorPicker()">&#9932;</div>
   </floating>
@@ -42,11 +37,8 @@ export default {
       });
       this.$store.commit("closeColorPicker");
     },
-    colorPickerColor: function (arg) {
-      this.selectedColor = arg;
-    },
-    darkThemeActive() {
-      return this.$store.state.theme === "dark" ? true : false;
+    colorPickerColor: function (e) {
+      this.selectedColor = e.target.value;
     },
   },
   updated: function () {

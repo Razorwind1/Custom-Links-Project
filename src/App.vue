@@ -222,6 +222,18 @@ input {
   fill: var(--background-text);
   transition: border ease 200ms;
 }
+input[type="color"] {
+  padding: 0;
+  margin: 0;
+  border: none;
+  width: 23px;
+  height: 25px;
+  cursor: pointer;
+  grid-area: button-color;
+}
+input[type="color"]:hover {
+  border: 1px solid var(--button-hover);
+}
 ::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
