@@ -4,7 +4,7 @@ Like a wardrobe full of clothes, LinkTailor is a virtual space where you can pla
 Want to know more? Watch a demo of the app? Dowload it yourself?
 
 Click through to the TailorLink website:
-#[linktailor.app](linktailor.app)
+# [linktailor.app](linktailor.app)
 
 ## Getting Started
 For developers looking to work with the code:
