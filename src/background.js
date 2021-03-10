@@ -10,6 +10,8 @@ import defaultImgBuffer from "./js/img/defaultImgBuffer"
 import DIR from "./js/helper/directories"
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const gotTheLock = app.requestSingleInstanceLock()
+var minimist = require('minimist');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -72,20 +74,35 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+if (!gotTheLock) {
+  app.quit()
+}
+else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (win){
+      if (win.isMinimized()) win.restore()
+      win.focus()
     }
-  }
-  console.log(" \n \n \n \n \n \n \n \n \n")
-  setUpDefaultLinkImg()
-  createWindow()
-  handler(win)
-})
+
+    win.webContents.send('cmd-args', minimist(commandLine))
+  })
+
+  app.on('ready', async () => {
+    if (isDevelopment && !process.env.IS_TEST) {
+      // Install Vue Devtools
+      try {
+        await installExtension(VUEJS_DEVTOOLS)
+      } catch (e) {
+        console.error('Vue Devtools failed to install:', e.toString())
+      }
+    }
+    console.log(" \n \n \n \n \n \n \n \n \n")
+    setUpDefaultLinkImg()
+    createWindow()
+    handler(win)
+  })
+}
+
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
