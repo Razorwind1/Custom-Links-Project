@@ -100,6 +100,19 @@ export default function handler(win) {
 
         event.returnValue = type
     })
+    ipcMain.on('app-created', () => {
+        win.webContents.send('cmd-args', argv)
+    })
+    ipcMain.on('get-startup-behavior', (event) => {
+        event.returnValue = app.getLoginItemSettings()
+    })
+    ipcMain.on('set-startup-behavior', (event, enabled) => {
+        app.setLoginItemSettings({
+            openAtLogin: enabled,
+            openAsHidden: enabled,
+            name: "Link Tailor"
+        })
+    })
 
     // STATE EVENTS
     ipcMain.on('state-changed', (event, state) => {
@@ -116,13 +129,11 @@ export default function handler(win) {
         event.returnValue = state
     })
 
-    ipcMain.on('app-created', () => {
-        win.webContents.send('cmd-args', argv)
-    })
 
     ipcMain.on("open", (event, address) => {
         shell.openExternal(address);
     })
+
 
     win.on('blur', () => {
         win.webContents.send('app-state-changed', 'blur')
