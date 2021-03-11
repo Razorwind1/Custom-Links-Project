@@ -3,7 +3,7 @@
     <div v-if="!windowMaximized" class="top-resize"></div>
     <div class="content">
       <img src="/assets/icons/LinkTailor_Universal_Icon.svg" />
-      <h1 class="app-title">Tailor Link</h1>
+      <h1 class="app-title">LinkTailor</h1>
       <div class="favourite-layouts">
         <div
           class="layout-circle"
@@ -23,7 +23,7 @@
         class="sidebar button"
         :class="[$store.state.events.sidebar.active ? 'active' : '']"
       >
-        SB
+        <img src="/assets/icons/magnifier-white.svg"/>
       </div>
       <div @click="minimize" class="minimize button">&#9866;</div>
       <div @click="maximize" class="maximize button">&#9744;</div>
@@ -34,6 +34,7 @@
 
 <script>
 import closeMenus from "@/js/helper/closeMenus.js";
+//import searchSvg from "@/components/icons/search.vue";
 
 export default {
   data: function () {
@@ -66,7 +67,7 @@ export default {
     },
   },
   mounted: function () {
-    window.ipcRenderer.on("app-state-changed", (event, message) => {
+  window.ipcRenderer.on("app-state-changed", (event, message) => {
       if (message === "maximize") {
         this.windowMaximized = true;
       }
@@ -82,6 +83,9 @@ export default {
       }
     });
   },
+  components: {
+    //searchSvg
+  }
 };
 </script>
 
@@ -131,8 +135,11 @@ export default {
   background-color: rgb(255, 2, 2);
 }
 .buttons .sidebar {
-  margin-right: 10px;
+  margin-right: 0px;
   border-radius: 50%;
+}
+.buttons .sidebar img {
+  width: 16px;
 }
 .buttons .sidebar.active {
   background-color: var(--button-accent);
