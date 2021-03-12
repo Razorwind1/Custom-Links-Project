@@ -109,7 +109,13 @@ export default {
       );
       this.layout = [];
 
-      if (layoutActive)
+      if (layoutActive) {
+        this.$el.parentNode.classList.remove("no-active-layout");
+
+        if (layoutActive.items.length === 0)
+          this.$el.parentNode.classList.add("no-active-link");
+        else this.$el.parentNode.classList.remove("no-active-link");
+
         layoutActive.items.forEach((element) => {
           const link = this.$store.getters.linkFromId(element.id);
           this.layout.push({
@@ -124,6 +130,9 @@ export default {
             label: link.content.label,
           });
         });
+      } else {
+        this.$el.parentNode.classList.add("no-active-layout");
+      }
 
       this.updateContainerWidth();
     },
@@ -155,6 +164,7 @@ export default {
           {
             label: "Open All",
             click: () => {
+              this.$store.commit("closeContextMenu");
               this.layout.forEach((element) => {
                 this.open(element.id);
               });
@@ -163,6 +173,7 @@ export default {
           {
             label: "Add Link",
             click: () => {
+              this.$store.commit("closeContextMenu");
               this.$store.commit("showPopup", {
                 type: "add-link",
               });
@@ -201,9 +212,6 @@ export default {
       });
     },
   },
-  created: function () {
-    this.updateGrid();
-  },
   mounted: function () {
     this._keyListener = function (e) {
       if (
@@ -228,6 +236,8 @@ export default {
 
     this.updateContainerWidth();
     window.addEventListener("resize", this.updateContainerWidth);
+
+    this.updateGrid();
   },
   beforeDestroy: function () {
     document.removeEventListener("keydown", this._keyListener);

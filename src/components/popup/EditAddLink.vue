@@ -246,6 +246,7 @@ export default {
 <style scoped>
 .popup-content div.content {
   height: 100%;
+  width: 100%;
   flex-direction: column;
   overflow: auto;
 }
@@ -322,7 +323,7 @@ div.address-input div.button:hover {
 }
 
 div.img-selection {
-  padding: 10px;
+  padding: 10px 0;
 }
 div.img-selection .img-container {
   width: 100px;

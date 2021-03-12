@@ -197,6 +197,15 @@ const store = new Vuex.Store({
 
       modifyLink(link, payload.data)
 
+      state.layouts.find(layout => layout.active)?.items.push({
+        id: link.id,
+        pos: {
+          x: 0,
+          y: 0,
+          sizeX: 1,
+          sizeY: 1
+        },
+      })
       state.links.push(link)
     },
     editLink(state, payload) {
@@ -305,7 +314,7 @@ const store = new Vuex.Store({
     toggleFavouriteLayout(state, id) {
       if (state.layouts.filter(layout => layout.favourite === true).length >= 10) {
         state.events.alert.active = true
-        state.events.alert.arg = {type: "layout-favourite-fail"}
+        state.events.alert.arg = { type: "layout-favourite-fail" }
         return;
       }
       const layout = state.layouts.find(layout => layout.id == id)
