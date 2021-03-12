@@ -155,6 +155,7 @@ export default {
         })
         .then((id) => {
           this.editLayout(id).scrollIntoView({behavior: "smooth", block: "start"});
+          this.$store.commit("activateLayout", id)
         });
     },
   },
