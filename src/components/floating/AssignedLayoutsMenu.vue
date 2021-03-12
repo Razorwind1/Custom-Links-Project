@@ -95,11 +95,11 @@ hr{
   outline: none;
 }
 .layoutsMenu{
-  min-width: 100px;
+  min-width: 150px;
   max-width: 180px;
   background: var(--background-color);
   border-radius: 5px;
-  border: 1px solid var(--background-accent);
+  border: 2px solid var(--background-accent);
   padding: 0;
   max-height: 350px;
 }
@@ -115,7 +115,6 @@ hr{
 }
 .header {
   padding: 0;
-  font-size: 12px;
   font-style: italic;
 }
 
@@ -131,7 +130,6 @@ hr{
 .assignedLayoutLabel {
  cursor: pointer;
  margin-left: 10px;
- font-size: 14px;
  white-space: nowrap;
  overflow: hidden;
  text-overflow: ellipsis;
@@ -157,7 +155,6 @@ hr{
 .nonassignedLayoutLabel {
  cursor: pointer;
  margin-left: 10px;
- font-size: 12px;
  filter: brightness(50%);
  white-space: nowrap;
  overflow: hidden;
