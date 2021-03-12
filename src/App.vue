@@ -208,7 +208,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color ease-in-out 100ms;
+  transition: background-color ease-in-out 100ms, opacity ease-in-out 100ms;
   border-radius: 5px;
 }
 
