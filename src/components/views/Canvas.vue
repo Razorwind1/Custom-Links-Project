@@ -109,13 +109,12 @@ export default {
       );
       this.layout = [];
 
-      if (layoutActive){
-        this.$el.parentNode.classList.remove("no-active-layout")
+      if (layoutActive) {
+        this.$el.parentNode.classList.remove("no-active-layout");
 
         if (layoutActive.items.length === 0)
-          this.$el.parentNode.classList.add("no-active-link")
-        else
-          this.$el.parentNode.classList.remove("no-active-link")
+          this.$el.parentNode.classList.add("no-active-link");
+        else this.$el.parentNode.classList.remove("no-active-link");
 
         layoutActive.items.forEach((element) => {
           const link = this.$store.getters.linkFromId(element.id);
@@ -131,9 +130,8 @@ export default {
             label: link.content.label,
           });
         });
-      }
-      else {
-        this.$el.parentNode.classList.add("no-active-layout")
+      } else {
+        this.$el.parentNode.classList.add("no-active-layout");
       }
 
       this.updateContainerWidth();
@@ -166,6 +164,7 @@ export default {
           {
             label: "Open All",
             click: () => {
+              this.$store.commit("closeContextMenu");
               this.layout.forEach((element) => {
                 this.open(element.id);
               });
@@ -174,6 +173,7 @@ export default {
           {
             label: "Add Link",
             click: () => {
+              this.$store.commit("closeContextMenu");
               this.$store.commit("showPopup", {
                 type: "add-link",
               });
