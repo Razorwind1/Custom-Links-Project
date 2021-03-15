@@ -1,7 +1,7 @@
 <template>
   <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
     <TitleBar />
-    <div style="height: 100%" :class="[this.eventsActive() ? 'disable-input' : '']">
+    <div style="height: 100%; overflow: hidden;" :class="[this.eventsActive() ? 'disable-input' : '']">
       <NavBar />
       <AppContent ref="appContent" />
     </div>
@@ -185,15 +185,15 @@ body {
   border-radius: 10px;
 }
 ::-webkit-scrollbar:hover {
-  background-color: var(--background-hover);
+  background-color: var(--background-muted);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--background-accent);
+  background-color: var(--line-color);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--background-accent);
+  background-color: var(--background-active);
 }
 ::-webkit-scrollbar-button,
 ::-webkit-scrollbar-track-piece,

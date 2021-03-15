@@ -59,13 +59,4 @@ div.link label {
   cursor: pointer;
 }
 
-::-webkit-scrollbar:hover {
-  background-color: var(--background-active);
-}
-::-webkit-scrollbar-thumb {
-  background-color: var(--background-color);
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--background-color);
-}
 </style>
