@@ -24,6 +24,7 @@
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
       :style="{ width: '100%', height: '100%' }"
+      @mousemove="mousemove"
     >
       <grid-item
         v-for="element in layout"
@@ -211,38 +212,14 @@ export default {
         event,
       });
     },
-  },
-  mounted: function () {
-    this._keyListener = function (e) {
-      if (
-        e.key === "a" &&
-        (e.ctrlKey || e.metaKey) &&
-        e.target.tagName !== "INPUT" &&
-        e.target.tagName !== "TEXTAREA"
-      ) {
-        this.$store.commit("showPopup", {
-          type: "add-link",
-        });
-      }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
-
-    this._mouseMove = function (e) {
+    mousemove: function (e) {
       if (e.buttons !== 1) {
         this.movingElement = null;
       }
-    };
-    document.addEventListener("mousemove", this._mouseMove.bind(this));
-
-    this.updateContainerWidth();
-    window.addEventListener("resize", this.updateContainerWidth);
-
-    this.updateGrid();
+    },
   },
-  beforeDestroy: function () {
-    document.removeEventListener("keydown", this._keyListener);
-    document.removeEventListener("mousemove", this._mouseMove);
-    window.removeEventListener("resize", this.updateContainerWidth);
+  mounted: function () {
+    this.updateGrid();
   },
 };
 </script>

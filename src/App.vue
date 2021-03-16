@@ -1,7 +1,17 @@
 <template>
-  <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
+  <div
+    id="app"
+    @click="closeMenus()"
+    @contextmenu="closeMenus()"
+    @keydown="keydown"
+    tabindex="0"
+    style="outline: none"
+  >
     <TitleBar />
-    <div style="height: 100%; overflow: hidden;" :class="[this.eventsActive() ? 'disable-input' : '']">
+    <div
+      style="height: 100%; overflow: hidden"
+      :class="[this.eventsActive() ? 'disable-input' : '']"
+    >
       <NavBar />
       <AppContent ref="appContent" />
     </div>
@@ -79,6 +89,26 @@ export default {
         this.$store.state.events.assignedLayoutsMenu.active
       );
     },
+    keydown: function (e) {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      if (
+        e.key.toLowerCase() === "z" &&
+        (e.ctrlKey || e.metaKey) &&
+        this.stateHistory.length > 1
+      ) {
+        this.stateHistory.pop();
+        this.$store.commit("setState", this.stateHistory.pop());
+      }
+
+      if (e.key.toLowerCase() === "a" && (e.ctrlKey || e.metaKey)) {
+        this.$store.commit("showPopup", {
+          type: "add-link",
+        });
+      }
+    },
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -119,22 +149,9 @@ export default {
       }
     );
 
-    this._keyListener = function (e) {
-      if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
-        if (
-          e.target.tagName !== "INPUT" &&
-          e.target.tagName !== "TEXTAREA" &&
-          this.stateHistory.length > 1
-        ) {
-          this.stateHistory.pop();
-          this.$store.commit("setState", this.stateHistory.pop());
-        }
-      }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
-
     window.addEventListener("resize", () => {
       this.closeMenus();
+      this.$refs.appContent.$refs.canvas.updateContainerWidth?.();
     });
 
     importCss(this.$store.state.theme);
