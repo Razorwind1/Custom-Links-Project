@@ -217,6 +217,16 @@ export default {
         this.movingElement = null;
       }
     },
+    increaseGridSize: function () {
+      this.link.w += 5
+      this.link.h += 5
+      this.updateContainerWidth()
+    },
+    decreaseGridSize: function () {
+      this.link.w -= 5
+      this.link.h -= 5
+      this.updateContainerWidth()
+    }
   },
   mounted: function () {
     this.updateGrid();

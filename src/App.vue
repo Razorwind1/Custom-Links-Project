@@ -4,6 +4,7 @@
     @click="closeMenus()"
     @contextmenu="closeMenus()"
     @keydown="keydown"
+    @wheel="scroll"
     tabindex="0"
     style="outline: none"
   >
@@ -89,6 +90,16 @@ export default {
         this.$store.state.events.assignedLayoutsMenu.active
       );
     },
+    scroll: function (e) {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      if (e.ctrlKey) {
+        if (e.deltaY > 0) this.$refs.appContent.$refs.canvas.decreaseGridSize?.();
+        if (e.deltaY < 0) this.$refs.appContent.$refs.canvas.increaseGridSize?.();
+      }
+    },
     keydown: function (e) {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
         return;
@@ -107,6 +118,13 @@ export default {
         this.$store.commit("showPopup", {
           type: "add-link",
         });
+      }
+
+      if (e.key.toLowerCase() === "+" && (e.ctrlKey || e.metaKey)) {
+        this.$refs.appContent.$refs.canvas.increaseGridSize?.();
+      }
+      if (e.key.toLowerCase() === "-" && (e.ctrlKey || e.metaKey)) {
+        this.$refs.appContent.$refs.canvas.decreaseGridSize?.();
       }
     },
   },
