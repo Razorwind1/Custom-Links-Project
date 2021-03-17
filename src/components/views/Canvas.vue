@@ -193,6 +193,20 @@ export default {
               });
             },
           },
+          {
+            label: "Zoom In",
+            click: () => {
+              this.$store.commit("closeContextMenu");
+              this.increaseGridSize()
+            },
+          },
+          {
+            label: "Zoom Out",
+            click: () => {
+              this.$store.commit("closeContextMenu");
+              this.decreaseGridSize()
+            },
+          },
         ],
         event,
       });
