@@ -169,7 +169,7 @@ export default {
 
     window.addEventListener("resize", () => {
       this.closeMenus();
-      this.$refs.appContent.$refs.canvas.updateContainerWidth?.();
+      this.$refs.appContent.$refs.canvas.updateGrid?.();
     });
 
     importCss(this.$store.state.theme);

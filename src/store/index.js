@@ -42,6 +42,7 @@ const store = new Vuex.Store({
         name: "Home",
         color: "#502010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 0,
@@ -70,6 +71,7 @@ const store = new Vuex.Store({
         name: "Gaming",
         color: "#102010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 0,
@@ -89,6 +91,7 @@ const store = new Vuex.Store({
         name: "Coding",
         color: "#902010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 1,
@@ -278,6 +281,7 @@ const store = new Vuex.Store({
 
       layout.color = payload.color || layout.color
       layout.name = payload.name || layout.name
+      layout.size = payload.size || layout.size
     },
     deleteLayout(state, id) {
       const removeIndex = state.layouts.findIndex(layout => layout.id === id)
@@ -419,6 +423,7 @@ const store = new Vuex.Store({
         theme: payload.theme,
         active: false,
         favourite: false,
+        size: 100,
         items: []
       })
       return id
