@@ -249,8 +249,8 @@ export default {
     },
     decreaseGridSize: function () {
       this.canvas.size -= 5;
-      if (this.canvas.size < 50) {
-        this.canvas.size = 50;
+      if (this.canvas.size < 25) {
+        this.canvas.size = 25;
         return;
       }
       this.updateGrid(true);
