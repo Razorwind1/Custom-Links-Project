@@ -12,18 +12,22 @@
     :layout.sync="layout"
     :col-num="canvas.colNum"
     :margin="[canvas.margin, canvas.margin]"
-    :row-height="link.h"
+    :row-height="canvas.size"
     :is-draggable="true"
     :is-resizable="true"
     :vertical-compact="false"
     :prevent-collision="true"
     :responsive="false"
     :use-style-cursor="false"
-    :style="{ minWidth: (link.w + canvas.margin) * canvas.colNum + 'px', height: '100%' }"
+    :style="{
+      minWidth: (canvas.size + canvas.margin) * canvas.colNum + 'px',
+      height: '100%',
+    }"
   >
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
       :style="{ width: '100%', height: '100%' }"
+      @mousemove="mousemove"
     >
       <grid-item
         v-for="element in layout"
@@ -78,11 +82,8 @@ export default {
   data() {
     return {
       layout: [],
-      link: {
-        w: 100,
-        h: 100,
-      },
       canvas: {
+        size: 100,
         colNum: 6,
         margin: 10,
       },
@@ -95,7 +96,7 @@ export default {
       return Math.max(...this.layout.map((el) => el.x + el.w));
     },
     maxCanvasX: function () {
-      return Math.floor(this.containerWidth / (this.link.w + this.canvas.margin));
+      return Math.floor(this.containerWidth / (this.canvas.size + this.canvas.margin));
     },
   },
   components: {
@@ -103,7 +104,7 @@ export default {
     GridItem: VueGridLayout.GridItem,
   },
   methods: {
-    updateGrid: function () {
+    updateGrid: function (updateSize) {
       const layoutActive = this.$store.state.layouts.find(
         (layout) => layout.active === true
       );
@@ -115,6 +116,16 @@ export default {
         if (layoutActive.items.length === 0)
           this.$el.parentNode.classList.add("no-active-link");
         else this.$el.parentNode.classList.remove("no-active-link");
+
+        if (updateSize === true)
+          this.$store.commit("editLayout", {
+            id: layoutActive.id,
+            size: this.canvas.size,
+          });
+        else {
+          this.canvas.size = layoutActive.size || 100;
+          this.canvas.margin = this.canvas.size / 10;
+        }
 
         layoutActive.items.forEach((element) => {
           const link = this.$store.getters.linkFromId(element.id);
@@ -134,9 +145,12 @@ export default {
         this.$el.parentNode.classList.add("no-active-layout");
       }
 
-      this.updateContainerWidth();
+      this.updateGridSize();
     },
     updateGridSize: function () {
+      if (this.$el && this.$el.parentNode)
+        this.containerWidth = this.$el.parentNode.offsetWidth;
+
       if (this.containerWidth) {
         if (this.maxCanvasX >= this.canvas.colNum) {
           this.canvas.colNum = this.maxCanvasX;
@@ -179,6 +193,20 @@ export default {
               });
             },
           },
+          {
+            label: "Zoom In",
+            click: () => {
+              this.$store.commit("closeContextMenu");
+              this.increaseGridSize()
+            },
+          },
+          {
+            label: "Zoom Out",
+            click: () => {
+              this.$store.commit("closeContextMenu");
+              this.decreaseGridSize()
+            },
+          },
         ],
         event,
       });
@@ -200,49 +228,36 @@ export default {
     resizedEvent: function (id, newH, newW) {
       this.$store.commit("setLinkSize", { id, newH, newW });
     },
-    updateContainerWidth: function () {
-      if (this.$el && this.$el.parentNode)
-        this.containerWidth = this.$el.parentNode.offsetWidth;
-      this.updateGridSize();
-    },
     assignedTagsMenu: function (event, element) {
       this.$store.commit("showAssignedTagsMenu", {
         element,
         event,
       });
     },
-  },
-  mounted: function () {
-    this._keyListener = function (e) {
-      if (
-        e.key === "a" &&
-        (e.ctrlKey || e.metaKey) &&
-        e.target.tagName !== "INPUT" &&
-        e.target.tagName !== "TEXTAREA"
-      ) {
-        this.$store.commit("showPopup", {
-          type: "add-link",
-        });
-      }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
-
-    this._mouseMove = function (e) {
+    mousemove: function (e) {
       if (e.buttons !== 1) {
         this.movingElement = null;
       }
-    };
-    document.addEventListener("mousemove", this._mouseMove.bind(this));
-
-    this.updateContainerWidth();
-    window.addEventListener("resize", this.updateContainerWidth);
-
-    this.updateGrid();
+    },
+    increaseGridSize: function () {
+      this.canvas.size += 5;
+      if (this.canvas.size > 200) {
+        this.canvas.size = 200;
+        return;
+      }
+      this.updateGrid(true);
+    },
+    decreaseGridSize: function () {
+      this.canvas.size -= 5;
+      if (this.canvas.size < 25) {
+        this.canvas.size = 25;
+        return;
+      }
+      this.updateGrid(true);
+    },
   },
-  beforeDestroy: function () {
-    document.removeEventListener("keydown", this._keyListener);
-    document.removeEventListener("mousemove", this._mouseMove);
-    window.removeEventListener("resize", this.updateContainerWidth);
+  mounted: function () {
+    this.updateGrid();
   },
 };
 </script>
