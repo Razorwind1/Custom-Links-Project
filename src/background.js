@@ -30,7 +30,7 @@ function createWindow() {
     minHeight: 400,
     frame: false,
     backgroundColor: "#2c2c2c",
-    icon: nativeImage.createFromPath(path.join(__dirname, '../src/link_tailor.png')),
+    icon: nativeImage.createFromPath(path.join(__dirname, '../build/icon.png')),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
