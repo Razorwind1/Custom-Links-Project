@@ -6,8 +6,10 @@
       :key="link.id"
       @click="openLink(link.id)"
       @contextmenu.stop="contextMenuLink($event, link.id)"
+      draggable="true"
+      @dragstart="dragStart($event, link.id)"
     >
-      <img :src="getLinkImg(link.id, link.content.img)" alt="" />
+      <img :src="getLinkImg(link.id, link.content.img)" alt />
       <label class="text-overflow">{{ link.content.label }}</label>
     </div>
   </div>
@@ -22,8 +24,13 @@ export default {
   methods: {
     getLinkImg,
     openLink,
-    contextMenuLink
-  },
+    contextMenuLink,
+    dragStart: function (event, link) {
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.setData("linkID", link.id);
+    }
+  }
 };
 </script>
 

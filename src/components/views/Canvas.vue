@@ -24,6 +24,7 @@
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
       :style="{ width: '100%', height: '100%' }"
+      @drop="onDrop($event)"
     >
       <grid-item
         v-for="element in layout"
@@ -103,6 +104,12 @@ export default {
     GridItem: VueGridLayout.GridItem,
   },
   methods: {
+     onDrop: function(event) {
+      console.log(event)
+      const linkID = event.dataTransfer.getData("linkID");
+      const link = this.link.find(link => link.id == linkID);
+      link.layout = this.layout;
+    },
     updateGrid: function () {
       const layoutActive = this.$store.state.layouts.find(
         (layout) => layout.active === true

@@ -153,8 +153,8 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
-  -webkit-user-drag: none;
+  /* user-select: none;
+  -webkit-user-drag: none; */
 }
 * div {
   display: flex;

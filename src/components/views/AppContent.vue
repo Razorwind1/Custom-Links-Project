@@ -12,6 +12,7 @@
       <div class="add-link canvas-info">
         <h1>You don't have any links in this layout.</h1>
         <h1>You can right click on links to add them here!</h1>
+        <h1>Drag a link to this layout to add it here!</h1>
         <div class="button" @click.stop="addLink">Add Link</div>
       </div>
     </div>
@@ -26,20 +27,20 @@ import Links from "@/components/core/Links.vue";
 
 export default {
   components: {
-    Links,
+    Links
   },
   props: {
-    popupVisible: Boolean,
+    popupVisible: Boolean
   },
   methods: {
-    layoutsMenu: function () {
+    layoutsMenu: function() {
       this.$store.commit("showPopup", {
-        type: "layout-list",
+        type: "layout-list"
       });
     },
-    addLink: function () {
+    addLink: function() {
       this.$store.commit("showPopup", {
-        type: "add-link",
+        type: "add-link"
       });
     },
   },
@@ -47,7 +48,7 @@ export default {
     this.$refs.sideBar.addEventListener("transitionend", () => {
       this.$refs.canvas.updateGrid?.();
     });
-  },
+  }
 };
 </script>
 
