@@ -3,38 +3,62 @@
 
 <head>
     <link rel="stylesheet" href="linktailor.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="navBar">
+    <div id="navBarContent">
         <div id="leftNav">
-            <a href="www.linktailor.app" class="navMainPage">App</a>
-            <a href="www.linktailor.app/index.html#Features" class="navSubPage">Features</a>
-            <a href="www.linktailor.app/index.html#Download" class="navSubPage">Download</a>
+            <div><a href="www.linktailor.app"><div class="navMainPage">App</div></a></div>
+            <div class="navSubPage"><a href="www.linktailor.app/index.html#Features"><div>Features</div></a></div>
+            <div class="navSubPage"><a href="www.linktailor.app/index.html#Download"><div>Download</div></a></div>
         </div>
-        <img src="LinkTailor_Universal_Icon.png" alt="LinkTailor Logo">
+        <div><img src="assets/LinkTailor_Universal_Icon.png" alt="LinkTailor Logo"></div>
         <div id="rightNav">
-            <a href="www.linktailor.app/thestory" class="navMainPage">The Story</a>
-            <a href="" class="navSubPage">The Team</a>
-            <a href="" class="navSubPage">Contact</a>
+            <div><a href="www.linktailor.app/thestory"><div class="navMainPage">Story</div></a></div>
+            <div><a href=""><div class="navSubPage">The Team</div></a></div>
+            <div><a href=""><div class="navSubPage">Contact</div></a></div>
         </div>
+    </div>
     </div>
 
     <h1>LinkTailor</h1>
     <h3>A virtual wardrobe for your links...</h3>
-    <p>[video]</p>
     <p>Like a wardrobe full of clothes, LinkTailor is a virtual space where you can place applications, files, and websites – treating them as garments that you can style, tag, and organize into outfits for any occasion. By saving <b>layouts</b> of links within LinkTailor, you can easily access them all in one place or even open them all with a single click.</p>
-    <p>You might make a layout for...</p>
+    <img id="posterImage" src="assets/LinkTailor_Poster_Final.PNG" alt="poster showcasing the LinkTailor application">
+    <br/>
+    <h3>You might make a layout for...</h3>
+    <div class="layoutContainer">
     <div class="layoutBlock"><div>Communications: </div>Gmail, Facebook, GroupMe, Instagram, Discord, Slack, etc.</div>
     <div class="layoutBlock"><div>Project: </div>Word docs, diagrams, your project portal, websites for research, a dropbox folder, a OneNote page, etc.</div>
     <div class="layoutBlock"><div>Gaming: </div>A spatially organized display of game exes, Discord, Twitch, strategy websites, SoundCloud music, folders with game saves, etc.</div>
     <div class="layoutBlock"><div>File System: </div>Folders of pictures, screenshots, and artwork, folders of project work, resumes and cover letters, essays, records, etc.</div>
     <div class="layoutBlock"><div>Tutorial: </div></div>
-    <p>Other ideas for arrangements may include: </p>
+    </div>
+    <p>Other ideas for layouts may include: </p>
     <div>podcasts, “when I’m bored”, self-improvement, cooking/recipes, Psychology 101, articles to read, job search, community resources, morning workout, music production</div>
+    
 
     <h2 id="Features">Features</h2>
-    <p>Many features</p>
+<div class="featuresContainer">
+    <ul>
+        <li><span>Layouts: </span>Arrange links spatially within a drag-and-drop grid system.
+            <ul>
+                <li>Grid size is adjustable</li>
+        <li>All links in a layout can be opened together.</li>
+            </ul>
+        </li>
+        <li><span>Tags: </span>Links can be given custom tags.</li>
+        <li><span>Styles: </span>Links can be custom styled and given custom icons.
+            <ul>
+                <li>Icons are automatically fetched from the file system and websites.</li>
+            </ul></li>
+        <li><span>Windows Context Menu Integration: </span>In Windows, files can be added to LinkTailor through the right-click menu (if the option is not deselected during install).</li>
+        <li><span>Undo: </span>Use Ctrl+Z to undo your last action.</li>
+    </ul>
+</div>
 
     <h2 id="Download">Download</h2>
     <p></p>
