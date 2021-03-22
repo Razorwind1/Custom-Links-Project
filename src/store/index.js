@@ -10,7 +10,7 @@ const store = new Vuex.Store({
     // State Data
     links: [
       {
-        id: 0,
+        id: 1092382312321312,
         type: "file",
         style: "gameStyle",
         tags: [1, 2],
@@ -22,7 +22,7 @@ const store = new Vuex.Store({
         }
       },
       {
-        id: 1,
+        id: 32134198471985789152,
         type: "url",
         style: "codingStyle",
         tags: [3],
@@ -285,7 +285,7 @@ const store = new Vuex.Store({
     },
     assignLayout(state, payload) {
       const layout = state.layouts.find(layout => layout.id == payload.layoutId);
-      if (!layout.items.includes(item => item.id === payload.linkId)) {
+      if (layout.items.findIndex(item => item.id === payload.linkId) === -1) {
         layout.items.push({
           id: payload.linkId,
           pos: {
@@ -438,6 +438,9 @@ const store = new Vuex.Store({
     },
     layoutsFromLinkId: (state) => (id) => {
       return state.layouts.filter(layout => layout.items.find(item => item.id === id) !== undefined)
+    },
+    activeLayout: (state) => () => {
+      return state.layouts.find(layout => layout.active === true)
     },
     // Style Getters
     styleFromName: (state) => (styleName) => {

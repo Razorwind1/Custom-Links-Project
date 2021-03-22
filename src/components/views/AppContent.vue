@@ -3,7 +3,7 @@
     id="app-content"
     :class="[this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar']"
   >
-    <div id="app-main">
+    <div id="app-main" @dragover.prevent @drop="drop($event)">
       <router-view ref="canvas" />
       <div class="edit-layouts canvas-info">
         <h1>You don't have an active layout.</h1>
@@ -27,28 +27,36 @@ import Links from "@/components/core/Links.vue";
 
 export default {
   components: {
-    Links
+    Links,
   },
   props: {
-    popupVisible: Boolean
+    popupVisible: Boolean,
   },
   methods: {
-    layoutsMenu: function() {
+    layoutsMenu: function () {
       this.$store.commit("showPopup", {
-        type: "layout-list"
+        type: "layout-list",
       });
     },
-    addLink: function() {
+    addLink: function () {
       this.$store.commit("showPopup", {
-        type: "add-link"
+        type: "add-link",
       });
+    },
+    drop: function (e) {
+      e.preventDefault();
+      const linkId = e.dataTransfer.getData("id");
+      const activeLayout = this.$store.getters.activeLayout()
+      if (activeLayout && linkId){
+        this.$store.commit("assignLayout", {linkId, layoutId: activeLayout.id})
+      }
     },
   },
   mounted() {
     this.$refs.sideBar.addEventListener("transitionend", () => {
       this.$refs.canvas.updateGrid?.();
     });
-  }
+  },
 };
 </script>
 
