@@ -406,8 +406,8 @@ const store = new Vuex.Store({
     },
 
     // Sidebar
-    toggleSidebar(state, payload) {
-      if (state.events.sidebar.active || (payload && payload.resizing))
+    toggleSidebar(state) {
+      if (state.events.sidebar.active)
         state.events.sidebar.active = false
       else
         state.events.sidebar.active = true
