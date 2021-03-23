@@ -3,7 +3,7 @@
     id="app-content"
     :class="[this.$store.state.events.sidebar.active ? '' : 'collapse-side-bar']"
   >
-    <div id="app-main">
+    <div id="app-main" @dragover.prevent @drop="drop($event)">
       <router-view ref="canvas" />
       <div class="edit-layouts canvas-info">
         <h1>You don't have an active layout.</h1>
@@ -12,6 +12,7 @@
       <div class="add-link canvas-info">
         <h1>You don't have any links in this layout.</h1>
         <h1>You can right click on links to add them here!</h1>
+        <h1>Drag a link to this layout to add it here!</h1>
         <div class="button" @click.stop="addLink">Add Link</div>
       </div>
     </div>
@@ -41,6 +42,14 @@ export default {
       this.$store.commit("showPopup", {
         type: "add-link",
       });
+    },
+    drop: function (e) {
+      e.preventDefault();
+      const linkId = e.dataTransfer.getData("id");
+      const activeLayout = this.$store.getters.activeLayout()
+      if (activeLayout && linkId){
+        this.$store.commit("assignLayout", {linkId, layoutId: activeLayout.id})
+      }
     },
   },
   mounted() {

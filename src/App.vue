@@ -212,6 +212,11 @@ body {
 .hidden {
   display: none !important;
 }
+.draggable {
+  user-select: all;
+  -webkit-user-drag: element;
+}
+
 
 /*   SCROLLBAR   */
 ::-webkit-scrollbar {
