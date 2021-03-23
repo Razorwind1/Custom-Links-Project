@@ -9,30 +9,6 @@ const store = new Vuex.Store({
   state: {
     // State Data
     links: [
-      {
-        id: 1092382312321312,
-        type: "file",
-        style: "gameStyle",
-        tags: [1, 2],
-        content: {
-          label: "Steam",
-          address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "Steam_icon_logo.png",
-          customImg: false
-        }
-      },
-      {
-        id: 32134198471985789152,
-        type: "url",
-        style: "codingStyle",
-        tags: [3],
-        content: {
-          label: "TailorLink GitHub",
-          address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "github_icon.jpg",
-          customImg: false
-        }
-      },
     ],
     layouts: [
       {
@@ -42,6 +18,7 @@ const store = new Vuex.Store({
         name: "Home",
         color: "#502010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 0,
@@ -70,6 +47,7 @@ const store = new Vuex.Store({
         name: "Gaming",
         color: "#102010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 0,
@@ -89,6 +67,7 @@ const store = new Vuex.Store({
         name: "Coding",
         color: "#902010",
         theme: "default",
+        size: 100,
         items: [
           {
             id: 1,
@@ -278,6 +257,7 @@ const store = new Vuex.Store({
 
       layout.color = payload.color || layout.color
       layout.name = payload.name || layout.name
+      layout.size = payload.size || layout.size
     },
     deleteLayout(state, id) {
       const removeIndex = state.layouts.findIndex(layout => layout.id === id)
@@ -419,6 +399,7 @@ const store = new Vuex.Store({
         theme: payload.theme,
         active: false,
         favourite: false,
+        size: 100,
         items: []
       })
       return id

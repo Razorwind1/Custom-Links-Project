@@ -8,7 +8,10 @@ const path = require('path');
 //define input and output directory
 const APP_DIR = path.resolve(__dirname, './dist_electron/win-unpacked');
 const OUT_DIR = path.resolve(__dirname, './windows_installer');
-const ICO_PATH = path.resolve(__dirname, './public/assets/icons/LinkTailor_Universal_Icon.svg')
+const ICO_PATH = path.resolve(__dirname, './public/assets/icons/LinkTailor_Universal_Icon_64.ico');
+const BANNER_IMG_PATH = path.resolve(__dirname, './public/assets/installer/LinkTailor_Installer_Banner.png');
+const BACKGROUND_IMG_PATH = path.resolve(__dirname, './public/assets/installer/LinkTailor_Installer_Background.png');
+const INSTALLER_ICO_PATH = path.resolve(__dirname, './public/assets/installer/LinkTailor_Dark_Icon_32.ico');
 
 //instansiate the MSICreator
 const msiCreator = new MSICreator({
@@ -21,13 +24,19 @@ const msiCreator = new MSICreator({
     shortcutFolderName: 'LinkTailor',
     shortcutName: 'LinkTailor',
     programFilesFolderName: 'LinkTailor',
-    iconPath: ICO_PATH,
+    appIconPath: ICO_PATH,
     manufacturer: 'UC 2021 Senior Design Team 6',
     version: '1.0.0',
     //configure installer UI
     ui: {
         chooseDirectory: true,
-        template: ''
+        template: '',
+        images: {
+            background: BACKGROUND_IMG_PATH,
+            banner: BANNER_IMG_PATH,
+            exclamationIcon: INSTALLER_ICO_PATH,
+            infoIcon: INSTALLER_ICO_PATH
+        }
     },
 });
 

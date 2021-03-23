@@ -1,7 +1,18 @@
 <template>
-  <div id="app" @click="closeMenus()" @contextmenu="closeMenus()">
+  <div
+    id="app"
+    @click="closeMenus()"
+    @contextmenu="closeMenus()"
+    @keydown="keydown"
+    @wheel="scroll"
+    tabindex="0"
+    style="outline: none"
+  >
     <TitleBar />
-    <div style="height: 100%" :class="[this.eventsActive() ? 'disable-input' : '']">
+    <div
+      style="height: 100%; overflow: hidden"
+      :class="[this.eventsActive() ? 'disable-input' : '']"
+    >
       <NavBar />
       <AppContent ref="appContent" />
     </div>
@@ -79,6 +90,43 @@ export default {
         this.$store.state.events.assignedLayoutsMenu.active
       );
     },
+    scroll: function (e) {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      if (e.ctrlKey) {
+        if (e.deltaY > 0) this.$refs.appContent.$refs.canvas.decreaseGridSize?.();
+        if (e.deltaY < 0) this.$refs.appContent.$refs.canvas.increaseGridSize?.();
+      }
+    },
+    keydown: function (e) {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      if (
+        e.key.toLowerCase() === "z" &&
+        (e.ctrlKey || e.metaKey) &&
+        this.stateHistory.length > 1
+      ) {
+        this.stateHistory.pop();
+        this.$store.commit("setState", this.stateHistory.pop());
+      }
+
+      if (e.key.toLowerCase() === "a" && (e.ctrlKey || e.metaKey)) {
+        this.$store.commit("showPopup", {
+          type: "add-link",
+        });
+      }
+
+      if (e.key.toLowerCase() === "+" && (e.ctrlKey || e.metaKey)) {
+        this.$refs.appContent.$refs.canvas.increaseGridSize?.();
+      }
+      if (e.key.toLowerCase() === "-" && (e.ctrlKey || e.metaKey)) {
+        this.$refs.appContent.$refs.canvas.decreaseGridSize?.();
+      }
+    },
   },
   created: function () {
     const state = window.ipcRenderer.sendSync("state-read");
@@ -119,22 +167,9 @@ export default {
       }
     );
 
-    this._keyListener = function (e) {
-      if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
-        if (
-          e.target.tagName !== "INPUT" &&
-          e.target.tagName !== "TEXTAREA" &&
-          this.stateHistory.length > 1
-        ) {
-          this.stateHistory.pop();
-          this.$store.commit("setState", this.stateHistory.pop());
-        }
-      }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
-
     window.addEventListener("resize", () => {
       this.closeMenus();
+      this.$refs.appContent.$refs.canvas.updateGrid?.();
     });
 
     importCss(this.$store.state.theme);
@@ -190,15 +225,15 @@ body {
   border-radius: 10px;
 }
 ::-webkit-scrollbar:hover {
-  background-color: var(--background-hover);
+  background-color: var(--background-muted);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--background-accent);
+  background-color: var(--line-color);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--background-accent);
+  background-color: var(--background-active);
 }
 ::-webkit-scrollbar-button,
 ::-webkit-scrollbar-track-piece,

@@ -1,8 +1,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <!-- http://wixtoolset.org/documentation/manual/v3/xsd/wix/product.html -->
-  <Product Id="76B1F90E-A3FE-4051-8378-70672DC18803" 
-           UpgradeCode="74aee096-bb70-42a5-a6e3-95c390fb5ec3"
+  <Product Id="4D1C3558-1A98-4BD6-9786-BAA413F74062" 
+           UpgradeCode="ae92d183-3021-4333-83e6-1c85a863cb03"
            Name = "LinkTailor Desktop Application (Machine - MSI)"
            Version="1.0.0.0"
            Manufacturer="UC 2021 Senior Design Team 6"
@@ -24,7 +24,7 @@
     <!-- While the MSI package is hidden in Apps & Features, it can still be queried
     via PowerShell and other means. To differentiate we give the public entry a slightly
     different name to make admins life easier.  -->
-    <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" />
+    <Property Id="VisibleProductName" Value="LinkTailor Desktop Application (Machine)" />
     <!-- Signals Single Package Authoring. This pacakge can pe installed perMachine
     or perUser. The mode is determined by the property below. -->
     <Property Id="ALLUSERS" Secure="yes" Value="2" />
@@ -55,13 +55,13 @@
     PurgeOnUninstall action. Since this package can be installed perUser or perMachine,
     we have to look in both places. First successful search wins. -->
     <Property Id="INSTALLPATH">
-      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq"
+      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq"
                       Root="HKCU" 
                       Type="raw"
                       Id="INSTALLPATH_REGSEARCH_HKCU"
                       Name="InstallPath"
                       Win64="no"/>
-      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq"
+      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq"
                       Root="HKLM" 
                       Type="raw"
                       Id="INSTALLPATH_REGSEARCH_HKLM"
@@ -112,322 +112,283 @@
     </UI>
     <UIRef Id="WixUI_Common" />
 
+    <WixVariable Id="WixUIDialogBmp" Value="F:\Daniel's Link Manager App\Custom-Links-Project\public\assets\installer\LinkTailor_Installer_Background.png" />
+    <WixVariable Id="WixUIBannerBmp" Value="F:\Daniel's Link Manager App\Custom-Links-Project\public\assets\installer\LinkTailor_Installer_Banner.png" />
+    <WixVariable Id="WixUIExclamationIco" Value="F:\Daniel's Link Manager App\Custom-Links-Project\public\assets\installer\LinkTailor_Dark_Icon_32.ico" />
+    <WixVariable Id="WixUIInfoIco" Value="F:\Daniel's Link Manager App\Custom-Links-Project\public\assets\installer\LinkTailor_Dark_Icon_32.ico" />
 
     <!-- Step 2: Add files and directories -->
     <Directory Id="TARGETDIR" Name="SourceDir">
        <!-- Installation files to %PROGRAMFILES% -->
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONROOTDIRECTORY" Name="LinkTailor">
-          <!--Change the windows registry values-->
-        <!--see https://wixtoolset.org/documentation/manual/v3/howtos/files_and_registry/write_a_registry_entry.html-->
-      <Component Id="ConextMenuRegistryEntries" Guid="c2897ee2-c951-40b1-8150-f02a523feecf">
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\LinkTailor">  
-            <RegistryValue Type='string' Value='Save to LinkTailor'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\LinkTailor\command">            
-            <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
-        </RegistryKey>
-        
-        <RegistryKey Root="HKCR"
-                     Key="*\shell\LinkTailor">  
-            <RegistryValue Type='string' Value='Save to LinkTailor'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="*\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="*\shell\LinkTailor\command">            
-            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
-        </RegistryKey>
-
-        <RegistryKey Root="HKCR"
-                     Key="Directory\shell\LinkTailor">  
-            <RegistryValue Type='string' Value='Save to LinkTailor'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
-        </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\shell\LinkTailor\command">            
-            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
-        </RegistryKey>
-    </Component>
-    <!--end of registry-adding code-->
-          <Directory Id="__df8e65ba_5263_4b76_8bf5_0cbec395863b" Name="LinkTailorApp">
-            <Directory Id="_locales_731f3ca0_52b2_4a0e_994d_09cd9c8733d6" Name="locales">
-              <Component Id="_locales_am.pak_510ef635_be80_4fc5_b19d_34c0aafd159a" Guid="8234c3b9-d936-4ece-b189-ee1a58e36093" Win64="no">
-                <File Name="am.pak" Id="_locales_am.pak_510ef635_be80_4fc5_b19d_34c0aafd159a" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\am.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+          <Directory Id="__8be065eb_cb0b_407f_812e_a4978a774651" Name="app-1.0.0">
+            <Directory Id="_locales_82af0605_dd90_41a7_84d5_8ee9007b5a04" Name="locales">
+              <Component Id="_locales_am.pak_94ad45d0_0427_411e_aaaa_823e5b370c33" Guid="d149089a-4628-4c62-b4a2-a87db09197cc" Win64="no">
+                <File Name="am.pak" Id="_locales_am.pak_94ad45d0_0427_411e_aaaa_823e5b370c33" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\am.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ar.pak_f928a7d3_de28_41c5_8d19_74652fce83d9" Guid="8093586a-344f-4dd5-b30c-0b5932d7430e" Win64="no">
-                <File Name="ar.pak" Id="_locales_ar.pak_f928a7d3_de28_41c5_8d19_74652fce83d9" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ar.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ar.pak_2a0e06a1_f92d_4897_8a3d_afe484f43a77" Guid="22f7fe4e-2fe7-476d-9b7a-7f767db360a0" Win64="no">
+                <File Name="ar.pak" Id="_locales_ar.pak_2a0e06a1_f92d_4897_8a3d_afe484f43a77" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ar.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_bg.pak_78ce1823_1e6d_47ea_90c8_e4418d7959b2" Guid="43ed5787-7f5e-49ae-89b4-5c221e26b080" Win64="no">
-                <File Name="bg.pak" Id="_locales_bg.pak_78ce1823_1e6d_47ea_90c8_e4418d7959b2" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\bg.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_bg.pak_1521734f_0208_4000_a1d2_316b54889d43" Guid="ee0114e9-140e-4f1c-817a-7377de764694" Win64="no">
+                <File Name="bg.pak" Id="_locales_bg.pak_1521734f_0208_4000_a1d2_316b54889d43" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\bg.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_bn.pak_e514c5cb_4c2b_4c28_8a2b_90a4b6f82667" Guid="91bab8f4-abfc-47c6-9ff7-e83c12ccb0c8" Win64="no">
-                <File Name="bn.pak" Id="_locales_bn.pak_e514c5cb_4c2b_4c28_8a2b_90a4b6f82667" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\bn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_bn.pak_4485aba7_ec66_4b06_bf99_1e8b8c0690d8" Guid="0e0942e0-a7e3-4c72-87a0-e580f248c668" Win64="no">
+                <File Name="bn.pak" Id="_locales_bn.pak_4485aba7_ec66_4b06_bf99_1e8b8c0690d8" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\bn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ca.pak_ea776f6a_1cf5_42c7_88ad_3562121a737c" Guid="180b9704-fca5-4400-a0bf-41b4004216fb" Win64="no">
-                <File Name="ca.pak" Id="_locales_ca.pak_ea776f6a_1cf5_42c7_88ad_3562121a737c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ca.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ca.pak_5d654d2b_7bd3_4c60_9cb4_35aa8d79644d" Guid="e64801e3-93f4-4a9d-a1de-c443fd1188e9" Win64="no">
+                <File Name="ca.pak" Id="_locales_ca.pak_5d654d2b_7bd3_4c60_9cb4_35aa8d79644d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ca.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_cs.pak_97350be7_56e7_4bf6_8c91_f9483449aa7c" Guid="bbbecafe-cf94-4be7-ba45-35f340e19511" Win64="no">
-                <File Name="cs.pak" Id="_locales_cs.pak_97350be7_56e7_4bf6_8c91_f9483449aa7c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\cs.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_cs.pak_7aab6202_bed1_4353_9f3f_660da7649a0e" Guid="e4d78809-8105-4553-aeb9-915db1e3eadb" Win64="no">
+                <File Name="cs.pak" Id="_locales_cs.pak_7aab6202_bed1_4353_9f3f_660da7649a0e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\cs.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_da.pak_23c9ba64_1e9f_4da2_b4df_1331b61d6285" Guid="fbe6cef4-772b-4e22-bcf4-7958e2307002" Win64="no">
-                <File Name="da.pak" Id="_locales_da.pak_23c9ba64_1e9f_4da2_b4df_1331b61d6285" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\da.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_da.pak_be9e45ea_370d_4e34_9e4a_8adf2b13def0" Guid="319211ec-4618-4d12-ab50-386060dd7500" Win64="no">
+                <File Name="da.pak" Id="_locales_da.pak_be9e45ea_370d_4e34_9e4a_8adf2b13def0" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\da.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_de.pak_7de238fd_b855_41b0_bc7b_d975c6b83f58" Guid="399fa779-93d5-416c-8747-2b31d8db5735" Win64="no">
-                <File Name="de.pak" Id="_locales_de.pak_7de238fd_b855_41b0_bc7b_d975c6b83f58" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\de.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_de.pak_fdffc483_ed26_4765_a9f2_a7031bbf66e3" Guid="9f4e66cb-a45f-4464-b2cc-27d021aad974" Win64="no">
+                <File Name="de.pak" Id="_locales_de.pak_fdffc483_ed26_4765_a9f2_a7031bbf66e3" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\de.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_el.pak_aba26394_c74e_443d_9282_17a1892ccf33" Guid="d9d30f7f-a773-49f2-9b9e-c07d4eb72668" Win64="no">
-                <File Name="el.pak" Id="_locales_el.pak_aba26394_c74e_443d_9282_17a1892ccf33" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\el.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_el.pak_01fe5126_ee95_4eaf_88de_67f9a86a825d" Guid="2535785f-ea00-4368-81e2-dc2c7e1ba01d" Win64="no">
+                <File Name="el.pak" Id="_locales_el.pak_01fe5126_ee95_4eaf_88de_67f9a86a825d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\el.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_en_GB.pak_48323c0a_0d0e_45e4_a2f9_88f2b6ce3942" Guid="e06939b7-b37e-4d7b-84ea-3f4ca1559778" Win64="no">
-                <File Name="en-GB.pak" Id="_locales_en_GB.pak_48323c0a_0d0e_45e4_a2f9_88f2b6ce3942" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\en-GB.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_en_GB.pak_eda00823_8f07_41ed_8888_ca0840f5056c" Guid="0bc53271-81b3-4c97-a095-60740d109d5e" Win64="no">
+                <File Name="en-GB.pak" Id="_locales_en_GB.pak_eda00823_8f07_41ed_8888_ca0840f5056c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\en-GB.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_en_US.pak_62569d31_7786_432a_b814_a25fd407c2be" Guid="d3b7c5e8-0729-4170-b7d8-6f9b5a9dc9ed" Win64="no">
-                <File Name="en-US.pak" Id="_locales_en_US.pak_62569d31_7786_432a_b814_a25fd407c2be" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\en-US.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_en_US.pak_7d0f56a4_1b57_4f68_8345_0b8898207dc4" Guid="47f4bee3-4794-4455-906f-07f2de729636" Win64="no">
+                <File Name="en-US.pak" Id="_locales_en_US.pak_7d0f56a4_1b57_4f68_8345_0b8898207dc4" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\en-US.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_es_419.pak_97c6cb0b_e976_44b4_906f_9697336ef438" Guid="4c84847b-445b-4cd6-a63b-6d1d90288f8a" Win64="no">
-                <File Name="es-419.pak" Id="_locales_es_419.pak_97c6cb0b_e976_44b4_906f_9697336ef438" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\es-419.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_es_419.pak_5ae99f9a_b3cb_4ec8_af6e_bc6668ce13dd" Guid="a04b1b58-406d-464b-9c4a-87536f54d622" Win64="no">
+                <File Name="es-419.pak" Id="_locales_es_419.pak_5ae99f9a_b3cb_4ec8_af6e_bc6668ce13dd" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\es-419.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_es.pak_a6f92ec4_578b_4b96_96c2_2103636633dd" Guid="5c8bf65e-5a2a-4eca-8641-e7891bfd0a9c" Win64="no">
-                <File Name="es.pak" Id="_locales_es.pak_a6f92ec4_578b_4b96_96c2_2103636633dd" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\es.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_es.pak_e29a1a8c_e9cc_4b0a_a110_e20058332361" Guid="01bc0242-a5b2-4e89-9f9e-03ad06a51076" Win64="no">
+                <File Name="es.pak" Id="_locales_es.pak_e29a1a8c_e9cc_4b0a_a110_e20058332361" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\es.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_et.pak_e5217367_3bf4_43e3_895f_8776bb8d0c23" Guid="1ae11f9b-f9ed-4a69-92ad-7e5560cf3fc1" Win64="no">
-                <File Name="et.pak" Id="_locales_et.pak_e5217367_3bf4_43e3_895f_8776bb8d0c23" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\et.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_et.pak_8645b7e7_7b90_4d62_adfd_539fe3f35621" Guid="d03ddfa5-5ce7-45e9-b122-543d8877e880" Win64="no">
+                <File Name="et.pak" Id="_locales_et.pak_8645b7e7_7b90_4d62_adfd_539fe3f35621" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\et.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_fa.pak_84776548_ece9_404c_9cc6_ea7e4af807cb" Guid="33203544-1a30-444b-9d26-5711362982ac" Win64="no">
-                <File Name="fa.pak" Id="_locales_fa.pak_84776548_ece9_404c_9cc6_ea7e4af807cb" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fa.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_fa.pak_6c8753fc_ed08_4336_a2ed_390f1a43677c" Guid="cd5ed312-27a6-44be-87c2-bae64d57d57c" Win64="no">
+                <File Name="fa.pak" Id="_locales_fa.pak_6c8753fc_ed08_4336_a2ed_390f1a43677c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fa.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_fi.pak_7993eca3_92e1_4abe_aa2a_e06879e728f2" Guid="d52c0f18-fc13-4a11-bd8f-78cd7308640f" Win64="no">
-                <File Name="fi.pak" Id="_locales_fi.pak_7993eca3_92e1_4abe_aa2a_e06879e728f2" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_fi.pak_f9ec03bf_a50f_439a_8f52_3f44318de530" Guid="6c6d432f-2ca5-481d-81eb-40cf3c80b4e2" Win64="no">
+                <File Name="fi.pak" Id="_locales_fi.pak_f9ec03bf_a50f_439a_8f52_3f44318de530" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_fil.pak_0570f4ba_f49f_4451_a166_67ce6a4f5ee9" Guid="cd918c12-e690-460a-a406-5233cbc747f6" Win64="no">
-                <File Name="fil.pak" Id="_locales_fil.pak_0570f4ba_f49f_4451_a166_67ce6a4f5ee9" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fil.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_fil.pak_fba5dd15_a06b_4dec_99de_a27928347b54" Guid="8d21cfbb-614a-4969-977e-c3481ca2192f" Win64="no">
+                <File Name="fil.pak" Id="_locales_fil.pak_fba5dd15_a06b_4dec_99de_a27928347b54" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fil.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_fr.pak_7771331d_6837_4fd2_9c73_d4979cb403d7" Guid="7be9b8d8-b1eb-4468-8437-743023ab67bb" Win64="no">
-                <File Name="fr.pak" Id="_locales_fr.pak_7771331d_6837_4fd2_9c73_d4979cb403d7" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_fr.pak_b244d793_6013_4264_802e_2e67e3317704" Guid="774040c4-2be6-43d4-8446-c9f5cd478d94" Win64="no">
+                <File Name="fr.pak" Id="_locales_fr.pak_b244d793_6013_4264_802e_2e67e3317704" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\fr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_gu.pak_0edd4a17_a5eb_470f_9a5c_40191a2c2c24" Guid="b3874388-65fe-4356-94a6-7dbb96d9706f" Win64="no">
-                <File Name="gu.pak" Id="_locales_gu.pak_0edd4a17_a5eb_470f_9a5c_40191a2c2c24" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\gu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_gu.pak_feab8bcd_8b0a_42b6_817f_039adfcabe5b" Guid="bf08cbe5-72b9-4e4f-8410-6c63f60faf14" Win64="no">
+                <File Name="gu.pak" Id="_locales_gu.pak_feab8bcd_8b0a_42b6_817f_039adfcabe5b" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\gu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_he.pak_2c936b02_dc03_4c73_ae99_94803c20766f" Guid="5c31052b-90e5-4067-86d0-00c24556569c" Win64="no">
-                <File Name="he.pak" Id="_locales_he.pak_2c936b02_dc03_4c73_ae99_94803c20766f" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\he.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_he.pak_8161067a_d434_4873_a55d_00ac654469ea" Guid="938f39d6-fe88-40b0-a872-b9a4568ea17e" Win64="no">
+                <File Name="he.pak" Id="_locales_he.pak_8161067a_d434_4873_a55d_00ac654469ea" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\he.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_hi.pak_4c1c953b_e0ac_4805_9b28_499798138b09" Guid="71b06178-3bee-4d20-8fe3-f9966ade26ac" Win64="no">
-                <File Name="hi.pak" Id="_locales_hi.pak_4c1c953b_e0ac_4805_9b28_499798138b09" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_hi.pak_b551a344_265f_4220_b8d6_cbecfa015fe8" Guid="f333a75f-15d7-40ac-ba66-429b06f26c4f" Win64="no">
+                <File Name="hi.pak" Id="_locales_hi.pak_b551a344_265f_4220_b8d6_cbecfa015fe8" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_hr.pak_2e2c8822_b027_4733_8848_7e495776eee5" Guid="55da4a43-624d-4d02-9a6f-6c83134a0ffe" Win64="no">
-                <File Name="hr.pak" Id="_locales_hr.pak_2e2c8822_b027_4733_8848_7e495776eee5" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_hr.pak_0e2accee_6651_4314_8e6f_6f56c74b3b06" Guid="4b182489-aca7-408c-ba5e-63452670b10d" Win64="no">
+                <File Name="hr.pak" Id="_locales_hr.pak_0e2accee_6651_4314_8e6f_6f56c74b3b06" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_hu.pak_6711cb49_2b2d_4d13_b5af_9b092d7633df" Guid="559d54a7-5075-4b02-ad06-a2f350720e0b" Win64="no">
-                <File Name="hu.pak" Id="_locales_hu.pak_6711cb49_2b2d_4d13_b5af_9b092d7633df" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_hu.pak_67988ff2_1064_41b7_b55b_1836ee6c95d0" Guid="972484f2-8bfa-4d72-9356-b1f2b45b341c" Win64="no">
+                <File Name="hu.pak" Id="_locales_hu.pak_67988ff2_1064_41b7_b55b_1836ee6c95d0" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\hu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_id.pak_877d9b74_fac9_4ccd_9d23_bfefc9e83d2a" Guid="a2469c51-7f71-49f4-b34d-3b10e5e4bb75" Win64="no">
-                <File Name="id.pak" Id="_locales_id.pak_877d9b74_fac9_4ccd_9d23_bfefc9e83d2a" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\id.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_id.pak_7d96b0d2_8f16_4cd9_9167_438379f2834f" Guid="e669935a-6275-469f-b2c8-f33107fce542" Win64="no">
+                <File Name="id.pak" Id="_locales_id.pak_7d96b0d2_8f16_4cd9_9167_438379f2834f" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\id.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_it.pak_b1331f1d_d4d1_49e7_9a88_5670aab2bd06" Guid="08087a02-e873-4d8c-a582-a64428e26385" Win64="no">
-                <File Name="it.pak" Id="_locales_it.pak_b1331f1d_d4d1_49e7_9a88_5670aab2bd06" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\it.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_it.pak_b0407602_6c7a_468f_9597_34d3f21d271d" Guid="bdb6e0ff-d6de-470b-9977-e943848c057d" Win64="no">
+                <File Name="it.pak" Id="_locales_it.pak_b0407602_6c7a_468f_9597_34d3f21d271d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\it.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ja.pak_cfdc5f6f_4dcf_40e4_909a_cc798dff655d" Guid="3e8d8127-482b-41e4-b230-f8c87b1d2371" Win64="no">
-                <File Name="ja.pak" Id="_locales_ja.pak_cfdc5f6f_4dcf_40e4_909a_cc798dff655d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ja.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ja.pak_ac363c60_a766_44fc_b79d_c5673dee43bc" Guid="57428ccf-2d5b-418e-a0a8-89c659035f73" Win64="no">
+                <File Name="ja.pak" Id="_locales_ja.pak_ac363c60_a766_44fc_b79d_c5673dee43bc" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ja.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_kn.pak_0943a079_3499_4025_912a_9d40cb00da6e" Guid="b5923641-6320-4edc-abee-54e3d3510b05" Win64="no">
-                <File Name="kn.pak" Id="_locales_kn.pak_0943a079_3499_4025_912a_9d40cb00da6e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\kn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_kn.pak_d8668844_0249_4e50_b3b0_765a3c37a920" Guid="3dbcfe77-b4b0-431d-abc6-66ce4ebd18cd" Win64="no">
+                <File Name="kn.pak" Id="_locales_kn.pak_d8668844_0249_4e50_b3b0_765a3c37a920" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\kn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ko.pak_e14774e3_a8b8_4b99_97f4_0c13499fdb87" Guid="a3a63d4a-f5fe-46b5-bcc9-042188784dba" Win64="no">
-                <File Name="ko.pak" Id="_locales_ko.pak_e14774e3_a8b8_4b99_97f4_0c13499fdb87" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ko.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ko.pak_d2a7cc4c_6d5c_4d1d_9459_9a08267521ab" Guid="892f4179-a687-49c3-a977-fa1007cc2766" Win64="no">
+                <File Name="ko.pak" Id="_locales_ko.pak_d2a7cc4c_6d5c_4d1d_9459_9a08267521ab" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ko.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_lt.pak_43fc6ab7_422d_421b_ad6d_c1e972b8fb87" Guid="ace9fb13-433a-4afb-b4b6-b9c831d00bf2" Win64="no">
-                <File Name="lt.pak" Id="_locales_lt.pak_43fc6ab7_422d_421b_ad6d_c1e972b8fb87" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\lt.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_lt.pak_61a9d42a_d703_43f7_b470_0559cb797ad1" Guid="31c8c37d-7b97-4585-9a42-c0ed5643e51f" Win64="no">
+                <File Name="lt.pak" Id="_locales_lt.pak_61a9d42a_d703_43f7_b470_0559cb797ad1" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\lt.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_lv.pak_6e8dee88_4792_4080_a2ea_3ff4b32796d8" Guid="a8419ee5-1fa7-41bb-bfdc-f99fa0e9edcf" Win64="no">
-                <File Name="lv.pak" Id="_locales_lv.pak_6e8dee88_4792_4080_a2ea_3ff4b32796d8" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\lv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_lv.pak_57e4b7a3_0cbc_4054_8d48_d39bbce92800" Guid="7007532e-32d4-4e21-9ab8-a034b271c537" Win64="no">
+                <File Name="lv.pak" Id="_locales_lv.pak_57e4b7a3_0cbc_4054_8d48_d39bbce92800" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\lv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ml.pak_c7d7ac02_fb18_4889_babd_9004524e300c" Guid="d874c0e4-2a30-4a3c-a434-a5ff491fe8b3" Win64="no">
-                <File Name="ml.pak" Id="_locales_ml.pak_c7d7ac02_fb18_4889_babd_9004524e300c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ml.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ml.pak_b40f8765_0cbd_45b4_acf0_386346706219" Guid="fb304c69-6299-439f-931f-823933f37e15" Win64="no">
+                <File Name="ml.pak" Id="_locales_ml.pak_b40f8765_0cbd_45b4_acf0_386346706219" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ml.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_mr.pak_9f848d8a_b1d3_4c88_ac39_19eed311d55e" Guid="47fcc301-91b9-43a9-9b80-75c823f7bfbd" Win64="no">
-                <File Name="mr.pak" Id="_locales_mr.pak_9f848d8a_b1d3_4c88_ac39_19eed311d55e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\mr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_mr.pak_bcf6c959_818b_4b1d_8c43_93eb8dc9ae6a" Guid="574667af-803f-4dbf-a98b-f2b4ac7e8816" Win64="no">
+                <File Name="mr.pak" Id="_locales_mr.pak_bcf6c959_818b_4b1d_8c43_93eb8dc9ae6a" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\mr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ms.pak_2722888f_5fe8_43fd_848d_a7800cb81890" Guid="9c1a7b7d-9a50-4341-9a7d-82c2a866317c" Win64="no">
-                <File Name="ms.pak" Id="_locales_ms.pak_2722888f_5fe8_43fd_848d_a7800cb81890" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ms.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ms.pak_20bdd316_030e_4764_8e31_15b5608d85f9" Guid="303bc9b6-d85d-43c3-92a2-fb2aebf16458" Win64="no">
+                <File Name="ms.pak" Id="_locales_ms.pak_20bdd316_030e_4764_8e31_15b5608d85f9" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ms.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_nb.pak_2c90fd5a_4b15_4d98_8624_7b8a5452d89d" Guid="6e1d017e-3559-4fa4-8016-0a86cc33d348" Win64="no">
-                <File Name="nb.pak" Id="_locales_nb.pak_2c90fd5a_4b15_4d98_8624_7b8a5452d89d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\nb.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_nb.pak_e843d523_95b8_4cfb_9a32_e01a72938b39" Guid="a435f413-614e-4cdd-b2e3-1b987c0aca03" Win64="no">
+                <File Name="nb.pak" Id="_locales_nb.pak_e843d523_95b8_4cfb_9a32_e01a72938b39" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\nb.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_nl.pak_5e8d1527_e56e_47df_bd85_7938dee070b1" Guid="ef9cb66a-a45e-4a2b-81cb-af5a8aedcaf3" Win64="no">
-                <File Name="nl.pak" Id="_locales_nl.pak_5e8d1527_e56e_47df_bd85_7938dee070b1" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\nl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_nl.pak_7f4c9537_379c_4a93_8d6c_762e1107f91b" Guid="01700289-4480-4286-9c28-7b29a8e2c0bb" Win64="no">
+                <File Name="nl.pak" Id="_locales_nl.pak_7f4c9537_379c_4a93_8d6c_762e1107f91b" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\nl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_pl.pak_e7d1ae04_0c32_4410_ab0c_0bc01dddeeb2" Guid="146ffb85-253d-4dc5-9df1-f99442de2e24" Win64="no">
-                <File Name="pl.pak" Id="_locales_pl.pak_e7d1ae04_0c32_4410_ab0c_0bc01dddeeb2" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_pl.pak_f19c1885_5aef_4a7b_b3d1_a91e6900f31d" Guid="94175bb9-ac9f-40aa-9f82-c1e782ea5e49" Win64="no">
+                <File Name="pl.pak" Id="_locales_pl.pak_f19c1885_5aef_4a7b_b3d1_a91e6900f31d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_pt_BR.pak_8e81d398_1f5a_4a79_8c78_b3b1b9ef39cc" Guid="1c6dfbae-8300-41e8-9424-f5902c5986d0" Win64="no">
-                <File Name="pt-BR.pak" Id="_locales_pt_BR.pak_8e81d398_1f5a_4a79_8c78_b3b1b9ef39cc" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pt-BR.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_pt_BR.pak_4ea8a55f_6c49_4e0b_8b60_2de3c7752c34" Guid="b8c279b1-7bf3-49cc-a858-c764affa4760" Win64="no">
+                <File Name="pt-BR.pak" Id="_locales_pt_BR.pak_4ea8a55f_6c49_4e0b_8b60_2de3c7752c34" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pt-BR.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_pt_PT.pak_27056635_c531_4415_93dc_f9a7dd167b5a" Guid="c8d8112f-12fb-4304-bc7d-8f7c8740c755" Win64="no">
-                <File Name="pt-PT.pak" Id="_locales_pt_PT.pak_27056635_c531_4415_93dc_f9a7dd167b5a" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pt-PT.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_pt_PT.pak_4a95c100_ad2a_407b_a887_bcdf812b5762" Guid="54553f61-da1d-4522-8ea2-816eb9d12dae" Win64="no">
+                <File Name="pt-PT.pak" Id="_locales_pt_PT.pak_4a95c100_ad2a_407b_a887_bcdf812b5762" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\pt-PT.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ro.pak_6ef71be6_471c_4e74_bc19_e26e7965a159" Guid="e45835a9-aaff-4c79-ad36-ea3f81219856" Win64="no">
-                <File Name="ro.pak" Id="_locales_ro.pak_6ef71be6_471c_4e74_bc19_e26e7965a159" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ro.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ro.pak_89dd980b_389e_4a61_9d84_c5f1fb1ce275" Guid="2647c31d-1921-4ecf-8fab-247a68472a1e" Win64="no">
+                <File Name="ro.pak" Id="_locales_ro.pak_89dd980b_389e_4a61_9d84_c5f1fb1ce275" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ro.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ru.pak_538fc860_6b9f_46c1_b7f2_c8b99befec11" Guid="130544d0-a4bd-401e-883e-45d65bc3be7e" Win64="no">
-                <File Name="ru.pak" Id="_locales_ru.pak_538fc860_6b9f_46c1_b7f2_c8b99befec11" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ru.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ru.pak_f7810487_5060_4882_9e7c_05340e103b93" Guid="28a32d47-8a6c-4cda-9c14-523705a388a6" Win64="no">
+                <File Name="ru.pak" Id="_locales_ru.pak_f7810487_5060_4882_9e7c_05340e103b93" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ru.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_sk.pak_f4df087e_eee0_48fd_9d5f_f53ca56d548e" Guid="f4d3d922-d744-4718-bda5-a42245c9186b" Win64="no">
-                <File Name="sk.pak" Id="_locales_sk.pak_f4df087e_eee0_48fd_9d5f_f53ca56d548e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_sk.pak_2359addf_1709_4b75_af7f_ed30a3d397f6" Guid="2c7b8316-1028-4a2a-86e0-1c0d4136968e" Win64="no">
+                <File Name="sk.pak" Id="_locales_sk.pak_2359addf_1709_4b75_af7f_ed30a3d397f6" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_sl.pak_8253a0ae_98d8_42b0_a16e_b5a8c3c54059" Guid="b69e78b7-e826-4008-8a8f-4a26a26e6b39" Win64="no">
-                <File Name="sl.pak" Id="_locales_sl.pak_8253a0ae_98d8_42b0_a16e_b5a8c3c54059" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_sl.pak_74ccd6af_64c4_40ce_aca1_1668bd2081ad" Guid="4bb3f271-9f39-45a4-ab1b-6323802ddf6d" Win64="no">
+                <File Name="sl.pak" Id="_locales_sl.pak_74ccd6af_64c4_40ce_aca1_1668bd2081ad" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_sr.pak_8f24998e_1e01_4b55_93c3_45e7df76705f" Guid="66259786-ab63-4a9f-8531-343f96d1dfb9" Win64="no">
-                <File Name="sr.pak" Id="_locales_sr.pak_8f24998e_1e01_4b55_93c3_45e7df76705f" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_sr.pak_4e4fecad_36e7_495d_a1ee_26446ec38dfe" Guid="2235bb18-0940-4edc-b69d-c913a2c41434" Win64="no">
+                <File Name="sr.pak" Id="_locales_sr.pak_4e4fecad_36e7_495d_a1ee_26446ec38dfe" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_sv.pak_7eb511f7_6e7c_4b14_8a1c_75fa2b9db017" Guid="67d87b87-7c33-4524-b2f3-59ebab068f1d" Win64="no">
-                <File Name="sv.pak" Id="_locales_sv.pak_7eb511f7_6e7c_4b14_8a1c_75fa2b9db017" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_sv.pak_4e4f70b8_d8c4_473a_9c1a_3b87fb52d380" Guid="4f1055a6-b908-4ab2-b30d-2ef0ec6c2597" Win64="no">
+                <File Name="sv.pak" Id="_locales_sv.pak_4e4f70b8_d8c4_473a_9c1a_3b87fb52d380" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_sw.pak_6a5f7020_ab04_438e_a895_6d6c676cbea8" Guid="3586d2e2-5e22-49e1-a2c0-caf8babc9d7d" Win64="no">
-                <File Name="sw.pak" Id="_locales_sw.pak_6a5f7020_ab04_438e_a895_6d6c676cbea8" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sw.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_sw.pak_e76e32da_6cb6_493f_b8c1_6c0053c6a4fb" Guid="34a79416-d951-47ad-80f5-0954db1efbf8" Win64="no">
+                <File Name="sw.pak" Id="_locales_sw.pak_e76e32da_6cb6_493f_b8c1_6c0053c6a4fb" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\sw.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_ta.pak_9e2052eb_1cd1_4efe_b0dd_396a62bde11c" Guid="62d3d555-75c1-4294-9751-cfbdecd7a558" Win64="no">
-                <File Name="ta.pak" Id="_locales_ta.pak_9e2052eb_1cd1_4efe_b0dd_396a62bde11c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ta.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_ta.pak_e2bce783_42d0_4f63_9cdb_1d30b33f684e" Guid="ebccb955-2338-40d9-9708-e2ad374ebcb8" Win64="no">
+                <File Name="ta.pak" Id="_locales_ta.pak_e2bce783_42d0_4f63_9cdb_1d30b33f684e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\ta.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_te.pak_02e1cfb7_7811_44c8_a6da_c090455843e5" Guid="6c350e9e-62f0-4c94-92a3-374d913084f9" Win64="no">
-                <File Name="te.pak" Id="_locales_te.pak_02e1cfb7_7811_44c8_a6da_c090455843e5" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\te.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_te.pak_31c923f8_4980_4455_bdc9_5bd1f94b9638" Guid="6e9766e5-7d66-432e-9947-59e7bdf9f533" Win64="no">
+                <File Name="te.pak" Id="_locales_te.pak_31c923f8_4980_4455_bdc9_5bd1f94b9638" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\te.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_th.pak_a64e650d_9c62_4910_b504_b5be83d13b2c" Guid="167e2112-ef5b-4d56-8ed0-ea33d1222339" Win64="no">
-                <File Name="th.pak" Id="_locales_th.pak_a64e650d_9c62_4910_b504_b5be83d13b2c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\th.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_th.pak_a7475db5_6a4d_4e47_97a4_761e00ff9cdc" Guid="f9d1adaf-f657-46c6-bf9f-24ce65ed1c04" Win64="no">
+                <File Name="th.pak" Id="_locales_th.pak_a7475db5_6a4d_4e47_97a4_761e00ff9cdc" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\th.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_tr.pak_cd5848cf_ec14_484f_ae37_b721fbf6fa49" Guid="22dc2f78-2ec3-4943-ad80-374976415e6f" Win64="no">
-                <File Name="tr.pak" Id="_locales_tr.pak_cd5848cf_ec14_484f_ae37_b721fbf6fa49" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\tr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_tr.pak_58fa5987_e50e_4b1d_87b7_4f2de08704b0" Guid="675fbadc-70fb-4e85-8a10-217765608d68" Win64="no">
+                <File Name="tr.pak" Id="_locales_tr.pak_58fa5987_e50e_4b1d_87b7_4f2de08704b0" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\tr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_uk.pak_44a7129d_4710_41c2_8e8e_b45bf5a51d76" Guid="847cc2d6-dbd5-4be5-ba35-805c130d0900" Win64="no">
-                <File Name="uk.pak" Id="_locales_uk.pak_44a7129d_4710_41c2_8e8e_b45bf5a51d76" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\uk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_uk.pak_0d90ab4d_ecfe_4548_a47e_cdf2f6ebb318" Guid="1d4a3531-9f46-4eaf-9a60-dc9eccf745ba" Win64="no">
+                <File Name="uk.pak" Id="_locales_uk.pak_0d90ab4d_ecfe_4548_a47e_cdf2f6ebb318" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\uk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_vi.pak_da3d4e5a_e043_4c5f_8dd5_829b7707e250" Guid="d5cfc43b-ed8c-4305-9f5c-aade23ee7f30" Win64="no">
-                <File Name="vi.pak" Id="_locales_vi.pak_da3d4e5a_e043_4c5f_8dd5_829b7707e250" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\vi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_vi.pak_b8bbfa0c_0399_40fa_859e_fc78bcf48dca" Guid="926b5ad2-7982-4431-99f4-448add417981" Win64="no">
+                <File Name="vi.pak" Id="_locales_vi.pak_b8bbfa0c_0399_40fa_859e_fc78bcf48dca" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\vi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_zh_CN.pak_6e1a3f60_409c_402d_9bf2_f790a25e1681" Guid="40ff2018-6926-43b9-8bfc-1c264f246ad0" Win64="no">
-                <File Name="zh-CN.pak" Id="_locales_zh_CN.pak_6e1a3f60_409c_402d_9bf2_f790a25e1681" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\zh-CN.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_zh_CN.pak_8bc18103_5fb1_42a0_8415_8068a190142e" Guid="d78040ad-8206-4985-ba5f-add8dbbe0479" Win64="no">
+                <File Name="zh-CN.pak" Id="_locales_zh_CN.pak_8bc18103_5fb1_42a0_8415_8068a190142e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\zh-CN.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_locales_zh_TW.pak_c9ece16b_9273_449e_9e13_b338851c113e" Guid="78ac7efd-2fe6-454d-94be-f716e6f3eb3b" Win64="no">
-                <File Name="zh-TW.pak" Id="_locales_zh_TW.pak_c9ece16b_9273_449e_9e13_b338851c113e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\zh-TW.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_locales_zh_TW.pak_cf83cfba_057f_4c2d_8fe1_3831aff8d93f" Guid="19f03950-a51b-44cc-8f11-90a643ed63ef" Win64="no">
+                <File Name="zh-TW.pak" Id="_locales_zh_TW.pak_cf83cfba_057f_4c2d_8fe1_3831aff8d93f" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\locales\zh-TW.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
             </Directory>
-            <Directory Id="_resources_b29aabff_bf49_4499_a679_2157ff355996" Name="resources">
-              <Component Id="_resources_app_update.yml_4c12a4a7_cf2b_4308_930d_f7a0c872925f" Guid="356f6090-bc08-4ab6-b21f-97bb3cfe23c9" Win64="no">
-                <File Name="app-update.yml" Id="_resources_app_update.yml_4c12a4a7_cf2b_4308_930d_f7a0c872925f" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\app-update.yml" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Directory Id="_resources_992a73ca_1397_4c0e_85f3_fc57e19ebfad" Name="resources">
+              <Component Id="_resources_app_update.yml_81aa16d4_01b2_4bbd_824b_c737f341c3cb" Guid="5ed2cf83-9251-40db-9e02-532221f472dd" Win64="no">
+                <File Name="app-update.yml" Id="_resources_app_update.yml_81aa16d4_01b2_4bbd_824b_c737f341c3cb" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\app-update.yml" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_resources_app.asar_c4186c2c_736d_42bc_a02b_26f5921d888b" Guid="9237c23d-42df-4d0d-9eed-d763c0ebbf33" Win64="no">
-                <File Name="app.asar" Id="_resources_app.asar_c4186c2c_736d_42bc_a02b_26f5921d888b" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\app.asar" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_resources_app.asar_b48ea273_6205_41d4_a0b1_2bf55e1e6414" Guid="3924c4bb-96bb-46a1-814d-68d0cc35b484" Win64="no">
+                <File Name="app.asar" Id="_resources_app.asar_b48ea273_6205_41d4_a0b1_2bf55e1e6414" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\app.asar" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_resources_elevate.exe_1d068f5d_ee74_43ee_92e4_427524474f81" Guid="3992bbac-cca0-470b-92d1-4b2ee7a58609" Win64="no">
-                <File Name="elevate.exe" Id="_resources_elevate.exe_1d068f5d_ee74_43ee_92e4_427524474f81" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\elevate.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_resources_elevate.exe_3f6d1208_94b0_4d4d_833f_565767d223aa" Guid="06ad77a1-8e90-4b77-b548-356c09fcf144" Win64="no">
+                <File Name="elevate.exe" Id="_resources_elevate.exe_3f6d1208_94b0_4d4d_833f_565767d223aa" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources\elevate.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
             </Directory>
-            <Directory Id="_swiftshader_def6cb06_784a_4c94_8f5c_9bf61eac5911" Name="swiftshader">
-              <Component Id="_swiftshader_libEGL.dll_0e2740fd_4745_48a7_8d7b_4f0e3c3699c4" Guid="f9d6a0bc-34ed-46e7-b64e-df7019eb3194" Win64="no">
-                <File Name="libEGL.dll" Id="_swiftshader_libEGL.dll_0e2740fd_4745_48a7_8d7b_4f0e3c3699c4" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\swiftshader\libEGL.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Directory Id="_swiftshader_c6d2aa00_14fd_474a_a762_06a9fc4d1edb" Name="swiftshader">
+              <Component Id="_swiftshader_libEGL.dll_6a90670f_5f33_4411_8ebc_294aed415236" Guid="a1fc40e6-2e32-40a1-bbbc-9c445ad8884f" Win64="no">
+                <File Name="libEGL.dll" Id="_swiftshader_libEGL.dll_6a90670f_5f33_4411_8ebc_294aed415236" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\swiftshader\libEGL.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-              <Component Id="_swiftshader_libGLESv2.dll_bb91d680_1f36_42ac_af5a_c3531709db16" Guid="15a92299-16fd-4db5-a36b-bb9ced54481f" Win64="no">
-                <File Name="libGLESv2.dll" Id="_swiftshader_libGLESv2.dll_bb91d680_1f36_42ac_af5a_c3531709db16" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\swiftshader\libGLESv2.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+              <Component Id="_swiftshader_libGLESv2.dll_30e7d238_6ff9_49c1_b0a6_aaf80d442466" Guid="c4526257-711e-4184-bd65-c60777c6ea29" Win64="no">
+                <File Name="libGLESv2.dll" Id="_swiftshader_libGLESv2.dll_30e7d238_6ff9_49c1_b0a6_aaf80d442466" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\swiftshader\libGLESv2.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
               </Component>
-            </Directory>            <Component Id="_LICENSE.electron.txt_d042a43e_d353_48d8_9258_6093fe5c38cb" Guid="b24a5dd7-9638-4342-8a4c-6574793b6108" Win64="no">
-              <File Name="LICENSE.electron.txt" Id="_LICENSE.electron.txt_d042a43e_d353_48d8_9258_6093fe5c38cb" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\LICENSE.electron.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            </Directory>            <Component Id="_LICENSE.electron.txt_746ae550_bdf6_44b6_bd78_dcec78e103ff" Guid="283c4c5a-4d47-4ab5-b978-4e6591e9ad3c" Win64="no">
+              <File Name="LICENSE.electron.txt" Id="_LICENSE.electron.txt_746ae550_bdf6_44b6_bd78_dcec78e103ff" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\LICENSE.electron.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_LICENSES.chromium.html_c3fd0278_5f0a_47ca_a868_49934405629d" Guid="b8dcf66e-e29f-4509-9e3e-e38d39dccab7" Win64="no">
-              <File Name="LICENSES.chromium.html" Id="_LICENSES.chromium.html_c3fd0278_5f0a_47ca_a868_49934405629d" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\LICENSES.chromium.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_LICENSES.chromium.html_ecab1316_bd09_4868_9919_943be8ccaff7" Guid="d3de1ee2-eb4b-44fd-9b8f-f943817d202f" Win64="no">
+              <File Name="LICENSES.chromium.html" Id="_LICENSES.chromium.html_ecab1316_bd09_4868_9919_943be8ccaff7" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\LICENSES.chromium.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_chrome_100_percent.pak_fd2da455_9dc0_4021_ac99_d03522b9c6aa" Guid="0b8a0021-e50c-448d-8857-cd38353255bb" Win64="no">
-              <File Name="chrome_100_percent.pak" Id="_chrome_100_percent.pak_fd2da455_9dc0_4021_ac99_d03522b9c6aa" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\chrome_100_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_chrome_100_percent.pak_009c16f6_e471_471d_b5bd_822439cb92cd" Guid="95304dcb-6923-441c-b18b-6931345c4877" Win64="no">
+              <File Name="chrome_100_percent.pak" Id="_chrome_100_percent.pak_009c16f6_e471_471d_b5bd_822439cb92cd" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\chrome_100_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_chrome_200_percent.pak_ce57a4ad_16a6_46be_9e60_c937e36aa147" Guid="b120b880-d816-4a21-87b8-e502bb730f90" Win64="no">
-              <File Name="chrome_200_percent.pak" Id="_chrome_200_percent.pak_ce57a4ad_16a6_46be_9e60_c937e36aa147" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\chrome_200_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_chrome_200_percent.pak_67d855a5_96b5_4d91_8328_6c76dc255dbe" Guid="91c396ec-68e1-42d8-aef7-07b73f1fad74" Win64="no">
+              <File Name="chrome_200_percent.pak" Id="_chrome_200_percent.pak_67d855a5_96b5_4d91_8328_6c76dc255dbe" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\chrome_200_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_d3dcompiler_47.dll_591fdea8_bba1_4508_893a_b02d3b8c2a1a" Guid="7c849d81-5eea-4cb9-8ec0-6ba207f19d92" Win64="no">
-              <File Name="d3dcompiler_47.dll" Id="_d3dcompiler_47.dll_591fdea8_bba1_4508_893a_b02d3b8c2a1a" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\d3dcompiler_47.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_d3dcompiler_47.dll_76ef3ef8_1d21_46ba_8c64_0319aa25dbe5" Guid="35a84672-93ba-4dd4-b02f-a6cbee2da0e0" Win64="no">
+              <File Name="d3dcompiler_47.dll" Id="_d3dcompiler_47.dll_76ef3ef8_1d21_46ba_8c64_0319aa25dbe5" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\d3dcompiler_47.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_ffmpeg.dll_7f596a46_e1d2_4d1e_a2cf_f439c16a9829" Guid="5ae5d45b-850b-4630-8286-ade6a4df4720" Win64="no">
-              <File Name="ffmpeg.dll" Id="_ffmpeg.dll_7f596a46_e1d2_4d1e_a2cf_f439c16a9829" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\ffmpeg.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_ffmpeg.dll_fbaace85_feba_4311_bcbc_05a4abf7d815" Guid="e1c6aebd-084a-43df-9b3c-f61058b49417" Win64="no">
+              <File Name="ffmpeg.dll" Id="_ffmpeg.dll_fbaace85_feba_4311_bcbc_05a4abf7d815" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\ffmpeg.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_icudtl.dat_651b2355_57f8_4583_b96a_07d7a38b4866" Guid="ab655410-11c7-4737-9ded-6317484ec381" Win64="no">
-              <File Name="icudtl.dat" Id="_icudtl.dat_651b2355_57f8_4583_b96a_07d7a38b4866" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\icudtl.dat" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_icudtl.dat_2eaeb150_d7b5_494d_8101_20236638e24b" Guid="7dc5cd89-da8e-4f66-81b5-379909015895" Win64="no">
+              <File Name="icudtl.dat" Id="_icudtl.dat_2eaeb150_d7b5_494d_8101_20236638e24b" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\icudtl.dat" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_libEGL.dll_30ffb098_ce75_4ec4_adce_c2e1149ecb75" Guid="1abf4d24-83e3-4c1c-b581-461c701d5ed1" Win64="no">
-              <File Name="libEGL.dll" Id="_libEGL.dll_30ffb098_ce75_4ec4_adce_c2e1149ecb75" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\libEGL.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_libEGL.dll_2bbbbff3_2647_4329_ad09_a1d76d53f0d0" Guid="e74b9041-ae1e-4695-b67a-56bd5485b68f" Win64="no">
+              <File Name="libEGL.dll" Id="_libEGL.dll_2bbbbff3_2647_4329_ad09_a1d76d53f0d0" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\libEGL.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_libGLESv2.dll_eb369758_3a42_4eb4_b73a_b2470f60e3f2" Guid="709cba8b-e4ee-4c40-b343-60db5faa4697" Win64="no">
-              <File Name="libGLESv2.dll" Id="_libGLESv2.dll_eb369758_3a42_4eb4_b73a_b2470f60e3f2" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\libGLESv2.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_libGLESv2.dll_e51120cc_11cb_4170_aa14_3cf5941d5527" Guid="92a5e969-b2c6-48d2-aa6f-a8d209bc00ed" Win64="no">
+              <File Name="libGLESv2.dll" Id="_libGLESv2.dll_e51120cc_11cb_4170_aa14_3cf5941d5527" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\libGLESv2.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_link_manager.exe_9f6156b1_78d1_45e7_934a_bf3925065b0e" Guid="d938da16-c758-4695-98d6-deeb61b20fb3" Win64="no">
-              <File Name="link-manager.exe" Id="_link_manager.exe_9f6156b1_78d1_45e7_934a_bf3925065b0e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\link-manager.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_link_manager.exe_80954690_8f41_478b_904e_111c53a9ee16" Guid="b29f5d58-78b4-4f9c-a11c-01f42b01c01f" Win64="no">
+              <File Name="link-manager.exe" Id="_link_manager.exe_80954690_8f41_478b_904e_111c53a9ee16" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\link-manager.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_resources.pak_aabe159d_2c99_4596_912a_e4037958eb6b" Guid="b641310b-04db-41cf-b4b2-4e5dd8cf49c1" Win64="no">
-              <File Name="resources.pak" Id="_resources.pak_aabe159d_2c99_4596_912a_e4037958eb6b" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_resources.pak_f8cbe6be_8f72_42cd_bc05_e90f608c2831" Guid="d8b194fd-8e23-44d6-bd3e-c2be5d087b79" Win64="no">
+              <File Name="resources.pak" Id="_resources.pak_f8cbe6be_8f72_42cd_bc05_e90f608c2831" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\resources.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_snapshot_blob.bin_b679f259_078a_478c_8c57_3254cd5b3845" Guid="e08f3c55-dbc1-4329-8082-3f7e3dadf4e6" Win64="no">
-              <File Name="snapshot_blob.bin" Id="_snapshot_blob.bin_b679f259_078a_478c_8c57_3254cd5b3845" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\snapshot_blob.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_snapshot_blob.bin_31189730_664d_487a_9215_1b7c2dd4df38" Guid="38eb1194-7386-4073-83ca-10c0085fb79e" Win64="no">
+              <File Name="snapshot_blob.bin" Id="_snapshot_blob.bin_31189730_664d_487a_9215_1b7c2dd4df38" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\snapshot_blob.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_v8_context_snapshot.bin_72c742c3_3d8a_4673_9fc7_625e7594ab1e" Guid="aa13a46c-153d-4076-848e-649620875e28" Win64="no">
-              <File Name="v8_context_snapshot.bin" Id="_v8_context_snapshot.bin_72c742c3_3d8a_4673_9fc7_625e7594ab1e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\v8_context_snapshot.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_v8_context_snapshot.bin_8737fac6_c279_46ab_b7a2_08c3d746c4e4" Guid="f9691c00-aabe-49cd-8191-c5194011448b" Win64="no">
+              <File Name="v8_context_snapshot.bin" Id="_v8_context_snapshot.bin_8737fac6_c279_46ab_b7a2_08c3d746c4e4" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\v8_context_snapshot.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_vk_swiftshader.dll_aa215fba_aa0e_49ad_a359_0c5998f83aa9" Guid="0b65afb3-eea0-49ac-8817-e571c82aa33b" Win64="no">
-              <File Name="vk_swiftshader.dll" Id="_vk_swiftshader.dll_aa215fba_aa0e_49ad_a359_0c5998f83aa9" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vk_swiftshader.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_vk_swiftshader.dll_5bd8547e_c6cb_42ca_9f4b_b3ccb1fe1a9e" Guid="c0f89cb5-0b69-4585-8153-896c28c40821" Win64="no">
+              <File Name="vk_swiftshader.dll" Id="_vk_swiftshader.dll_5bd8547e_c6cb_42ca_9f4b_b3ccb1fe1a9e" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vk_swiftshader.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_vk_swiftshader_icd.json_76898f1d_f2bb_4cda_9664_ca20fdcb999c" Guid="728a20e3-1955-4e4e-bea3-d3f10f8c99c9" Win64="no">
-              <File Name="vk_swiftshader_icd.json" Id="_vk_swiftshader_icd.json_76898f1d_f2bb_4cda_9664_ca20fdcb999c" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vk_swiftshader_icd.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_vk_swiftshader_icd.json_879f25a5_05ff_4a12_a0f8_6d637d9a0008" Guid="ace28751-f2fa-481b-9754-3baa8fd22600" Win64="no">
+              <File Name="vk_swiftshader_icd.json" Id="_vk_swiftshader_icd.json_879f25a5_05ff_4a12_a0f8_6d637d9a0008" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vk_swiftshader_icd.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
-            <Component Id="_vulkan_1.dll_13fbd804_faa6_49c2_9b60_82375b698da9" Guid="56c5f1ec-d0ec-497e-95c2-50add68008b2" Win64="no">
-              <File Name="vulkan-1.dll" Id="_vulkan_1.dll_13fbd804_faa6_49c2_9b60_82375b698da9" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vulkan-1.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+            <Component Id="_vulkan_1.dll_9b8e7c54_1f96_4074_86f4_21cf6e4851fc" Guid="f0357a4f-2f75-4bab-8709-96a070c5b4f4" Win64="no">
+              <File Name="vulkan-1.dll" Id="_vulkan_1.dll_9b8e7c54_1f96_4074_86f4_21cf6e4851fc" Source="F:\Daniel's Link Manager App\Custom-Links-Project\dist_electron\win-unpacked\vulkan-1.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
             </Component>
           </Directory>
-          <Component Id="_LinkTailor.exe_8ffd3205_8afc_4d02_94de_4a776182a117" Guid="010ad83b-2011-4260-9034-ddd8d273f342" Win64="no">
-            <File Name="LinkTailor.exe" Id="_LinkTailor.exe_8ffd3205_8afc_4d02_94de_4a776182a117" Source="C:\Users\Daniel\AppData\Local\Temp\LinkTailorJO0LID\LinkTailor.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+          <Component Id="_LinkTailor.exe_db286115_6439_4c99_9786_a5ff9917e22f" Guid="cbaef527-0982-4d19-ad6a-79e03b91e76d" Win64="no">
+            <File Name="LinkTailor.exe" Id="_LinkTailor.exe_db286115_6439_4c99_9786_a5ff9917e22f" Source="C:\Users\Daniel\AppData\Local\Temp\LinkTailorIdG3Lg\LinkTailor.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
           </Component>
-          <Component Id="_.installInfo.json_c40f5acb_cf81_42f5_8779_11cf38d4a048" Guid="5167da18-a097-4ed4-a9ef-d7a7d31caba3" Win64="no">
-            <File Name=".installInfo.json" Id="_.installInfo.json_c40f5acb_cf81_42f5_8779_11cf38d4a048" Source="C:\Users\Daniel\AppData\Local\Temp\.installInfo78RHzM\.installInfo.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+          <Component Id="_.installInfo.json_49729b9d_e755_45a6_8554_187f52a70777" Guid="1c96b3b1-f0c3-42cf-a73d-a2386a5f0a0a" Win64="no">
+            <File Name=".installInfo.json" Id="_.installInfo.json_49729b9d_e755_45a6_8554_187f52a70777" Source="C:\Users\Daniel\AppData\Local\Temp\.installInfo2kYI5B\.installInfo.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
           </Component>
-          <Component Id="RegistryInstallPath" Guid="af9aa2df-2c1a-4093-a50e-44882611db99" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+          <Component Id="RegistryInstallPath" Guid="75f04ece-46df-4403-b588-c650139eb315" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
               <RegistryValue Name="InstallPath" Type="string" Value="[APPLICATIONROOTDIRECTORY]" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallDisplayName" Guid="fcea2274-5df5-4f40-8f42-45425a094c02" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+          <Component Id="UninstallDisplayName" Guid="facff59a-f5a1-4605-b509-7fba23781fcd" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
               <RegistryValue Name="DisplayName" Type="string" Value="[VisibleProductName]" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallPublisher" Guid="eb7208a6-a76e-43e7-b21c-f148c69ced3e" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+          <Component Id="UninstallPublisher" Guid="ad9dce45-12e6-4550-8f7e-8259c55a459e" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
               <RegistryValue Name="Publisher" Type="string" Value="UC 2021 Senior Design Team 6" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallDisplayVersion" Guid="b0822898-2ed5-4d32-9884-1b0fde19d442" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+          <Component Id="UninstallDisplayVersion" Guid="8fa7dbfd-a9c5-4a39-b72d-cbaae22457fd" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
               <RegistryValue Name="DisplayVersion" Type="string" Value="1.0.0" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallModifyString" Guid="0206c87f-f9a4-416f-9556-e2e4fce3e600" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
-              <RegistryValue Name="ModifyPath" Type="expandable" Value="MsiExec.exe /I {76B1F90E-A3FE-4051-8378-70672DC18803}" KeyPath="yes"/>
+          <Component Id="UninstallModifyString" Guid="c7c9ab47-b996-4c65-84d8-08b5079575c9" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="ModifyPath" Type="expandable" Value="MsiExec.exe /I {4D1C3558-1A98-4BD6-9786-BAA413F74062}" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallString" Guid="b9a3eceb-d5e1-4acc-9bb9-b7b9f92874d7" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
-              <RegistryValue Name="UninstallString" Type="expandable" Value="MsiExec.exe /X {76B1F90E-A3FE-4051-8378-70672DC18803}" KeyPath="yes"/>
+          <Component Id="UninstallString" Guid="703cfeb6-aaf7-4ec3-a06a-80e816583572" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="UninstallString" Type="expandable" Value="MsiExec.exe /X {4D1C3558-1A98-4BD6-9786-BAA413F74062}" KeyPath="yes"/>
             </RegistryKey>
           </Component>
-          <Component Id="UninstallDisplayIcon" Guid="71939ba1-989a-423a-9173-bb0296fbaeff" Win64="no">
-            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{76B1F90E-A3FE-4051-8378-70672DC18803}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+          <Component Id="UninstallDisplayIcon" Guid="bcf6474c-218f-4ce9-ae0d-458f53dcaf4c" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4D1C3558-1A98-4BD6-9786-BAA413F74062}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
               <RegistryValue Name="DisplayIcon" Type="expandable" Value="[SystemFolder]msiexec.exe" KeyPath="yes"/>
             </RegistryKey>
           </Component>
@@ -445,7 +406,7 @@
 
     <!-- Step 3: Add app to Start Menu -->
     <DirectoryRef Id="ApplicationProgramsFolder">
-      <Component Id="ApplicationShortcut" Guid="64482020-1458-48f2-bcb7-26993d4e6016" Win64="no">
+      <Component Id="ApplicationShortcut" Guid="5ab08db6-f76b-4acf-8c36-995cacb5633c" Win64="no">
         <Shortcut Id="ApplicationStartMenuShortcut"
                   Name="LinkTailor"
                   Description="The LinkTailor application is for users to save and arrange layouts of links, making it easier for them to access applications, files, and websites."
@@ -465,7 +426,7 @@
 
    <!-- Step 4: Add app desktop shortcut --> 
     <DirectoryRef Id="DesktopFolder">
-      <Component Id="DesktopShortcut" Guid="9e2096ab-9977-473c-ba8f-36932f7b7413" >
+      <Component Id="DesktopShortcut" Guid="cb31e580-8bb4-471c-a4a5-f00529952cbe" >
           <Shortcut Id="MyDesktopShortcut"
                     Name="LinkTailor"
                     Description="The LinkTailor application is for users to save and arrange layouts of links, making it easier for them to access applications, files, and websites."
@@ -484,7 +445,7 @@
     <!-- Lets cleanup any files that are were not part of the initial install
     via this MSI. Such as newer versions installed by the auto-updater. -->
     <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
-      <Component Id="PurgeOnUninstall" Guid="4b574cfa-aed2-4cde-9e64-a6d59f572f6f" Win64="no">
+      <Component Id="PurgeOnUninstall" Guid="0b2d7273-fccc-4952-abee-dc5b5b1fd138" Win64="no">
         <CreateFolder/>
         <util:RemoveFolderEx On="uninstall" Property="INSTALLPATH" />
       </Component>
@@ -492,83 +453,83 @@
 
     <Feature Id="Complete" Title="LinkTailor Desktop Application (1.0.0)" Description="The complete package." Display="expand" Level="1" ConfigurableDirectory="APPLICATIONROOTDIRECTORY">
       <!-- Step 5: Tell WiX to install the files -->
-      <Feature Id="MainApplication" Title="Main Application" Level="1" Description="The main components to run the LinkTailor application." >
-        <ComponentRef Id="_locales_am.pak_510ef635_be80_4fc5_b19d_34c0aafd159a" />
-        <ComponentRef Id="_locales_ar.pak_f928a7d3_de28_41c5_8d19_74652fce83d9" />
-        <ComponentRef Id="_locales_bg.pak_78ce1823_1e6d_47ea_90c8_e4418d7959b2" />
-        <ComponentRef Id="_locales_bn.pak_e514c5cb_4c2b_4c28_8a2b_90a4b6f82667" />
-        <ComponentRef Id="_locales_ca.pak_ea776f6a_1cf5_42c7_88ad_3562121a737c" />
-        <ComponentRef Id="_locales_cs.pak_97350be7_56e7_4bf6_8c91_f9483449aa7c" />
-        <ComponentRef Id="_locales_da.pak_23c9ba64_1e9f_4da2_b4df_1331b61d6285" />
-        <ComponentRef Id="_locales_de.pak_7de238fd_b855_41b0_bc7b_d975c6b83f58" />
-        <ComponentRef Id="_locales_el.pak_aba26394_c74e_443d_9282_17a1892ccf33" />
-        <ComponentRef Id="_locales_en_GB.pak_48323c0a_0d0e_45e4_a2f9_88f2b6ce3942" />
-        <ComponentRef Id="_locales_en_US.pak_62569d31_7786_432a_b814_a25fd407c2be" />
-        <ComponentRef Id="_locales_es_419.pak_97c6cb0b_e976_44b4_906f_9697336ef438" />
-        <ComponentRef Id="_locales_es.pak_a6f92ec4_578b_4b96_96c2_2103636633dd" />
-        <ComponentRef Id="_locales_et.pak_e5217367_3bf4_43e3_895f_8776bb8d0c23" />
-        <ComponentRef Id="_locales_fa.pak_84776548_ece9_404c_9cc6_ea7e4af807cb" />
-        <ComponentRef Id="_locales_fi.pak_7993eca3_92e1_4abe_aa2a_e06879e728f2" />
-        <ComponentRef Id="_locales_fil.pak_0570f4ba_f49f_4451_a166_67ce6a4f5ee9" />
-        <ComponentRef Id="_locales_fr.pak_7771331d_6837_4fd2_9c73_d4979cb403d7" />
-        <ComponentRef Id="_locales_gu.pak_0edd4a17_a5eb_470f_9a5c_40191a2c2c24" />
-        <ComponentRef Id="_locales_he.pak_2c936b02_dc03_4c73_ae99_94803c20766f" />
-        <ComponentRef Id="_locales_hi.pak_4c1c953b_e0ac_4805_9b28_499798138b09" />
-        <ComponentRef Id="_locales_hr.pak_2e2c8822_b027_4733_8848_7e495776eee5" />
-        <ComponentRef Id="_locales_hu.pak_6711cb49_2b2d_4d13_b5af_9b092d7633df" />
-        <ComponentRef Id="_locales_id.pak_877d9b74_fac9_4ccd_9d23_bfefc9e83d2a" />
-        <ComponentRef Id="_locales_it.pak_b1331f1d_d4d1_49e7_9a88_5670aab2bd06" />
-        <ComponentRef Id="_locales_ja.pak_cfdc5f6f_4dcf_40e4_909a_cc798dff655d" />
-        <ComponentRef Id="_locales_kn.pak_0943a079_3499_4025_912a_9d40cb00da6e" />
-        <ComponentRef Id="_locales_ko.pak_e14774e3_a8b8_4b99_97f4_0c13499fdb87" />
-        <ComponentRef Id="_locales_lt.pak_43fc6ab7_422d_421b_ad6d_c1e972b8fb87" />
-        <ComponentRef Id="_locales_lv.pak_6e8dee88_4792_4080_a2ea_3ff4b32796d8" />
-        <ComponentRef Id="_locales_ml.pak_c7d7ac02_fb18_4889_babd_9004524e300c" />
-        <ComponentRef Id="_locales_mr.pak_9f848d8a_b1d3_4c88_ac39_19eed311d55e" />
-        <ComponentRef Id="_locales_ms.pak_2722888f_5fe8_43fd_848d_a7800cb81890" />
-        <ComponentRef Id="_locales_nb.pak_2c90fd5a_4b15_4d98_8624_7b8a5452d89d" />
-        <ComponentRef Id="_locales_nl.pak_5e8d1527_e56e_47df_bd85_7938dee070b1" />
-        <ComponentRef Id="_locales_pl.pak_e7d1ae04_0c32_4410_ab0c_0bc01dddeeb2" />
-        <ComponentRef Id="_locales_pt_BR.pak_8e81d398_1f5a_4a79_8c78_b3b1b9ef39cc" />
-        <ComponentRef Id="_locales_pt_PT.pak_27056635_c531_4415_93dc_f9a7dd167b5a" />
-        <ComponentRef Id="_locales_ro.pak_6ef71be6_471c_4e74_bc19_e26e7965a159" />
-        <ComponentRef Id="_locales_ru.pak_538fc860_6b9f_46c1_b7f2_c8b99befec11" />
-        <ComponentRef Id="_locales_sk.pak_f4df087e_eee0_48fd_9d5f_f53ca56d548e" />
-        <ComponentRef Id="_locales_sl.pak_8253a0ae_98d8_42b0_a16e_b5a8c3c54059" />
-        <ComponentRef Id="_locales_sr.pak_8f24998e_1e01_4b55_93c3_45e7df76705f" />
-        <ComponentRef Id="_locales_sv.pak_7eb511f7_6e7c_4b14_8a1c_75fa2b9db017" />
-        <ComponentRef Id="_locales_sw.pak_6a5f7020_ab04_438e_a895_6d6c676cbea8" />
-        <ComponentRef Id="_locales_ta.pak_9e2052eb_1cd1_4efe_b0dd_396a62bde11c" />
-        <ComponentRef Id="_locales_te.pak_02e1cfb7_7811_44c8_a6da_c090455843e5" />
-        <ComponentRef Id="_locales_th.pak_a64e650d_9c62_4910_b504_b5be83d13b2c" />
-        <ComponentRef Id="_locales_tr.pak_cd5848cf_ec14_484f_ae37_b721fbf6fa49" />
-        <ComponentRef Id="_locales_uk.pak_44a7129d_4710_41c2_8e8e_b45bf5a51d76" />
-        <ComponentRef Id="_locales_vi.pak_da3d4e5a_e043_4c5f_8dd5_829b7707e250" />
-        <ComponentRef Id="_locales_zh_CN.pak_6e1a3f60_409c_402d_9bf2_f790a25e1681" />
-        <ComponentRef Id="_locales_zh_TW.pak_c9ece16b_9273_449e_9e13_b338851c113e" />
-        <ComponentRef Id="_resources_app_update.yml_4c12a4a7_cf2b_4308_930d_f7a0c872925f" />
-        <ComponentRef Id="_resources_app.asar_c4186c2c_736d_42bc_a02b_26f5921d888b" />
-        <ComponentRef Id="_resources_elevate.exe_1d068f5d_ee74_43ee_92e4_427524474f81" />
-        <ComponentRef Id="_swiftshader_libEGL.dll_0e2740fd_4745_48a7_8d7b_4f0e3c3699c4" />
-        <ComponentRef Id="_swiftshader_libGLESv2.dll_bb91d680_1f36_42ac_af5a_c3531709db16" />
-        <ComponentRef Id="_LICENSE.electron.txt_d042a43e_d353_48d8_9258_6093fe5c38cb" />
-        <ComponentRef Id="_LICENSES.chromium.html_c3fd0278_5f0a_47ca_a868_49934405629d" />
-        <ComponentRef Id="_chrome_100_percent.pak_fd2da455_9dc0_4021_ac99_d03522b9c6aa" />
-        <ComponentRef Id="_chrome_200_percent.pak_ce57a4ad_16a6_46be_9e60_c937e36aa147" />
-        <ComponentRef Id="_d3dcompiler_47.dll_591fdea8_bba1_4508_893a_b02d3b8c2a1a" />
-        <ComponentRef Id="_ffmpeg.dll_7f596a46_e1d2_4d1e_a2cf_f439c16a9829" />
-        <ComponentRef Id="_icudtl.dat_651b2355_57f8_4583_b96a_07d7a38b4866" />
-        <ComponentRef Id="_libEGL.dll_30ffb098_ce75_4ec4_adce_c2e1149ecb75" />
-        <ComponentRef Id="_libGLESv2.dll_eb369758_3a42_4eb4_b73a_b2470f60e3f2" />
-        <ComponentRef Id="_link_manager.exe_9f6156b1_78d1_45e7_934a_bf3925065b0e" />
-        <ComponentRef Id="_resources.pak_aabe159d_2c99_4596_912a_e4037958eb6b" />
-        <ComponentRef Id="_snapshot_blob.bin_b679f259_078a_478c_8c57_3254cd5b3845" />
-        <ComponentRef Id="_v8_context_snapshot.bin_72c742c3_3d8a_4673_9fc7_625e7594ab1e" />
-        <ComponentRef Id="_vk_swiftshader.dll_aa215fba_aa0e_49ad_a359_0c5998f83aa9" />
-        <ComponentRef Id="_vk_swiftshader_icd.json_76898f1d_f2bb_4cda_9664_ca20fdcb999c" />
-        <ComponentRef Id="_vulkan_1.dll_13fbd804_faa6_49c2_9b60_82375b698da9" />
-        <ComponentRef Id="_LinkTailor.exe_8ffd3205_8afc_4d02_94de_4a776182a117" />
-        <ComponentRef Id="_.installInfo.json_c40f5acb_cf81_42f5_8779_11cf38d4a048" />
+      <Feature Id="MainApplication" Title="Main Application" Level="1" Description="The main components to run the applications." >
+        <ComponentRef Id="_locales_am.pak_94ad45d0_0427_411e_aaaa_823e5b370c33" />
+        <ComponentRef Id="_locales_ar.pak_2a0e06a1_f92d_4897_8a3d_afe484f43a77" />
+        <ComponentRef Id="_locales_bg.pak_1521734f_0208_4000_a1d2_316b54889d43" />
+        <ComponentRef Id="_locales_bn.pak_4485aba7_ec66_4b06_bf99_1e8b8c0690d8" />
+        <ComponentRef Id="_locales_ca.pak_5d654d2b_7bd3_4c60_9cb4_35aa8d79644d" />
+        <ComponentRef Id="_locales_cs.pak_7aab6202_bed1_4353_9f3f_660da7649a0e" />
+        <ComponentRef Id="_locales_da.pak_be9e45ea_370d_4e34_9e4a_8adf2b13def0" />
+        <ComponentRef Id="_locales_de.pak_fdffc483_ed26_4765_a9f2_a7031bbf66e3" />
+        <ComponentRef Id="_locales_el.pak_01fe5126_ee95_4eaf_88de_67f9a86a825d" />
+        <ComponentRef Id="_locales_en_GB.pak_eda00823_8f07_41ed_8888_ca0840f5056c" />
+        <ComponentRef Id="_locales_en_US.pak_7d0f56a4_1b57_4f68_8345_0b8898207dc4" />
+        <ComponentRef Id="_locales_es_419.pak_5ae99f9a_b3cb_4ec8_af6e_bc6668ce13dd" />
+        <ComponentRef Id="_locales_es.pak_e29a1a8c_e9cc_4b0a_a110_e20058332361" />
+        <ComponentRef Id="_locales_et.pak_8645b7e7_7b90_4d62_adfd_539fe3f35621" />
+        <ComponentRef Id="_locales_fa.pak_6c8753fc_ed08_4336_a2ed_390f1a43677c" />
+        <ComponentRef Id="_locales_fi.pak_f9ec03bf_a50f_439a_8f52_3f44318de530" />
+        <ComponentRef Id="_locales_fil.pak_fba5dd15_a06b_4dec_99de_a27928347b54" />
+        <ComponentRef Id="_locales_fr.pak_b244d793_6013_4264_802e_2e67e3317704" />
+        <ComponentRef Id="_locales_gu.pak_feab8bcd_8b0a_42b6_817f_039adfcabe5b" />
+        <ComponentRef Id="_locales_he.pak_8161067a_d434_4873_a55d_00ac654469ea" />
+        <ComponentRef Id="_locales_hi.pak_b551a344_265f_4220_b8d6_cbecfa015fe8" />
+        <ComponentRef Id="_locales_hr.pak_0e2accee_6651_4314_8e6f_6f56c74b3b06" />
+        <ComponentRef Id="_locales_hu.pak_67988ff2_1064_41b7_b55b_1836ee6c95d0" />
+        <ComponentRef Id="_locales_id.pak_7d96b0d2_8f16_4cd9_9167_438379f2834f" />
+        <ComponentRef Id="_locales_it.pak_b0407602_6c7a_468f_9597_34d3f21d271d" />
+        <ComponentRef Id="_locales_ja.pak_ac363c60_a766_44fc_b79d_c5673dee43bc" />
+        <ComponentRef Id="_locales_kn.pak_d8668844_0249_4e50_b3b0_765a3c37a920" />
+        <ComponentRef Id="_locales_ko.pak_d2a7cc4c_6d5c_4d1d_9459_9a08267521ab" />
+        <ComponentRef Id="_locales_lt.pak_61a9d42a_d703_43f7_b470_0559cb797ad1" />
+        <ComponentRef Id="_locales_lv.pak_57e4b7a3_0cbc_4054_8d48_d39bbce92800" />
+        <ComponentRef Id="_locales_ml.pak_b40f8765_0cbd_45b4_acf0_386346706219" />
+        <ComponentRef Id="_locales_mr.pak_bcf6c959_818b_4b1d_8c43_93eb8dc9ae6a" />
+        <ComponentRef Id="_locales_ms.pak_20bdd316_030e_4764_8e31_15b5608d85f9" />
+        <ComponentRef Id="_locales_nb.pak_e843d523_95b8_4cfb_9a32_e01a72938b39" />
+        <ComponentRef Id="_locales_nl.pak_7f4c9537_379c_4a93_8d6c_762e1107f91b" />
+        <ComponentRef Id="_locales_pl.pak_f19c1885_5aef_4a7b_b3d1_a91e6900f31d" />
+        <ComponentRef Id="_locales_pt_BR.pak_4ea8a55f_6c49_4e0b_8b60_2de3c7752c34" />
+        <ComponentRef Id="_locales_pt_PT.pak_4a95c100_ad2a_407b_a887_bcdf812b5762" />
+        <ComponentRef Id="_locales_ro.pak_89dd980b_389e_4a61_9d84_c5f1fb1ce275" />
+        <ComponentRef Id="_locales_ru.pak_f7810487_5060_4882_9e7c_05340e103b93" />
+        <ComponentRef Id="_locales_sk.pak_2359addf_1709_4b75_af7f_ed30a3d397f6" />
+        <ComponentRef Id="_locales_sl.pak_74ccd6af_64c4_40ce_aca1_1668bd2081ad" />
+        <ComponentRef Id="_locales_sr.pak_4e4fecad_36e7_495d_a1ee_26446ec38dfe" />
+        <ComponentRef Id="_locales_sv.pak_4e4f70b8_d8c4_473a_9c1a_3b87fb52d380" />
+        <ComponentRef Id="_locales_sw.pak_e76e32da_6cb6_493f_b8c1_6c0053c6a4fb" />
+        <ComponentRef Id="_locales_ta.pak_e2bce783_42d0_4f63_9cdb_1d30b33f684e" />
+        <ComponentRef Id="_locales_te.pak_31c923f8_4980_4455_bdc9_5bd1f94b9638" />
+        <ComponentRef Id="_locales_th.pak_a7475db5_6a4d_4e47_97a4_761e00ff9cdc" />
+        <ComponentRef Id="_locales_tr.pak_58fa5987_e50e_4b1d_87b7_4f2de08704b0" />
+        <ComponentRef Id="_locales_uk.pak_0d90ab4d_ecfe_4548_a47e_cdf2f6ebb318" />
+        <ComponentRef Id="_locales_vi.pak_b8bbfa0c_0399_40fa_859e_fc78bcf48dca" />
+        <ComponentRef Id="_locales_zh_CN.pak_8bc18103_5fb1_42a0_8415_8068a190142e" />
+        <ComponentRef Id="_locales_zh_TW.pak_cf83cfba_057f_4c2d_8fe1_3831aff8d93f" />
+        <ComponentRef Id="_resources_app_update.yml_81aa16d4_01b2_4bbd_824b_c737f341c3cb" />
+        <ComponentRef Id="_resources_app.asar_b48ea273_6205_41d4_a0b1_2bf55e1e6414" />
+        <ComponentRef Id="_resources_elevate.exe_3f6d1208_94b0_4d4d_833f_565767d223aa" />
+        <ComponentRef Id="_swiftshader_libEGL.dll_6a90670f_5f33_4411_8ebc_294aed415236" />
+        <ComponentRef Id="_swiftshader_libGLESv2.dll_30e7d238_6ff9_49c1_b0a6_aaf80d442466" />
+        <ComponentRef Id="_LICENSE.electron.txt_746ae550_bdf6_44b6_bd78_dcec78e103ff" />
+        <ComponentRef Id="_LICENSES.chromium.html_ecab1316_bd09_4868_9919_943be8ccaff7" />
+        <ComponentRef Id="_chrome_100_percent.pak_009c16f6_e471_471d_b5bd_822439cb92cd" />
+        <ComponentRef Id="_chrome_200_percent.pak_67d855a5_96b5_4d91_8328_6c76dc255dbe" />
+        <ComponentRef Id="_d3dcompiler_47.dll_76ef3ef8_1d21_46ba_8c64_0319aa25dbe5" />
+        <ComponentRef Id="_ffmpeg.dll_fbaace85_feba_4311_bcbc_05a4abf7d815" />
+        <ComponentRef Id="_icudtl.dat_2eaeb150_d7b5_494d_8101_20236638e24b" />
+        <ComponentRef Id="_libEGL.dll_2bbbbff3_2647_4329_ad09_a1d76d53f0d0" />
+        <ComponentRef Id="_libGLESv2.dll_e51120cc_11cb_4170_aa14_3cf5941d5527" />
+        <ComponentRef Id="_link_manager.exe_80954690_8f41_478b_904e_111c53a9ee16" />
+        <ComponentRef Id="_resources.pak_f8cbe6be_8f72_42cd_bc05_e90f608c2831" />
+        <ComponentRef Id="_snapshot_blob.bin_31189730_664d_487a_9215_1b7c2dd4df38" />
+        <ComponentRef Id="_v8_context_snapshot.bin_8737fac6_c279_46ab_b7a2_08c3d746c4e4" />
+        <ComponentRef Id="_vk_swiftshader.dll_5bd8547e_c6cb_42ca_9f4b_b3ccb1fe1a9e" />
+        <ComponentRef Id="_vk_swiftshader_icd.json_879f25a5_05ff_4a12_a0f8_6d637d9a0008" />
+        <ComponentRef Id="_vulkan_1.dll_9b8e7c54_1f96_4074_86f4_21cf6e4851fc" />
+        <ComponentRef Id="_LinkTailor.exe_db286115_6439_4c99_9786_a5ff9917e22f" />
+        <ComponentRef Id="_.installInfo.json_49729b9d_e755_45a6_8554_187f52a70777" />
         <ComponentRef Id="RegistryInstallPath" />
         <ComponentRef Id="UninstallDisplayName" />
         <ComponentRef Id="UninstallPublisher" />
@@ -579,9 +540,6 @@
         <ComponentRef Id="ApplicationShortcut" />
         <ComponentRef Id="DesktopShortcut" />
         <ComponentRef Id="PurgeOnUninstall" />
-      </Feature>
-      <Feature Id="ContextMenuRegistry" Title="Context Menus" Level="2" Description="Windows context menu integration. New Windows registry entries, allowing users to right click on files/folders in the file system and 'Add to LinkTailor.'" >
-      <ComponentRef Id="ConextMenuRegistryEntries" />
       </Feature> 
     </Feature> 
   </Product>

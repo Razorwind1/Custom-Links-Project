@@ -1,7 +1,8 @@
 <template>
   <div id="nav">
     <div>
-      <router-link to="/" class="button" @contextmenu.stop.native="layoutsMenu" @dblclick.native="layoutsMenu">
+      <router-link to="/" class="button" @contextmenu.stop.native="layoutsMenu"
+      @click.stop.native="layoutsMenu">
         <img src="/assets/icons/freepik/svg/008-home (2).svg" />
       </router-link>
       <a class="add-link-button button" @click="addLink">

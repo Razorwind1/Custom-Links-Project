@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, nativeImage } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
@@ -23,7 +23,6 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 function createWindow() {
-  // Create the browser window.
   win = new BrowserWindow({
     width: 615,
     height: 400,
@@ -31,6 +30,7 @@ function createWindow() {
     minHeight: 400,
     frame: false,
     backgroundColor: "#2c2c2c",
+    icon: nativeImage.createFromPath(path.join(__dirname, '../build/icon.png')),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -79,7 +79,7 @@ if (!gotTheLock) {
 }
 else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    if (win){
+    if (win) {
       if (win.isMinimized()) win.restore()
       win.focus()
     }
