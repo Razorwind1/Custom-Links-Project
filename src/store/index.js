@@ -9,30 +9,6 @@ const store = new Vuex.Store({
   state: {
     // State Data
     links: [
-      {
-        id: 0,
-        type: "file",
-        style: "gameStyle",
-        tags: [1, 2],
-        content: {
-          label: "Steam",
-          address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "Steam_icon_logo.png",
-          customImg: false
-        }
-      },
-      {
-        id: 1,
-        type: "url",
-        style: "codingStyle",
-        tags: [3],
-        content: {
-          label: "TailorLink GitHub",
-          address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "github_icon.jpg",
-          customImg: false
-        }
-      },
     ],
     layouts: [
       {
