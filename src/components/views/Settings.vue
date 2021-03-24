@@ -2,7 +2,7 @@
   <div class="settings">
     <h1>Settings</h1>
     <div>
-      <label for="theme">Theme:</label>
+      <label for="theme">Theme (Work in progress except "Dark"):</label>
       <select
         name="select"
         id="theme"
