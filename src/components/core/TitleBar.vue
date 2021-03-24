@@ -24,10 +24,14 @@
         :class="[$store.state.events.sidebar.active ? 'active' : '']"
       >
         <img src="/assets/icons/magnifier-white.svg" />
-        <input type="text" class="input-empty" @click.stop ref="searchInput" @keyup="search($event)" />
-        <div class="input-clear" @click.stop="clearInput">
-          x
-        </div>
+        <input
+          type="text"
+          class="input-empty"
+          @click.stop
+          ref="searchInput"
+          @keyup="search($event)"
+        />
+        <div class="input-clear" @click.stop="clearInput">x</div>
       </div>
       <div @click="minimize" class="minimize button">&#9866;</div>
       <div @click="maximize" class="maximize button">&#9744;</div>
@@ -74,18 +78,16 @@ export default {
       this.clearInput();
       this.$refs.searchInput.focus();
     },
-    search: function ({target}){
-      if (target.value === "")
-        target.classList.add("input-empty")
-      else 
-        target.classList.remove("input-empty")
+    search: function ({ target }) {
+      if (target.value === "") target.classList.add("input-empty");
+      else target.classList.remove("input-empty");
 
-      console.log(target.value)
+      this.$store.state.events.search.term = target.value;
     },
     clearInput: function () {
       this.$refs.searchInput.value = "";
-      this.search({target: this.$refs.searchInput})
-    }
+      this.search({ target: this.$refs.searchInput });
+    },
   },
   mounted: function () {
     window.ipcRenderer.on("app-state-changed", (event, message) => {
@@ -192,7 +194,7 @@ export default {
   border: 0;
   margin: 0;
 }
-.buttons .sidebar .input-clear{
+.buttons .sidebar .input-clear {
   width: 15px;
   justify-content: center;
   position: absolute;
@@ -200,10 +202,11 @@ export default {
   border-radius: 5px;
   transition: background-color 150ms ease-in-out;
 }
-.buttons .sidebar .input-clear:hover{
+.buttons .sidebar .input-clear:hover {
   background-color: var(--button-color);
 }
-.buttons .sidebar:not(.active) .input-clear, .buttons .sidebar input.input-empty+.input-clear {
+.buttons .sidebar:not(.active) .input-clear,
+.buttons .sidebar input.input-empty + .input-clear {
   display: none;
 }
 

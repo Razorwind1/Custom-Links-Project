@@ -166,6 +166,9 @@ const store = new Vuex.Store({
       sidebar: {
         active: false,
         arg: null
+      },
+      search: {
+        term: ""
       }
     },
   },
@@ -437,6 +440,31 @@ const store = new Vuex.Store({
     linksFromTag: (state) => (tagID) => {
       return state.links.filter(link => link.tags.includes(tagID))
     },
+    linksFromSearch: (state) => (links) => {
+      let term = state.events.search.term.toLowerCase()
+      if (!term) return links
+
+      let tagIds = state.tags.filter(tag => tag.name.toLowerCase().includes(term)).map(tag => tag.id)
+
+      let layoutLinkIds = []
+      state.layouts.filter(layout => layout.name.toLowerCase().includes(term)).forEach(layout =>layoutLinkIds.push(...layout.items.map(item => item.id)))
+
+      let result = links.filter(link => (
+        link.type?.toLowerCase().includes(term) ||
+        link.style?.toLowerCase().includes(term) ||
+        link.content.label?.toLowerCase().includes(term) ||
+        link.content.address?.toLowerCase().includes(term) ||
+        link.tags.findIndex(tag => tagIds.includes(tag)) !== -1
+      ))
+
+      layoutLinkIds.forEach(linkId => {
+        if (result.findIndex(link => link.id === linkId) === -1)
+          result.push(state.links.find(link => link.id === linkId))
+      })
+
+      return result
+    },
+
     // Layout Getters
     layoutFromId: (state) => (id) => {
       return state.layouts.filter(layout => layout.id === id)[0]
