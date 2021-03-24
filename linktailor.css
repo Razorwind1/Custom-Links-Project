@@ -44,6 +44,7 @@ p {
     margin-bottom: 20px;
 }
 
+
 /*NAVIGATION BAR*/
 #navBar {
     margin-top: 40px;
@@ -121,6 +122,9 @@ p {
 }
 
 /*FEATURES BLOCK*/
+.featuresContainer > ul > li {
+    padding-bottom: 30px;
+}
 .featuresContainer span{
     font-weight: bold;
 }
