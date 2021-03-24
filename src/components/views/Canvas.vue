@@ -47,20 +47,24 @@
           @click="open(element.id)"
           @contextmenu.stop="contextMenuLink($event, element.id)"
         >
-          <div class="assignedTagsIcon">
+          <div class="assignedTagsIcon icons">
             <img
               src="/assets/icons\label-tag.svg"
               alt="Assigned Tags Icon"
-              @click.stop="assignedTagsMenu($event, element)"
+              @click.stop="assignedTagsMenu($event)"
             />
           </div>
 
-          <div class="editIcon">
+          <div class="editIcon icons">
             <img
               src="\assets\icons\edit_white.png"
               alt="Edit Icon"
               @click.stop="contextMenuLink($event, element.id)"
             />
+          </div>
+
+          <div class="removeIcon icons" @click.stop="removeFromLayout(element.id, element.layoutId)">
+            <deleteSvg />
           </div>
           <div class="img-container">
             <img v-bind:src="getLinkImg(element.id, element.img)" />
@@ -77,6 +81,8 @@ import VueGridLayout from "vue-grid-layout";
 import getLinkImg from "@/js/img/getLinkImg.js";
 import openLink from "@/js/link/open.js";
 import contextMenuLink from "@/js/link/contextMenu.js";
+import deleteSvg from "@/components/icons/delete.vue";
+
 
 export default {
   data() {
@@ -102,6 +108,7 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
+    deleteSvg
   },
   methods: {
     updateGrid: function (updateSize) {
@@ -139,6 +146,7 @@ export default {
             img: link.content.img,
             style: link.style,
             label: link.content.label,
+            layoutId: layoutActive.id
           });
         });
       } else {
@@ -255,6 +263,10 @@ export default {
       }
       this.updateGrid(true);
     },
+
+    removeFromLayout: function (linkId, layoutId){
+      this.$store.commit("unassignLayout", {linkId, layoutId})
+    }
   },
   mounted: function () {
     this.updateGrid();
@@ -267,37 +279,32 @@ export default {
   width: 100%;
   display: block;
 }
-.editIcon {
+.icons{
   position: absolute;
-  right: 5px;
-  top: 5px;
   display: none;
 }
-.vue-grid-item:hover .editIcon {
+.vue-grid-item:hover .icons {
   display: flex;
 }
-.editIcon img {
+.icons img, .icons svg {
   width: 13px;
 }
-.editIcon img:hover {
-  filter: brightness(85%);
+.icons img:hover, .icons svg:hover {
+  filter: brightness(150%);
   transition: filter 0.1s ease-in-out;
 }
-.assignedTagsIcon {
-  position: absolute;
+.editIcon {
   left: 5px;
   top: 5px;
-  display: none;
 }
-.vue-grid-item:hover .assignedTagsIcon {
-  display: flex;
+.assignedTagsIcon {
+  left: 5px;
+  bottom: 5px;
 }
-.assignedTagsIcon img {
-  width: 13px;
-}
-.assignedTagsIcon img:hover {
-  filter: brightness(85%);
-  transition: filter 0.1s ease-in-out;
+.removeIcon {
+  right: 5px;
+  top: 5px;
+  fill: var(--alert-hover)
 }
 
 .link {
