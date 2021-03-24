@@ -118,7 +118,7 @@ div.collapse-side-bar #side-bar {
 .edit-layouts {
   display: none;
 }
-#app-main.no-active-layout .edit-layouts {
+#app-main.no-active-layout .vue-grid-layout~.edit-layouts {
   display: flex;
 }
 .add-link {
@@ -127,7 +127,7 @@ div.collapse-side-bar #side-bar {
 .add-link h1 {
   font-size: 1.3rem;
 }
-#app-main.no-active-link:not(.no-active-layout) .add-link {
+#app-main.no-active-link:not(.no-active-layout) .vue-grid-layout~.add-link {
   display: flex;
 }
 </style>
