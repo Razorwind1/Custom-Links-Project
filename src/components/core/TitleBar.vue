@@ -13,17 +13,25 @@
           :class="{ active: layout.active, hidden: !layout.favourite }"
           @click="setLayout(layout)"
         >
-          <div class="layout-name">{{layout.name}}</div>
+          <div class="layout-name">{{ layout.name }}</div>
         </div>
       </div>
     </div>
     <div class="buttons">
       <div
-        @click="$store.commit('toggleSidebar')"
+        @click="toggleSidebar($event)"
         class="sidebar button"
         :class="[$store.state.events.sidebar.active ? 'active' : '']"
       >
-        <img src="/assets/icons/magnifier-white.svg"/>
+        <img src="/assets/icons/magnifier-white.svg" />
+        <input
+          type="text"
+          class="input-empty"
+          @click.stop
+          ref="searchInput"
+          @keyup="search($event)"
+        />
+        <div class="input-clear" @click.stop="clearInput">x</div>
       </div>
       <div @click="minimize" class="minimize button">&#9866;</div>
       <div @click="maximize" class="maximize button">&#9744;</div>
@@ -61,13 +69,28 @@ export default {
       this.windowMaximized = false;
     },
     setLayout: function (layout) {
-      if (layout.active)
-        return
+      if (layout.active) return;
       this.$store.commit("activateLayout", layout.id);
+    },
+    toggleSidebar: function () {
+      this.$store.commit("toggleSidebar");
+
+      this.clearInput();
+      this.$refs.searchInput.focus();
+    },
+    search: function ({ target }) {
+      if (target.value === "") target.classList.add("input-empty");
+      else target.classList.remove("input-empty");
+
+      this.$store.state.events.search.term = target.value;
+    },
+    clearInput: function () {
+      this.$refs.searchInput.value = "";
+      this.search({ target: this.$refs.searchInput });
     },
   },
   mounted: function () {
-  window.ipcRenderer.on("app-state-changed", (event, message) => {
+    window.ipcRenderer.on("app-state-changed", (event, message) => {
       if (message === "maximize") {
         this.windowMaximized = true;
       }
@@ -85,7 +108,7 @@ export default {
   },
   components: {
     //searchSvg
-  }
+  },
 };
 </script>
 
@@ -108,7 +131,9 @@ export default {
   margin-right: 3px;
   margin-top: -2px;
 }
-.close, .minimize, .maximize {
+.close,
+.minimize,
+.maximize {
   pointer-events: all !important;
 }
 .buttons {
@@ -135,14 +160,54 @@ export default {
   background-color: rgb(255, 2, 2);
 }
 .buttons .sidebar {
-  margin-right: 0px;
+  margin-right: 5px;
   border-radius: 50%;
+  transition: width 100ms ease-in-out, border-radius 100ms ease-in-out;
+  position: relative;
 }
 .buttons .sidebar img {
   width: 16px;
 }
 .buttons .sidebar.active {
+  width: 150px;
   background-color: var(--button-accent);
+  border-radius: 15px;
+  padding: 0 10px;
+}
+.buttons .sidebar input {
+  transition: width 100ms ease-in-out, padding 100ms ease-in-out, margin 100ms ease-in-out;
+  width: 100px;
+  height: 20px;
+  margin-left: 5px;
+  padding: 5px;
+  background: transparent;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  border-radius: 0;
+  padding-right: 15px;
+}
+.buttons .sidebar:not(.active) input {
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.buttons .sidebar .input-clear {
+  width: 15px;
+  justify-content: center;
+  position: absolute;
+  right: 12px;
+  border-radius: 5px;
+  transition: background-color 150ms ease-in-out;
+}
+.buttons .sidebar .input-clear:hover {
+  background-color: var(--button-color);
+}
+.buttons .sidebar:not(.active) .input-clear,
+.buttons .sidebar input.input-empty + .input-clear {
+  display: none;
 }
 
 .top-resize {
@@ -167,7 +232,7 @@ export default {
 }
 
 .favourite-layouts {
-  font-size: .8rem;
+  font-size: 0.8rem;
   -webkit-app-region: no-drag;
   margin-left: 10px;
   justify-content: center;
@@ -206,7 +271,7 @@ export default {
   display: none;
 }
 .favourite-layouts .layout-name:before {
-  content: '';
+  content: "";
   width: 10px;
   height: 10px;
   position: absolute;

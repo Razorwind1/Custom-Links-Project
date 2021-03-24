@@ -2,7 +2,7 @@
   <div class="container">
     <div
       class="link draggable"
-      v-for="link in $store.state.links"
+      v-for="link in $store.getters.linksFromSearch($store.state.links)"
       :key="link.id"
       @click="openLink(link.id)"
       @contextmenu.stop="contextMenuLink($event, link.id)"
