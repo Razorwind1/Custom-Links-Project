@@ -86,7 +86,6 @@ export default {
 <style scoped>
 h4 {
   margin: 0;
-  color: var(--text-accent);
 }
 hr{
   height: 0px;

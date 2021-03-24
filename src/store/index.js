@@ -9,30 +9,6 @@ const store = new Vuex.Store({
   state: {
     // State Data
     links: [
-      {
-        id: 0,
-        type: "file",
-        style: "gameStyle",
-        tags: [1, 2],
-        content: {
-          label: "Steam",
-          address: "C:/Program Files (x86)/Steam/steam.exe",
-          img: "Steam_icon_logo.png",
-          customImg: false
-        }
-      },
-      {
-        id: 1,
-        type: "url",
-        style: "codingStyle",
-        tags: [3],
-        content: {
-          label: "TailorLink GitHub",
-          address: "https://github.com/Razorwind1/Custom-Links-Project",
-          img: "github_icon.jpg",
-          customImg: false
-        }
-      },
     ],
     layouts: [
       {
@@ -292,7 +268,7 @@ const store = new Vuex.Store({
     },
     assignLayout(state, payload) {
       const layout = state.layouts.find(layout => layout.id == payload.layoutId);
-      if (!layout.items.includes(item => item.id === payload.linkId)) {
+      if (layout.items.findIndex(item => item.id === payload.linkId) === -1) {
         layout.items.push({
           id: payload.linkId,
           pos: {
@@ -471,6 +447,9 @@ const store = new Vuex.Store({
     },
     layoutsFromLinkId: (state) => (id) => {
       return state.layouts.filter(layout => layout.items.find(item => item.id === id) !== undefined)
+    },
+    activeLayout: (state) => () => {
+      return state.layouts.find(layout => layout.active === true)
     },
     // Style Getters
     styleFromName: (state) => (styleName) => {

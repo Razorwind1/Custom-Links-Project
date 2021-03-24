@@ -1,13 +1,16 @@
 <template>
   <div class="container">
     <div
-      class="link"
+      class="link draggable"
       v-for="link in $store.getters.linksFromSearch($store.state.links)"
       :key="link.id"
       @click="openLink(link.id)"
       @contextmenu.stop="contextMenuLink($event, link.id)"
+      draggable="true"
+      @dragstart="dragStart($event, link.id)"
+      
     >
-      <img :src="getLinkImg(link.id, link.content.img)" alt="" />
+      <img :src="getLinkImg(link.id, link.content.img)" alt />
       <label class="text-overflow">{{ link.content.label }}</label>
     </div>
   </div>
@@ -23,6 +26,9 @@ export default {
     getLinkImg,
     openLink,
     contextMenuLink,
+    dragStart: function (event, id) {
+      event.dataTransfer.setData("id", id);
+    },
   },
 };
 </script>

@@ -10,6 +10,7 @@
           <div v-for="(tag, index) in $store.state.tags" :key="index">
             <div class="tag-entry">
               <div class="tag-entry-top-row">
+                <div>
                 <input
                   class="tagLabel"
                   v-bind:class="{
@@ -22,6 +23,14 @@
                   v-on:keyup.enter="saveName(tag.id)"
                   @blur="stopEditingName()"
                 />
+                </div>
+                <div
+                  @mousedown="saveName(tag.id)"
+                  class="checkSaveLabel"
+                  v-show="tagBeingEditedIdx == index && editingFields"
+                >
+                  &#x2713;
+                </div>
                 <div
                   @click="stopEditingName()"
                   class="xStopEditing"
@@ -29,14 +38,10 @@
                 >
                   &#9932;
                 </div>
-                <div
-                  @click="saveName(tag.id)"
-                  class="checkSaveLabel"
-                  v-show="tagBeingEditedIdx == index && editingFields"
-                >
-                  &#x2713;
+                
+                <div>
+                <input class="colorPicker" type="color" :value="tag.color" @change="changeTagColor($event, tag.id)" />
                 </div>
-                <input type="color" :value="tag.color" @change="changeTagColor($event, tag.id)" />
                 <!-- <div
                   @click.stop="
                     colorPicker($event, {
@@ -50,10 +55,9 @@
                     :style="{ 'background-color': tag.color }"
                   ></span>
                 </div> -->
-                <div class="delete-button">
-                  <a class="delete-tag" @click="xDeleteTag(tag.id)">
-                    <img src="/assets/icons/freepik/svg/019-recycle bin (2).svg" />
-                  </a>
+                <div class="delete-button" @click="xDeleteTag(tag.id)">
+                    <deleteSVG />
+                    <!-- <img src="/public/assets/icons/error.svg"/> -->
                 </div>
               </div>
               <div class="tag-entry-bottom-row">
@@ -75,6 +79,7 @@
 
 <script>
 import popup from "@/components/popup/Popup.vue";
+import deleteSVG from "@/components/icons/delete.vue";
 
 export default {
   data: function () {
@@ -142,6 +147,7 @@ export default {
   },
   components: {
     popup,
+    deleteSVG,
   },
 };
 </script>
@@ -164,25 +170,21 @@ input.tagBeingEdited {
 }
 .xStopEditing {
   margin-top: 1px;
-  font-size: 12px;
+  font-size: 11px;
   position: absolute;
-  left: 97px;
+  left: 110px;
 }
 .checkSaveLabel {
   font-size: 13px;
   position: absolute;
-  left: 92px;
+  left: 98px;
 }
-div.xDeleteTag {
-  font-size: 11px;
-  margin-right: -2px;
-}
-span.color-dot {
+/* span.color-dot {
   height: 23px;
   width: 23px;
   border-radius: 50%;
   display: inline-block;
-}
+} */
 .tag-entry {
   border: 2px solid var(--background-accent);
   width: 170px;
@@ -205,12 +207,11 @@ span.color-dot {
   border-radius: 5px;
   cursor: pointer;
 }
-.tag-entry-top-row > div:nth-child(1) {
-  width: 120px;
-}
-.tag-entry-top-row > div:nth-child(2) {
-  margin-left: 10px;
-  margin-right: 15px;
+.delete-button svg {
+  fill: var(--background-active);
+  width: 15px;
+  margin-left: 1px;
+  padding-right: 1px;
 }
 
 .tag-entry-bottom-row {
@@ -233,7 +234,6 @@ span.color-dot {
 }
 .associated-link:hover {
   filter: brightness(80%);
-  cursor: pointer;
 }
 
 .popup-content div.content {
@@ -274,8 +274,5 @@ span.color-dot {
 .new-tag:active {
   background-color: var(--button-accent);
 }
-div.delete-button > a.delete-tag > img {
-  width: 20px;
-  margin: 3px bold;
-}
+
 </style>
