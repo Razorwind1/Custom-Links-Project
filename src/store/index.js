@@ -9,108 +9,55 @@ const store = new Vuex.Store({
   state: {
     // State Data
     links: [
+      // {
+      //   id: "example-id",
+      //   type: "file",
+      //   style: "exampleStyle",                     Not implemented yet
+      //   tags: [tagId, tagId2],
+      //   content: {
+      //     label: "Link Label",
+      //     address: "ExampleAddress.com",
+      //     img: "exampleImage.png",
+      //     customImg: false
+      //   }
+      // },
     ],
     layouts: [
-      {
-        id: "0001",
-        active: false,
-        favourite: true,
-        name: "Home",
-        color: "#502010",
-        theme: "default",
-        size: 100,
-        items: [
-          {
-            id: 0,
-            pos: {
-              x: 0,
-              y: 0,
-              sizeX: 1,
-              sizeY: 1
-            },
-          },
-          {
-            id: 1,
-            pos: {
-              x: 0,
-              y: 1,
-              sizeX: 1,
-              sizeY: 1
-            },
-          }
-        ]
-      },
-      {
-        id: "0002",
-        active: false,
-        favourite: true,
-        name: "Gaming",
-        color: "#102010",
-        theme: "default",
-        size: 100,
-        items: [
-          {
-            id: 0,
-            pos: {
-              x: 0,
-              y: 0,
-              sizeX: 1,
-              sizeY: 1
-            },
-          },
-        ]
-      },
-      {
-        id: "0003",
-        active: true,
-        favourite: true,
-        name: "Coding",
-        color: "#902010",
-        theme: "default",
-        size: 100,
-        items: [
-          {
-            id: 1,
-            pos: {
-              x: 0,
-              y: 0,
-              sizeX: 1,
-              sizeY: 1
-            },
-          },
-        ]
-      }
+      // {
+      //   id: "example-id",
+      //   active: false,
+      //   favourite: true,
+      //   name: "Layout Name",
+      //   color: "#000000",
+      //   theme: "default",                          Not implemented yet
+      //   size: 100,
+      //   items: [
+      //     {
+      //       id: itemId,
+      //       pos: {
+      //         x: 0,
+      //         y: 0,
+      //         sizeX: 1,
+      //         sizeY: 1
+      //       },
+      //     },
+      //   ]
+      // },
     ],
     styles: [
-      {
-        name: "gameStyle",
-        color: 'rgb(226, 97, 151)',
-        fontFamily: 'Verdana, Geneva, sans-serif',
-        fontSize: '100%',
-      },
-      {
-        name: "codingStyle",
-        color: 'rgb(102, 150, 222)',
-        fontFamily: '"Brush Script MT", Helvetica, sans-serif',
-        fontSize: '100%',
-      }
+      // {
+      //   name: "Style Name",
+      //   color: 'rgb(0, 0, 0)',
+      //   fontFamily: 'Verdana, Geneva, sans-serif',
+      //   fontSize: '100%',
+      // }
     ],
     tags: [
-      {
-        id: 1,
-        name: "favorite",
-        color: "#A716D6E0"
-      },
-      {
-        id: 2,
-        name: "gaming",
-        color: "#A716D6E0"
-      },
-      {
-        id: 3,
-        name: "New Tag",
-        color: "#333"
-      }
+      // {
+      //   id: tagId,
+      //   name: "Tag Name",
+      //   color: "#000000"
+      // },
     ],
     theme: "dark",
     // Global Events
