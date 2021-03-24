@@ -79,7 +79,7 @@
 
 <script>
 import popup from "@/components/popup/Popup.vue";
-import deleteSVG from "@/components/icons/delete.vue";
+import deleteSVG from "@/components/icons/delete-round.vue";
 
 export default {
   data: function () {
@@ -160,7 +160,7 @@ input.tagLabel {
   padding-left: 3px;
   padding-right: 0px;
   cursor: pointer;
-  width: 120px;
+  width: 115px;
   text-overflow: ellipsis;
 }
 input.tagBeingEdited {
@@ -273,6 +273,19 @@ input.tagBeingEdited {
 }
 .new-tag:active {
   background-color: var(--button-accent);
+}
+
+.delete-button {
+  border-radius: 50%;
+  box-shadow: -1px 0px 4px 0px black;
+}
+.delete-button svg {
+  width: 20px;
+  fill: var(--alert-color);
+  background: transparent;
+}
+.delete-button:hover svg{
+  fill: var(--alert-hover);
 }
 
 </style>
