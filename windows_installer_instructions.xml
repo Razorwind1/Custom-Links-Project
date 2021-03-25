@@ -82,7 +82,7 @@ Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
 
 <!--extra changes:-->
 <Property Id="VisibleProductName" Value="LinkTailor desktop application (Machine)" />
-<!--instead of: <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
-Description="The main components to run the LinkTailor application."
-<!--instead of: Description="The main components to run the applications."-->
+<!--instead of the above, use: <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
+Description="The main components to run the applications."
+<!--instead of the above, use: Description="The main components to run the LinkTailor application."-->
 
