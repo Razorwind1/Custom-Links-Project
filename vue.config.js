@@ -4,7 +4,7 @@ module.exports = {
       "preload": "src/preload.js",
       "builderOptions": {
         "appId": "com.link.tailor",
-        "productName": "Link Tailor"
+        "productName": "LinkTailor"
       },
     }
   },

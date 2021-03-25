@@ -33,11 +33,11 @@ Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\Background\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe'/>
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\Background\shell\LinkTailor\command">            
-            <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+            <RegistryValue KeyPath="yes" Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe" "--open_dir=%V "'/>
         </RegistryKey>
         
         <RegistryKey Root="HKCR"
@@ -46,11 +46,11 @@ Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="*\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe'/>
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="*\shell\LinkTailor\command">            
-            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe" "--open_dir=%V "'/>
         </RegistryKey>
 
         <RegistryKey Root="HKCR"
@@ -59,11 +59,11 @@ Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\shell\LinkTailor">  
-            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe'/>
+            <RegistryValue Type='string' Name='Icon' Value='[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe'/>
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\shell\LinkTailor\command">            
-            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/link-manager.exe" "--open_dir=%V "'/>
+            <RegistryValue Type='string' Value='"[APPLICATIONROOTDIRECTORY]LinkTailorApp/LinkTailor.exe" "--open_dir=%V "'/>
         </RegistryKey>
     </Component>
     <!--end of registry-adding code-->
@@ -79,10 +79,19 @@ Light.exe sampleFile.wixobj <-creates an .msi file from the .wixobj
 </Feature>
 
 
-
 <!--extra changes:-->
 <Property Id="VisibleProductName" Value="LinkTailor desktop application (Machine)" />
 <!--instead of the above, use: <Property Id="VisibleProductName" Value="LinkTailor Desktop Application" /> -->
 Description="The main components to run the applications."
 <!--instead of the above, use: Description="The main components to run the LinkTailor application."-->
+
+
+
+<!--possibly add:
+Id='*'
+to the <Package tag-->
+
+<!--possibly change version number:
+Version="1.0.1.0" (note that the 4th number is ignored by Windows)
+in the <Product tag-->
 
