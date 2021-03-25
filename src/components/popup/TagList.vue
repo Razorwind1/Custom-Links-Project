@@ -10,7 +10,7 @@
           <div v-for="(tag, index) in $store.state.tags" :key="index">
             <div class="tag-entry">
               <div class="tag-entry-top-row">
-                <div>
+                <div class="tagLabelField">
                 <input
                   class="tagLabel"
                   v-bind:class="{
@@ -172,12 +172,12 @@ input.tagBeingEdited {
   margin-top: 1px;
   font-size: 11px;
   position: absolute;
-  left: 110px;
+  left: 105px;
 }
 .checkSaveLabel {
   font-size: 13px;
   position: absolute;
-  left: 98px;
+  left: 93px;
 }
 /* span.color-dot {
   height: 23px;
@@ -202,16 +202,29 @@ input.tagBeingEdited {
 .tag-entry > div {
   padding: 4px;
 }
-.tag-entry-top-row > div:hover {
+.tag-entry-top-row > .tagLabelField {
+  margin-right: 3px;
+}
+.tag-entry-top-row > .tagLabelField:hover {
   background-color: var(--background-hover);
   border-radius: 5px;
   cursor: pointer;
 }
+.delete-button {
+  border-radius: 50%;
+}
 .delete-button svg {
+  width: 16px;
+  margin-left: 2px;
+  margin-right: 1px;
+  fill: var(--background-accent);
+  background: transparent;
+}
+.delete-button:hover svg{
   fill: var(--background-active);
-  width: 15px;
-  margin-left: 1px;
-  padding-right: 1px;
+  background-color: var(--background-hover);
+  border-radius: 16px;
+  cursor: pointer;
 }
 
 .tag-entry-bottom-row {
@@ -275,17 +288,6 @@ input.tagBeingEdited {
   background-color: var(--button-accent);
 }
 
-.delete-button {
-  border-radius: 50%;
-  box-shadow: -1px 0px 4px 0px black;
-}
-.delete-button svg {
-  width: 20px;
-  fill: var(--alert-color);
-  background: transparent;
-}
-.delete-button:hover svg{
-  fill: var(--alert-hover);
-}
+
 
 </style>
