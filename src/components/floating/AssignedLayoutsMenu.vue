@@ -90,7 +90,9 @@ h4 {
 hr{
   height: 0px;
   border: none;
-  border-bottom: 1px solid var(--line-accent);
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: var(--line-color);
   outline: none;
 }
 .layoutsMenu{
