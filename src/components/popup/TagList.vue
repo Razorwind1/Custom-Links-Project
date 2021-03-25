@@ -256,11 +256,11 @@ input.tagBeingEdited {
 }
 
 .popup-content div.section {
-  flex-direction: column;
   margin: 1px 3px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .popup-content div.section > * {
   margin: 8px 5px;
