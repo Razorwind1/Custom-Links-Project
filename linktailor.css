@@ -146,6 +146,7 @@ p.subParagraph {
 }
 .teamMemberBlock img {
     width: 180px;
+    height: 180px;
 }
 .teamMemberBlock .teamMemberText {
     padding-left: 30px;
