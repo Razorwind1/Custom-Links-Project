@@ -100,6 +100,17 @@ export default function handler(win) {
 
         event.returnValue = type
     })
+    ipcMain.on('get-link-address', (event, args) => {
+        try {
+            event.returnValue = shell.readShortcutLink(args.file).target
+        }
+        catch {
+            event.returnValue = null
+        }
+    })
+    ipcMain.on('open-in-explorer', (event, address) => {
+        shell.showItemInFolder(address)
+    })
     ipcMain.on('app-created', () => {
         win.webContents.send('cmd-args', argv)
     })

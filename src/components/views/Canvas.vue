@@ -140,7 +140,6 @@ export default {
             img: link.content.img,
             style: link.style,
             label: link.content.label,
-            layoutId: layoutActive.id
           });
         });
       } else {
@@ -257,10 +256,6 @@ export default {
       }
       this.updateGrid(true);
     },
-
-    removeFromLayout: function (linkId, layoutId){
-      this.$store.commit("unassignLayout", {linkId, layoutId})
-    }
   },
   mounted: function () {
     this.updateGrid();

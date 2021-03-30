@@ -23,6 +23,17 @@ const store = new Vuex.Store({
       // },
     ],
     layouts: [
+      {
+        id: "123c740e-87a1-40fd-81a3-4c98271f4790",
+        active: true,
+        favourite: true,
+        name: "Home",
+        color: "#000000",
+        theme: "default",
+        size: 100,
+        items: [
+        ]
+      },
       // {
       //   id: "example-id",
       //   active: false,
@@ -228,7 +239,7 @@ const store = new Vuex.Store({
       }
     },
     unassignLayout(state, payload) {
-      const layout = state.layouts.find(layout => layout.id == payload.layoutId)
+      const layout = state.layouts.find(layout => layout.id == payload.layoutId) || state.layouts.find(layout => layout.active)
       const index = layout.items.findIndex(item => item.id === payload.linkId)
       if (index !== -1) {
         layout.items.splice(index, 1)
@@ -310,8 +321,7 @@ const store = new Vuex.Store({
     // Context Menu
     showContextMenu(state, payload) {
       state.events.contextMenu.active = true
-      state.events.contextMenu.arg = payload.content
-      state.events.contextMenu.event = payload.event
+      state.events.contextMenu.arg = payload
     },
     closeContextMenu(state) {
       state.events.contextMenu.active = false
@@ -370,7 +380,7 @@ const store = new Vuex.Store({
       let tagIds = state.tags.filter(tag => tag.name.toLowerCase().includes(term)).map(tag => tag.id)
 
       let layoutLinkIds = []
-      state.layouts.filter(layout => layout.name.toLowerCase().includes(term)).forEach(layout =>layoutLinkIds.push(...layout.items.map(item => item.id)))
+      state.layouts.filter(layout => layout.name.toLowerCase().includes(term)).forEach(layout => layoutLinkIds.push(...layout.items.map(item => item.id)))
 
       let result = links.filter(link => (
         link.type?.toLowerCase().includes(term) ||

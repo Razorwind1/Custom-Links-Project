@@ -45,10 +45,31 @@ export default {
     },
     drop: function (e) {
       e.preventDefault();
+
       const linkId = e.dataTransfer.getData("id");
-      const activeLayout = this.$store.getters.activeLayout()
-      if (activeLayout && linkId){
-        this.$store.commit("assignLayout", {linkId, layoutId: activeLayout.id})
+      const activeLayout = this.$store.getters.activeLayout();
+      if (activeLayout && linkId) {
+        this.$store.commit("assignLayout", { linkId, layoutId: activeLayout.id });
+      }
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0];
+
+        const fileAddress = window.ipcRenderer.sendSync("get-link-address", { file: file.path }) || file.path
+        
+        const nativeIconBuffer = window.ipcRenderer.sendSync(
+          "get-native-icon",
+          fileAddress
+        );
+
+        this.$store.commit("showPopup", {
+          type: "add-link",
+          address: fileAddress,
+          label: window.path.parse(fileAddress).name || "My Drive",
+          linkType: window.ipcRenderer.sendSync("get-link-type", { link: fileAddress }),
+          nativeIconBuffer,
+        });
       }
     },
   },
@@ -118,7 +139,7 @@ div.collapse-side-bar #side-bar {
 .edit-layouts {
   display: none;
 }
-#app-main.no-active-layout .vue-grid-layout~.edit-layouts {
+#app-main.no-active-layout .vue-grid-layout ~ .edit-layouts {
   display: flex;
 }
 .add-link {
@@ -127,7 +148,7 @@ div.collapse-side-bar #side-bar {
 .add-link h1 {
   font-size: 1.3rem;
 }
-#app-main.no-active-link:not(.no-active-layout) .vue-grid-layout~.add-link {
+#app-main.no-active-link:not(.no-active-layout) .vue-grid-layout ~ .add-link {
   display: flex;
 }
 </style>
