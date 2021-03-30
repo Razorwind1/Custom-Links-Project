@@ -11,9 +11,7 @@ export default function (event, id) {
           this.$store.commit("closeContextMenu");
           openLink.bind(this)(element.id)
         },
-        style: {
-          backgroundColor: "var(--button-muted)"
-        }
+        class: "open"
       },
       {
         label: "Edit Link",
@@ -29,7 +27,7 @@ export default function (event, id) {
       {
         label: "Tags",
         click: () => {
-          //this.$store.commit("closeContextMenu");
+          this.$store.commit("closeContextMenu");
           this.$store.commit("showAssignedTagsMenu", {
             element,
             event,
@@ -39,12 +37,30 @@ export default function (event, id) {
       {
         label: "Layouts",
         click: () => {
-          //this.$store.commit("closeContextMenu");
+          this.$store.commit("closeContextMenu");
           this.$store.commit("showAssignedLayoutsMenu", {
             element,
             event,
           });
         },
+      },
+      {
+        label: "Open in Explorer",
+        click: () => {
+          this.$store.commit("closeContextMenu");
+          window.ipcRenderer.send("open-in-explorer", element?.content?.address)
+        },
+        class: "open-in-explorer"
+      },
+      {
+        label: "Remove",
+        click: () => {
+          this.$store.commit("closeContextMenu");
+          this.$store.commit("unassignLayout", {
+            linkId: element.id
+          })
+        },
+        class: "remove"
       },
       {
         label: "Delete Link",
@@ -55,11 +71,10 @@ export default function (event, id) {
             id: element.id,
           });
         },
-        style: {
-          backgroundColor: "var(--alert-muted)"
-        }
+        class: "delete"
       },
     ],
     event,
+    element
   });
 }
