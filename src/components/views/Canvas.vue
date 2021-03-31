@@ -40,6 +40,7 @@
         @move="moveEvent"
         @resized="resizedEvent"
         @moved="movedEvent"
+        :class="[canvas.size <= 75 ? 'compact' : '']"
       >
         <div
           class="link"
@@ -47,7 +48,10 @@
           @click="open(element.id)"
           @contextmenu.stop="contextMenuLink($event, element.id)"
         >
-          <div class="assignedTagsIcon icons" @click.stop="assignedTagsMenu($event, element)">
+          <div
+            class="assignedTagsIcon icons"
+            @click.stop="assignedTagsMenu($event, element)"
+          >
             <tagSvg />
           </div>
 
@@ -76,7 +80,6 @@ import contextMenuLink from "@/js/link/contextMenu.js";
 // import deleteSvg from "@/components/icons/delete.vue";
 import editSvg from "@/components/icons/hamburger.vue";
 import tagSvg from "@/components/icons/tag.vue";
-
 
 export default {
   data() {
@@ -200,14 +203,14 @@ export default {
             label: "Zoom In",
             click: () => {
               this.$store.commit("closeContextMenu");
-              this.increaseGridSize()
+              this.increaseGridSize();
             },
           },
           {
             label: "Zoom Out",
             click: () => {
               this.$store.commit("closeContextMenu");
-              this.decreaseGridSize()
+              this.decreaseGridSize();
             },
           },
         ],
@@ -273,13 +276,20 @@ export default {
   width: 100%;
   display: block;
 }
-.icons{
+.icons {
   position: absolute;
   display: none;
   width: 15px;
 }
 .vue-grid-item:hover .icons {
   display: flex;
+}
+.vue-grid-item.compact .icons, .vue-grid-item.compact label {
+  display: none;
+}
+.vue-grid-item.compact .img-container {
+  max-height: 100%;
+  margin-bottom: 4px;
 }
 .icons svg {
   width: 100%;
@@ -302,7 +312,7 @@ export default {
 .removeIcon {
   right: 5px;
   top: 5px;
-  fill: var(--alert-hover)
+  fill: var(--alert-hover);
 }
 
 .link {
