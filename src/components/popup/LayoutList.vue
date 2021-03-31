@@ -77,7 +77,7 @@
 // import validateInputs from "@/js/helper/validation.js";
 import popup from "@/components/popup/Popup.vue";
 import gearSvg from "@/components/icons/gear.vue";
-import discardSvg from "@/components/icons/close-round.vue";
+import discardSvg from "@/components/icons/close.vue";
 import trashSvg from "@/components/icons/trash.vue";
 import heartEmptySvg from "@/components/icons/heart-empty.vue";
 import heartSvg from "@/components/icons/heart.vue";
@@ -113,7 +113,7 @@ export default {
       this.$nextTick(() => {
         input.select();
       });
-      return input
+      return input;
     },
     deleteLayout: function (id) {
       this.$store.commit("showAlert", {
@@ -154,8 +154,8 @@ export default {
           theme: "default",
         })
         .then((id) => {
-          this.editLayout(id).scrollIntoView({behavior: "smooth", block: "start"});
-          this.$store.commit("activateLayout", id)
+          this.editLayout(id).scrollIntoView({ behavior: "smooth", block: "start" });
+          this.$store.commit("activateLayout", id);
         });
     },
   },
@@ -278,12 +278,15 @@ input.name[disabled]::selection {
   grid-area: button-trash;
 }
 .discard {
-  fill: var(--alert-hover);
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(-30%) translateY(-30%);
 }
+.discard svg {
+  background-color: var(--alert-hover);
+}
+
 .save {
   fill: var(--button-color);
   position: absolute;
@@ -291,6 +294,18 @@ input.name[disabled]::selection {
   right: 0;
   transform: translateX(30%) translateY(-30%);
 }
+.save svg {
+  background-color: var(--success-color);
+}
+
+.discard svg,
+.save svg {
+  fill: var(--background-accent);
+  border-radius: 50%;
+  padding: 5px;
+}
+
+
 
 svg {
   min-width: 25px;
@@ -303,6 +318,4 @@ svg:hover {
 svg:active {
   transform: scale(0.9);
 }
-
-
 </style>

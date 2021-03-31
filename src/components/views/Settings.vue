@@ -21,10 +21,7 @@
       <div class="checkbox" id="startup" @click="startupToggle" :checked="startup"></div>
     </div>
 
-    <div class="attribution">
-      Icons made by
-      <span v-on:click="attributionLink">Freepik</span>
-    </div>
+    <div class="attribution">Icons from <span v-on:click="attributionLink">Flaticon</span></div>
   </div>
 </template>
 
@@ -37,7 +34,7 @@ export default {
   },
   methods: {
     attributionLink: function () {
-      window.shell.openExternal("https://www.flaticon.com/authors/freepik");
+      window.ipcRenderer.send("open", "https://www.flaticon.com/");
     },
     theme(e) {
       this.$store.commit("setTheme", e.target.value);

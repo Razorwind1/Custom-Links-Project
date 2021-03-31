@@ -47,25 +47,17 @@
           @click="open(element.id)"
           @contextmenu.stop="contextMenuLink($event, element.id)"
         >
-          <div class="assignedTagsIcon icons">
-            <img
-              src="/assets/icons\label-tag.svg"
-              alt="Assigned Tags Icon"
-              @click.stop="assignedTagsMenu($event)"
-            />
+          <div class="assignedTagsIcon icons" @click.stop="assignedTagsMenu($event, element)">
+            <tagSvg />
           </div>
 
-          <div class="editIcon icons">
-            <img
-              src="\assets\icons\edit_white.png"
-              alt="Edit Icon"
-              @click.stop="contextMenuLink($event, element.id)"
-            />
+          <div class="editIcon icons" @click.stop="contextMenuLink($event, element.id)">
+            <editSvg />
           </div>
 
-          <div class="removeIcon icons" @click.stop="removeFromLayout(element.id, element.layoutId)">
+          <!-- <div class="removeIcon icons" @click.stop="removeFromLayout(element.id, element.layoutId)">
             <deleteSvg />
-          </div>
+          </div> -->
           <div class="img-container">
             <img v-bind:src="getLinkImg(element.id, element.img)" />
           </div>
@@ -81,7 +73,9 @@ import VueGridLayout from "vue-grid-layout";
 import getLinkImg from "@/js/img/getLinkImg.js";
 import openLink from "@/js/link/open.js";
 import contextMenuLink from "@/js/link/contextMenu.js";
-import deleteSvg from "@/components/icons/delete.vue";
+// import deleteSvg from "@/components/icons/delete.vue";
+import editSvg from "@/components/icons/hamburger.vue";
+import tagSvg from "@/components/icons/tag.vue";
 
 
 export default {
@@ -108,7 +102,9 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    deleteSvg
+    tagSvg,
+    editSvg,
+    // deleteSvg
   },
   methods: {
     updateGrid: function (updateSize) {
@@ -277,24 +273,28 @@ export default {
 .icons{
   position: absolute;
   display: none;
+  width: 15px;
 }
 .vue-grid-item:hover .icons {
   display: flex;
 }
-.icons img, .icons svg {
-  width: 13px;
+.icons svg {
+  width: 100%;
 }
-.icons img:hover, .icons svg:hover {
+.icons svg:hover {
   filter: brightness(150%);
   transition: filter 0.1s ease-in-out;
 }
 .editIcon {
-  left: 5px;
+  right: 5px;
   top: 5px;
+  fill: var(--background-text);
 }
 .assignedTagsIcon {
+  width: 17px;
   left: 5px;
-  bottom: 5px;
+  top: 5px;
+  fill: var(--button-hover);
 }
 .removeIcon {
   right: 5px;

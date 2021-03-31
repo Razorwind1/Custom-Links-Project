@@ -23,7 +23,7 @@
         class="sidebar button"
         :class="[$store.state.events.sidebar.active ? 'active' : '']"
       >
-        <img src="/assets/icons/magnifier-white.svg" />
+        <searchSvg />
         <input
           type="text"
           class="input-empty"
@@ -33,16 +33,19 @@
         />
         <div class="input-clear" @click.stop="clearInput">x</div>
       </div>
-      <div @click="minimize" class="minimize button">&#9866;</div>
-      <div @click="maximize" class="maximize button">&#9744;</div>
-      <div @click="close" class="close button">&#9932;</div>
+      <div @click="minimize" class="minimize button"><minimizeSvg /></div>
+      <div @click="maximize" class="maximize button"><maximizeSvg /></div>
+      <div @click="close" class="close button"><closeSvg /></div>
     </div>
   </div>
 </template>
 
 <script>
 import closeMenus from "@/js/helper/closeMenus.js";
-//import searchSvg from "@/components/icons/search.vue";
+import searchSvg from "@/components/icons/magnifier.vue";
+import minimizeSvg from "@/components/icons/minimize.vue";
+import maximizeSvg from "@/components/icons/square.vue";
+import closeSvg from "@/components/icons/close.vue";
 
 export default {
   data: function () {
@@ -107,7 +110,10 @@ export default {
     });
   },
   components: {
-    //searchSvg
+    searchSvg,
+    minimizeSvg,
+    maximizeSvg,
+    closeSvg
   },
 };
 </script>
@@ -139,6 +145,11 @@ export default {
 .buttons {
   -webkit-app-region: no-drag;
 }
+.buttons svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--background-text);
+}
 .buttons > div {
   width: var(--title-bar-height);
   height: var(--title-bar-height);
@@ -164,9 +175,6 @@ export default {
   border-radius: 50%;
   transition: width 100ms ease-in-out, border-radius 100ms ease-in-out;
   position: relative;
-}
-.buttons .sidebar img {
-  width: 16px;
 }
 .buttons .sidebar.active {
   width: 150px;
