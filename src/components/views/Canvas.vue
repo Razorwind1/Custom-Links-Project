@@ -87,7 +87,7 @@ export default {
         colNum: 6,
         margin: 10,
       },
-      movingElement: null,
+      movingElement: false,
       containerWidth: 0,
     };
   },
@@ -166,8 +166,8 @@ export default {
       }
     },
     open: function (elementId) {
-      if (this.movingElement !== null) {
-        this.movingElement = null;
+      if (this.movingElement) {
+        this.movingElement = false;
         return;
       }
       openLink.bind(this)(elementId);
@@ -222,8 +222,8 @@ export default {
         return { ...styleObject[0], marginBottom: this.canvas.margin + "px" };
       else return { marginBottom: this.canvas.margin + "px" };
     },
-    moveEvent: function (i) {
-      this.movingElement = i;
+    moveEvent: function () {
+      this.movingElement = true;
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
@@ -239,7 +239,10 @@ export default {
     },
     mousemove: function (e) {
       if (e.buttons !== 1) {
-        this.movingElement = null;
+        this.movingElement = false;
+      }
+      if (e.buttons === 1) {
+        this.movingElement = true;
       }
     },
     increaseGridSize: function () {
@@ -339,6 +342,7 @@ export default {
   background-color: var(--link-color);
   border-radius: 5px;
   color: var(--link-text);
+  touch-action: none;
 }
 .vue-grid-item:hover {
   background-color: var(--link-hover);
