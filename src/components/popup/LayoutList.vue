@@ -1,6 +1,6 @@
 <template>
   <popup>
-    <div class="popup-content" @click.stop="discardChanges">
+    <div class="popup-content" @click.stop="saveChanges" @contextmenu.stop>
       <div class="content">
         <h2>Layouts</h2>
         <div class="layouts">
@@ -10,6 +10,7 @@
             class="layout"
             :class="{ active: layout.active, editing: layout.id === editingLayout }"
             @click.stop="selectLayout(layout)"
+            :style="{borderColor: layout.color + '50'}"
           >
             <input
               class="name text-overflow"
@@ -102,7 +103,7 @@ export default {
     },
     selectLayout: function (layout) {
       if (layout.id !== this.editingLayout) {
-        this.discardChanges();
+        this.saveChanges();
       }
       if (layout.id !== this.editingLayout && !layout.active)
         this.$store.commit("activateLayout", layout.id);
@@ -137,11 +138,12 @@ export default {
       this.color = null;
     },
     saveChanges: function () {
-      this.$store.commit("editLayout", {
-        color: this.color,
-        name: this.name,
-        id: this.editingLayout,
-      });
+      if (this.editingLayout)
+        this.$store.commit("editLayout", {
+          color: this.color,
+          name: this.name,
+          id: this.editingLayout,
+        });
       this.editingLayout = null;
       this.name = null;
       this.color = null;
@@ -201,8 +203,8 @@ h2 {
 }
 .layout {
   position: relative;
-  max-height: 50px;
-  height: 50px;
+  max-height: 60px;
+  height: 60px;
   margin: 5px;
   padding: 10px 20px;
   background-color: var(--background-accent);
@@ -213,6 +215,7 @@ h2 {
   grid-template-rows: auto;
   grid-template-areas: "fav name name button-edit";
   cursor: pointer;
+  border: 4px solid black;
   transition: background-color 200ms, transform 200ms;
 }
 .layout.editing {
@@ -226,6 +229,9 @@ h2 {
 .layout.active {
   background-color: var(--background-active);
   transform: scale(1.01);
+}
+.layout:first-child {
+  margin-top: 0;
 }
 input.name {
   grid-area: name;
@@ -304,8 +310,6 @@ input.name[disabled]::selection {
   border-radius: 50%;
   padding: 5px;
 }
-
-
 
 svg {
   min-width: 25px;
