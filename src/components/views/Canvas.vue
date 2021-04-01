@@ -40,6 +40,7 @@
         @move="moveEvent"
         @resized="resizedEvent"
         @moved="movedEvent"
+        :class="[canvas.size <= 75 ? 'compact' : '']"
       >
         <div
           class="link"
@@ -47,21 +48,20 @@
           @click="open(element.id)"
           @contextmenu.stop="contextMenuLink($event, element.id)"
         >
-          <div class="assignedTagsIcon">
-            <img
-              src="/assets/icons\label-tag.svg"
-              alt="Assigned Tags Icon"
-              @click.stop="assignedTagsMenu($event, element)"
-            />
+          <div
+            class="assignedTagsIcon icons"
+            @click.stop="assignedTagsMenu($event, element)"
+          >
+            <tagSvg />
           </div>
 
-          <div class="editIcon icons">
-            <img
-              src="\assets\icons\edit_white.png"
-              alt="Edit Icon"
-              @click.stop="contextMenuLink($event, element.id)"
-            />
+          <div class="editIcon icons" @click.stop="contextMenuLink($event, element.id)">
+            <editSvg />
           </div>
+
+          <!-- <div class="removeIcon icons" @click.stop="removeFromLayout(element.id, element.layoutId)">
+            <deleteSvg />
+          </div> -->
           <div class="img-container">
             <img v-bind:src="getLinkImg(element.id, element.img)" />
           </div>
@@ -77,7 +77,9 @@ import VueGridLayout from "vue-grid-layout";
 import getLinkImg from "@/js/img/getLinkImg.js";
 import openLink from "@/js/link/open.js";
 import contextMenuLink from "@/js/link/contextMenu.js";
-
+// import deleteSvg from "@/components/icons/delete.vue";
+import editSvg from "@/components/icons/hamburger.vue";
+import tagSvg from "@/components/icons/tag.vue";
 
 export default {
   data() {
@@ -88,7 +90,7 @@ export default {
         colNum: 6,
         margin: 10,
       },
-      movingElement: null,
+      movingElement: false,
       containerWidth: 0,
     };
   },
@@ -102,7 +104,10 @@ export default {
   },
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    tagSvg,
+    editSvg,
+    // deleteSvg
   },
   methods: {
     updateGrid: function (updateSize) {
@@ -164,8 +169,8 @@ export default {
       }
     },
     open: function (elementId) {
-      if (this.movingElement !== null) {
-        this.movingElement = null;
+      if (this.movingElement) {
+        this.movingElement = false;
         return;
       }
       openLink.bind(this)(elementId);
@@ -198,14 +203,14 @@ export default {
             label: "Zoom In",
             click: () => {
               this.$store.commit("closeContextMenu");
-              this.increaseGridSize()
+              this.increaseGridSize();
             },
           },
           {
             label: "Zoom Out",
             click: () => {
               this.$store.commit("closeContextMenu");
-              this.decreaseGridSize()
+              this.decreaseGridSize();
             },
           },
         ],
@@ -220,8 +225,8 @@ export default {
         return { ...styleObject[0], marginBottom: this.canvas.margin + "px" };
       else return { marginBottom: this.canvas.margin + "px" };
     },
-    moveEvent: function (i) {
-      this.movingElement = i;
+    moveEvent: function () {
+      this.movingElement = true;
     },
     movedEvent: function (id, newX, newY) {
       this.$store.commit("setLinkPosition", { id, newX, newY });
@@ -237,7 +242,10 @@ export default {
     },
     mousemove: function (e) {
       if (e.buttons !== 1) {
-        this.movingElement = null;
+        this.movingElement = false;
+      }
+      if (e.buttons === 1) {
+        this.movingElement = true;
       }
     },
     increaseGridSize: function () {
@@ -268,37 +276,43 @@ export default {
   width: 100%;
   display: block;
 }
-.editIcon {
+.icons {
   position: absolute;
+  display: none;
+  width: 15px;
+}
+.vue-grid-item:hover .icons {
+  display: flex;
+}
+.vue-grid-item.compact .icons, .vue-grid-item.compact label {
+  display: none;
+}
+.vue-grid-item.compact .img-container {
+  max-height: 100%;
+  margin-bottom: 4px;
+}
+.icons svg {
+  width: 100%;
+}
+.icons svg:hover {
+  filter: brightness(150%);
+  transition: filter 0.1s ease-in-out;
+}
+.editIcon {
   right: 5px;
   top: 5px;
-  display: none;
-}
-.vue-grid-item:hover .editIcon {
-  display: flex;
-}
-.editIcon img {
-  width: 13px;
-}
-.editIcon img:hover {
-  filter: brightness(85%);
-  transition: filter 0.1s ease-in-out;
+  fill: var(--background-text);
 }
 .assignedTagsIcon {
-  position: absolute;
+  width: 17px;
   left: 5px;
   top: 5px;
-  display: none;
+  fill: var(--button-hover);
 }
-.vue-grid-item:hover .assignedTagsIcon {
-  display: flex;
-}
-.assignedTagsIcon img {
-  width: 13px;
-}
-.assignedTagsIcon img:hover {
-  filter: brightness(85%);
-  transition: filter 0.1s ease-in-out;
+.removeIcon {
+  right: 5px;
+  top: 5px;
+  fill: var(--alert-hover);
 }
 
 .link {
@@ -338,6 +352,7 @@ export default {
   background-color: var(--link-color);
   border-radius: 5px;
   color: var(--link-text);
+  touch-action: none;
 }
 .vue-grid-item:hover {
   background-color: var(--link-hover);

@@ -1,26 +1,34 @@
 <template>
   <div id="nav">
     <div>
-      <router-link to="/" class="button" @contextmenu.stop.native="layoutsMenu"
-      @click.stop.native="layoutsMenu">
-        <img src="/assets/icons/freepik/svg/008-home (2).svg" />
+      <router-link to="/" class="button">
+        <homeSvg />
       </router-link>
-      <a class="add-link-button button" @click="addLink">
-        <img src="/assets/icons/freepik/png/051-add.png" />
+      <a class="button" @click="addLink">
+        <addSvg />
       </a>
     </div>
     <div>
-      <a class="tag-list-button button" @click="tagList">
-        <img src="/assets/icons/label-tag.svg" />
+      <a class="button" @click.stop="layoutsMenu">
+        <layoutSvg />
+      </a>
+      <a class="button" @click="tagList">
+        <tagSvg />
       </a>
       <router-link to="/settings" class="button">
-        <img src="/assets/icons/freepik/svg/002-settings (2).svg" />
+        <settingsSvg />
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import layoutSvg from "@/components/icons/layout.vue";
+import tagSvg from "@/components/icons/tag.vue";
+import settingsSvg from "@/components/icons/gear.vue";
+import addSvg from "@/components/icons/add.vue";
+import homeSvg from "@/components/icons/home.vue";
+
 export default {
   methods: {
     addLink: function () {
@@ -38,6 +46,13 @@ export default {
         type: "layout-list",
       });
     },
+  },
+  components: {
+    layoutSvg,
+    tagSvg,
+    settingsSvg,
+    addSvg,
+    homeSvg
   },
 };
 </script>
@@ -66,28 +81,18 @@ export default {
 #nav > div > a:hover {
   background-color: var(--nav-accent);
 }
-#nav > div > a.add-link-button:hover {
-}
 #nav > div > a.router-link-exact-active {
   background-color: var(--nav-accent);
   border-radius: 15px;
 }
 
-#nav > div > a > img {
-  width: 50%;
+#nav > div > a > svg {
+  width: 55%;
+  fill: var(--button-color);
   transition: width ease-in-out 100ms;
-  -webkit-user-drag: none;
-  filter: grayscale(80%);
 }
-#nav > div > a.add-link-button > img {
-  filter: grayscale(30%);
-}
-#nav > div > a:hover > img {
-  width: 60%;
-  filter: grayscale(0%);
-}
-#nav > div > a.router-link-exact-active > img {
-  width: 60%;
-  filter: grayscale(0%);
+#nav > div > a:hover > svg, #nav > div > a.router-link-exact-active svg {
+  filter: brightness(200%);
+  width: 65%;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <popup>
-    <div class="popup-content" @click.stop="discardChanges">
+    <div class="popup-content" @click.stop="saveChanges" @contextmenu.stop>
       <div class="content">
         <h2>Layouts</h2>
         <div class="layouts">
@@ -10,6 +10,7 @@
             class="layout"
             :class="{ active: layout.active, editing: layout.id === editingLayout }"
             @click.stop="selectLayout(layout)"
+            :style="{borderColor: layout.color + '50'}"
           >
             <input
               class="name text-overflow"
@@ -77,7 +78,7 @@
 // import validateInputs from "@/js/helper/validation.js";
 import popup from "@/components/popup/Popup.vue";
 import gearSvg from "@/components/icons/gear.vue";
-import discardSvg from "@/components/icons/close-round.vue";
+import discardSvg from "@/components/icons/close.vue";
 import trashSvg from "@/components/icons/trash.vue";
 import heartEmptySvg from "@/components/icons/heart-empty.vue";
 import heartSvg from "@/components/icons/heart.vue";
@@ -102,7 +103,7 @@ export default {
     },
     selectLayout: function (layout) {
       if (layout.id !== this.editingLayout) {
-        this.discardChanges();
+        this.saveChanges();
       }
       if (layout.id !== this.editingLayout && !layout.active)
         this.$store.commit("activateLayout", layout.id);
@@ -113,7 +114,7 @@ export default {
       this.$nextTick(() => {
         input.select();
       });
-      return input
+      return input;
     },
     deleteLayout: function (id) {
       this.$store.commit("showAlert", {
@@ -137,11 +138,12 @@ export default {
       this.color = null;
     },
     saveChanges: function () {
-      this.$store.commit("editLayout", {
-        color: this.color,
-        name: this.name,
-        id: this.editingLayout,
-      });
+      if (this.editingLayout)
+        this.$store.commit("editLayout", {
+          color: this.color,
+          name: this.name,
+          id: this.editingLayout,
+        });
       this.editingLayout = null;
       this.name = null;
       this.color = null;
@@ -154,8 +156,8 @@ export default {
           theme: "default",
         })
         .then((id) => {
-          this.editLayout(id).scrollIntoView({behavior: "smooth", block: "start"});
-          this.$store.commit("activateLayout", id)
+          this.editLayout(id).scrollIntoView({ behavior: "smooth", block: "start" });
+          this.$store.commit("activateLayout", id);
         });
     },
   },
@@ -201,8 +203,8 @@ h2 {
 }
 .layout {
   position: relative;
-  max-height: 50px;
-  height: 50px;
+  max-height: 60px;
+  height: 60px;
   margin: 5px;
   padding: 10px 20px;
   background-color: var(--background-accent);
@@ -213,6 +215,7 @@ h2 {
   grid-template-rows: auto;
   grid-template-areas: "fav name name button-edit";
   cursor: pointer;
+  border: 4px solid black;
   transition: background-color 200ms, transform 200ms;
 }
 .layout.editing {
@@ -226,6 +229,9 @@ h2 {
 .layout.active {
   background-color: var(--background-active);
   transform: scale(1.01);
+}
+.layout:first-child {
+  margin-top: 0;
 }
 input.name {
   grid-area: name;
@@ -278,18 +284,31 @@ input.name[disabled]::selection {
   grid-area: button-trash;
 }
 .discard {
-  fill: var(--alert-hover);
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(-30%) translateY(-30%);
 }
+.discard svg {
+  background-color: var(--alert-hover);
+}
+
 .save {
   fill: var(--button-color);
   position: absolute;
   top: 0;
   right: 0;
   transform: translateX(30%) translateY(-30%);
+}
+.save svg {
+  background-color: var(--success-color);
+}
+
+.discard svg,
+.save svg {
+  fill: var(--background-accent);
+  border-radius: 50%;
+  padding: 5px;
 }
 
 svg {
@@ -303,6 +322,4 @@ svg:hover {
 svg:active {
   transform: scale(0.9);
 }
-
-
 </style>

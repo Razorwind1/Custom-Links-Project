@@ -294,7 +294,7 @@ const store = new Vuex.Store({
     },
     closeAssignedTagsMenu(state) {
       state.events.assignedTagsMenu.active = false
-      state.events.assignedTagsMenu.id = null
+      state.events.assignedTagsMenu.arg = null
       state.events.assignedTagsMenu.event = null
     },
 
@@ -314,7 +314,7 @@ const store = new Vuex.Store({
     },
     closeAssignedLayoutsMenu(state) {
       state.events.assignedLayoutsMenu.active = false
-      state.events.assignedLayoutsMenu.id = null
+      state.events.assignedLayoutsMenu.arg = null
       state.events.assignedLayoutsMenu.event = null
     },
 

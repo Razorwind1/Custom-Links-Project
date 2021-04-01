@@ -18,7 +18,7 @@ export default {
       event: MouseEvent
   },
   mounted: function () {
-    this.setContainerPosition(event);
+    this.setContainerPosition(this.event);
   },
   methods: {
     setContainerPosition(event) {

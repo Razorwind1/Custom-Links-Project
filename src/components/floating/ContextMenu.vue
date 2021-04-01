@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       event: this.$store.state.events.contextMenu.arg.event,
-      linkType: this.$store.state.events.contextMenu.arg.element.type,
+      linkType: this.$store.state.events.contextMenu.arg.element?.type || "",
       menuItems: this.$store.state.events.contextMenu.arg.content,
     };
   },
