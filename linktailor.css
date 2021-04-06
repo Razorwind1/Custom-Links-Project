@@ -47,6 +47,10 @@ p.subParagraph {
     margin-top: -15px;
     padding-left: 20px;
 }
+iframe {
+    display: block;
+    margin: 0 auto;
+}
 
 
 /*NAVIGATION BAR*/
