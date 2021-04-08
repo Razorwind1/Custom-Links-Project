@@ -3,7 +3,7 @@ Like a wardrobe full of clothes, LinkTailor is a virtual space where you can pla
 
 Want to [know more](https://linktailor.app/#Features)? Watch a [YouTube demo](https://www.youtube.com/watch?v=1OBZN-S4m-k) of the app? [Download](https://linktailor.app/#Download) it yourself?
 
-### [linktailor.app](https://linktailor.app/)
+### [visit linktailor.app](https://linktailor.app/)
 
 ## Getting Started
 For developers looking to work with the code:
