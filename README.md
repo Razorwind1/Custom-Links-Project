@@ -1,9 +1,9 @@
 # LinkTailor
 Like a wardrobe full of clothes, LinkTailor is a virtual space where you can place applications, files, and websites – treating them as garments that you can style, tag, and organize into outfits for any occasion. By saving layouts of links within LinkTailor, you can easily access them all in one place or even open them all with a single click.
 
-Want to [know more](linktailor.app/features)? Watch a [demo](linktailor.app/demo) of the app? [Download](linktailor.app/download) it yourself?
+Want to [know more](https://linktailor.app/#Features)? Watch a [YouTube demo](https://www.youtube.com/watch?v=1OBZN-S4m-k) of the app? [Download](https://linktailor.app/#Download) it yourself?
 
-### [linktailor.app](linktailor.app)
+### [linktailor.app](https://linktailor.app/)
 
 ## Getting Started
 For developers looking to work with the code:
@@ -37,5 +37,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/)
 
 
 ## Contact
-The team behind LinkTailor can be reached from our website [linktailor.app](https://linktailor.app/)
+The team behind LinkTailor can be reached from our website [linktailor.app](https://linktailor.app/thestory#Contact)
 
