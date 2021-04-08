@@ -37,5 +37,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/)
 
 
 ## Contact
-The team behind LinkTailor can be reached from our website [linktailor.app](linktailor.app)
+The team behind LinkTailor can be reached from our website [linktailor.app](https://linktailor.app/)
 
