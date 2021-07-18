@@ -27,7 +27,6 @@
     <div
       @contextmenu.stop="contextMenuCanvas($event)"
       :style="{ width: '100%', height: '100%' }"
-      @mousemove="mousemove"
     >
       <grid-item
         v-for="element in layout"
@@ -59,9 +58,6 @@
             <editSvg />
           </div>
 
-          <!-- <div class="removeIcon icons" @click.stop="removeFromLayout(element.id, element.layoutId)">
-            <deleteSvg />
-          </div> -->
           <div class="img-container">
             <img v-bind:src="getLinkImg(element.id, element.img)" />
           </div>
@@ -77,7 +73,6 @@ import VueGridLayout from "vue-grid-layout";
 import getLinkImg from "@/js/img/getLinkImg.js";
 import openLink from "@/js/link/open.js";
 import contextMenuLink from "@/js/link/contextMenu.js";
-// import deleteSvg from "@/components/icons/delete.vue";
 import editSvg from "@/components/icons/hamburger.vue";
 import tagSvg from "@/components/icons/tag.vue";
 
@@ -107,7 +102,6 @@ export default {
     GridItem: VueGridLayout.GridItem,
     tagSvg,
     editSvg,
-    // deleteSvg
   },
   methods: {
     updateGrid: function (updateSize) {
@@ -239,14 +233,6 @@ export default {
         element,
         event,
       });
-    },
-    mousemove: function (e) {
-      if (e.buttons !== 1) {
-        this.movingElement = false;
-      }
-      if (e.buttons === 1) {
-        this.movingElement = true;
-      }
     },
     increaseGridSize: function () {
       this.canvas.size += 5;
